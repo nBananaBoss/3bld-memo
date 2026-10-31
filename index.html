@@ -7,6 +7,25 @@
 <script>try{var _d=JSON.parse(localStorage.getItem('bld-pairs-v1')||'null'),_b=(_d&&_d.set&&_d.set.bg)||'forest',_h=document.documentElement;_h.dataset.bg=_b;_h.dataset.lt=['sunset','sage','meadow','lagoon','lavender','light'].indexOf(_b)>-1?'1':'0';_h.dataset.anim=['oled','solid','light'].indexOf(_b)>-1?'0':'1'}catch(e){}</script>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+/* =====================================================================================================
+   TWEAK MAP  (one file, so this is the index)
+   - The cascade is layered: later rules override earlier ones. To change something, find its LAST rule
+     (search the selector, jump to the final match) or add an override in the final "round" block.
+   - Colours: theme variables live in the html[data-bg=...] rules near the top (--bg --panel --line --fg
+     --muted --acc --on, plus --b1..b3 for the background blobs). light themes also get html[data-lt="1"].
+   - Where things are, by section comment (search the text between the dashes):
+       intro / intro v3 / intro v4 ........ the opening animation and the 3D cube logo
+       entrance & ambient ................. page-load animations, idle prompt breathing (breathe, idleGlow)
+       top icons / top bar ................ the glass icon pill, per-icon hover motion
+       clock ............................... the top-left glass clock pill
+       controls ........................... one radius, one focus ring for buttons
+       timer page ......................... the separate minimal timer overlay (stat-free on purpose)
+       background (blobs, aurora, grain) ... search "colour blobs", "aurora", "film grain"
+       light themes ....................... calmer, crisper overrides for the pastel themes
+       round 3..7 ......................... later polish layers; newest overrides sit at the bottom
+   - JavaScript lives in the second script tag near the bottom; sections are marked with block comments
+     (sound engine, heatmap, stats, drill, memo chain, scrambler, timer, word drill, word grid, intro).
+   ===================================================================================================== */
 :root{--bg:#0B0E14;--panel:#121722;--line:#222B3B;--fg:#D3D8E0;--muted:#8D96A8;--acc:#67E8F9;--on:#07202A;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 *,*::before,*::after{box-sizing:inherit}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
@@ -184,9 +203,11 @@ body.ready #top button:nth-child(1){animation-delay:.05s}body.ready #top button:
 body.ready #sclk,body.ready #guide{animation:pin .8s cubic-bezier(.32,.72,0,1) .3s backwards}
 @keyframes tin{from{opacity:0;transform:translateY(-12px) scale(.7)}}
 @keyframes pin{from{opacity:0;transform:translateY(14px)}}
-#pair.idle{animation:breathe 3.6s ease-in-out infinite}
-body.ready:not(.live) #pair.idle{animation:pin .8s cubic-bezier(.32,.72,0,1) .2s backwards,breathe 3.6s ease-in-out 1s infinite}
+#pair.idle{animation:breathe 3.6s ease-in-out infinite,idleGlow 3.6s ease-in-out infinite}
+body.ready:not(.live) #pair.idle{animation:pin .8s cubic-bezier(.32,.72,0,1) .2s backwards,breathe 3.6s ease-in-out 1s infinite,idleGlow 3.6s ease-in-out 1s infinite}
 @keyframes breathe{0%,100%{opacity:.5}50%{opacity:1}}
+@keyframes idleGlow{0%,100%{text-shadow:0 0 0 transparent}50%{text-shadow:0 0 .5em color-mix(in srgb,var(--acc) var(--ga,34%),transparent),0 0 1.5em color-mix(in srgb,var(--acc) var(--gb,14%),transparent)}}
+html[data-lt="1"]{--ga:14%;--gb:5%}
 /* Letter pool: two clear position selectors with compact, grouped shortcuts. */
 .poolpad{padding:1rem .9rem 1.1rem;min-width:0;box-sizing:border-box}.poolhead{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;margin-bottom:1rem}.poolhead .mut{margin-top:.35rem;line-height:1.5}.poolcount{white-space:nowrap;font-size:.72rem;color:var(--acc);border:1px solid color-mix(in srgb,var(--acc) 28%,var(--line));border-radius:999px;padding:.35rem .65rem;font-variant-numeric:tabular-nums}.poolcolumns{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;min-width:0}.poolcolumn{min-width:0;box-sizing:border-box;overflow:hidden;border:1px solid var(--line);border-radius:12px;padding:.65rem;background:color-mix(in srgb,var(--bg) 42%,transparent);transition:border-color .2s,background .2s}.poolcolumn:focus-within{border-color:color-mix(in srgb,var(--acc) 55%,var(--line))}.poolcolhead{display:flex;align-items:center;justify-content:space-between;gap:.4rem;margin-bottom:.65rem;font-size:.78rem}.poolmini{display:flex;gap:.25rem}.poolmini button{font-size:.65rem;padding:.22rem .42rem;border-radius:5px;color:var(--muted)}.poolcolumn .chips{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px}.poolcolumn .chips button{width:100%;min-width:0;height:1.85rem;min-height:0;padding:0;border-radius:6px;box-sizing:border-box}.poolpresets{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem;margin-top:.85rem;padding-top:.75rem;border-top:1px solid var(--line)}.poolpresets>.mut{margin-right:.2rem}.poolpresets button{font-size:.72rem;padding:.4rem .6rem}.poolpresets #pall{background:color-mix(in srgb,var(--acc) 10%,transparent);border-color:color-mix(in srgb,var(--acc) 35%,var(--line))}.presetdivider{height:1.25rem;width:1px;background:var(--line);margin:0 .2rem}.presetlabel{font-size:.72rem;color:var(--muted);gap:.35rem}.presetlabel select{font-size:.75rem;padding:.3rem}.poolfix{display:flex;flex-wrap:wrap;align-items:center;gap:.55rem;margin-top:.75rem;padding:.75rem;border:1px solid var(--line);border-radius:10px;background:color-mix(in srgb,var(--bg) 45%,transparent)}.poolfix-title{width:100%;font-size:.75rem;font-weight:600;color:var(--fg)}.poolfix select{min-width:4rem;max-width:5rem;font-size:.8rem;padding:.4rem}.poolfix-actions{display:flex;gap:.55rem;width:100%;min-width:0}.poolfix-actions button{flex:0 1 auto}.poolfix button{font-size:.72rem;padding:.45rem .65rem}.poolfix button:focus-visible,.poolpresets button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}.poolfix .mut{font-size:.7rem}.poolhint{font-size:.68rem;color:var(--muted);margin-top:.7rem;min-height:1em;transition:color .2s}.poolhint.changed{color:var(--acc);animation:poolHint .24s ease-out}@keyframes poolHint{from{opacity:.45;transform:translateY(2px)}to{opacity:1;transform:none}}
 #pair.space-enter{animation:pairSettle .2s cubic-bezier(.2,.7,.25,1) both}@keyframes pairSettle{0%{transform:translate(var(--ex,0px),var(--ey,2px)) rotate(var(--er,0deg)) scale(var(--es,.995));opacity:.92}100%{transform:none;opacity:1}}
@@ -1075,6 +1096,53 @@ html[data-lt="1"] #gt th.hl{text-shadow:0 0 .6em color-mix(in srgb,var(--acc) 45
   #top #bg:hover svg .k3{transform:translateX(-5px)}
 }
 @media(prefers-reduced-motion:reduce){#top button svg path{animation:none!important;transition:none!important}}
+
+/* memo answer panel (timer page): glass card under the timer, blurred until revealed */
+.tmpills{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-top:.9rem}
+.tmpills .tmmode{margin-top:0}
+.tmemo[hidden]{display:none}
+.tmemo{position:fixed;z-index:3;left:50%;bottom:1rem;transform:translateX(-50%);width:min(900px,92vw);padding:.75rem 1.1rem .85rem;border:1px solid color-mix(in srgb,var(--line) 85%,transparent);border-radius:16px;background:color-mix(in srgb,var(--panel) 52%,transparent);-webkit-backdrop-filter:blur(14px) saturate(1.2);backdrop-filter:blur(14px) saturate(1.2);transition:opacity .3s}
+.tpage.run .tmemo,.tpage.hold .tmemo,.tpage.ready .tmemo{opacity:0;pointer-events:none}
+.tmemo-h{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem 1rem;font-size:.7rem;letter-spacing:.08em;color:var(--muted);margin-bottom:.5rem}
+.tmemo-h .k{text-transform:uppercase;font-weight:600}
+.tmemo-lbl{padding:.12rem .7rem;border-radius:999px;border:1px solid color-mix(in srgb,var(--line) 85%,transparent);font-size:.74rem;font-weight:600;letter-spacing:.05em;text-transform:none;color:var(--fg);transition:color .3s,border-color .3s,background .3s}
+.tmemo.last .tmemo-lbl{color:var(--acc);border-color:color-mix(in srgb,var(--acc) 55%,var(--line));background:color-mix(in srgb,var(--acc) 10%,transparent)}
+.tmemo-k{position:absolute;right:1.1rem;bottom:.5rem;font-size:.66rem;letter-spacing:.06em;color:var(--muted);opacity:.55;pointer-events:none}
+.tmemo-hint{position:absolute;left:0;right:0;top:58%;text-align:center;font-size:.78rem;letter-spacing:.06em;color:var(--fg);pointer-events:none;transition:opacity .3s}
+.tmemo.rev .tmemo-hint{opacity:0}
+.tmemo-meth{margin-left:auto;letter-spacing:.02em;opacity:.7;white-space:nowrap}
+.mc .sw{color:var(--acc)}
+.mc .na{color:var(--muted)}
+.tmemo-b{filter:blur(9px);opacity:.5;cursor:pointer;user-select:none;transition:filter .5s cubic-bezier(.32,.72,0,1),opacity .4s}
+.tmemo.rev .tmemo-b{filter:none;opacity:1;cursor:default;user-select:text}
+.mrow{display:flex;align-items:flex-start;gap:.9rem;padding:.3rem 0}
+.mk{flex:none;width:4.6rem;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding-top:.4rem}
+.mk em{font-style:normal;opacity:.6;margin-left:.35em}
+.mps{display:flex;flex-wrap:wrap;gap:.4rem .55rem}
+.mc{display:flex;flex-direction:column;align-items:center;min-width:2.7rem;padding:.2rem .55rem .25rem;border-radius:10px;background:color-mix(in srgb,var(--fg) 5%,transparent);border:1px solid color-mix(in srgb,var(--line) 70%,transparent)}
+.mc b{font-size:1.15rem;letter-spacing:.12em;color:var(--fg);font-weight:650}
+.mc i{font-style:normal;font-size:.68rem;color:var(--muted);max-width:7.5em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-height:1.1em}
+.tpage:has(.tmemo:not([hidden])) .tmmain{margin-bottom:170px}
+.tpage:has(.tmemo:not([hidden])) .tcube{--cs:clamp(130px,17vw,215px)}
+.tmemo.rev .mc{animation:mv .45s cubic-bezier(.32,.72,0,1) backwards;animation-delay:calc(var(--i) * 35ms)}
+.mc.nw{padding-top:.3rem;padding-bottom:.3rem}
+.mc.q{padding-left:.8rem;padding-right:.8rem}
+.mnone{color:var(--muted);font-size:.85rem;padding-top:.35rem}
+.mx{display:flex;flex-wrap:wrap;gap:.35rem;font-size:.72rem;letter-spacing:.02em;filter:blur(8px);opacity:.5;transition:filter .5s cubic-bezier(.32,.72,0,1),opacity .4s}
+.tmemo.rev .mx{filter:none;opacity:1}
+.mx span{padding:.1rem .6rem;border-radius:999px;border:1px solid color-mix(in srgb,var(--line) 80%,transparent);color:var(--muted)}
+.mx span.hot{color:var(--acc);border-color:color-mix(in srgb,var(--acc) 55%,var(--line));background:color-mix(in srgb,var(--acc) 9%,transparent)}
+
+/* ---------- round 7: more-contrast mode + idle glow ---------- */
+/* Only active when the OS "increase contrast" setting is on. Pulls the dim greys toward the text colour,
+   firms up borders, and stops the idle prompt fading as far down. Works for every theme because it is
+   derived from each theme's own --fg / --bg. */
+@media (prefers-contrast:more){
+  html{--muted:color-mix(in srgb,var(--fg) 82%,var(--bg));--line:color-mix(in srgb,var(--fg) 38%,var(--bg))}
+  #pair.idle{color:color-mix(in srgb,var(--fg) 88%,var(--bg))}
+  #sclk{opacity:1}
+  @keyframes breathe{0%,100%{opacity:.78}50%{opacity:1}}
+}
 </style>
 </head>
 <body>
@@ -1278,7 +1346,8 @@ C,cat,cabin,cucumber</pre>
 <button class="tclose" data-close type="button" aria-label="Close timer">Close</button>
 <div class="tpage" id="tpage">
 <div id="tmsc" class="tmsc"></div>
-<div class="tmmain"><div class="tmcol"><div id="tmt" class="tmt">0.00</div><div class="tmline"><i id="tmbar"></i><i id="tmbar2"></i></div><div class="tmsp" id="tmsp"><div class="tms tmm" id="tmmc"><span class="k">Memo</span><b id="tmm">&ndash;</b><em id="tmmp"></em></div><div class="tms tme" id="tmec"><span class="k">Exec</span><b id="tme">&ndash;</b><em id="tmep"></em></div></div><div id="tmh" class="tmh"></div><button type="button" class="tmmode" id="tmmode" tabindex="-1"></button></div><div class="tcube" id="tcube" title="Drag to rotate, double-click to reset" aria-label="3D view of the scramble, drag to rotate"><div class="tcshadow"></div><div class="tcfloat"><div class="tc3d" id="tc3d"></div></div></div></div>
+<div class="tmmain"><div class="tmcol"><div id="tmt" class="tmt">0.00</div><div class="tmline"><i id="tmbar"></i><i id="tmbar2"></i></div><div class="tmsp" id="tmsp"><div class="tms tmm" id="tmmc"><span class="k">Memo</span><b id="tmm">&ndash;</b><em id="tmmp"></em></div><div class="tms tme" id="tmec"><span class="k">Exec</span><b id="tme">&ndash;</b><em id="tmep"></em></div></div><div id="tmh" class="tmh"></div><div class="tmpills"><button type="button" class="tmmode" id="tmmode" tabindex="-1"></button><button type="button" class="tmmode" id="tmmemo" tabindex="-1"></button></div></div><div class="tcube" id="tcube" title="Drag to rotate, double-click to reset" aria-label="3D view of the scramble, drag to rotate"><div class="tcshadow"></div><div class="tcfloat"><div class="tc3d" id="tc3d"></div></div></div></div>
+<div class="tmemo" id="tmemo" hidden aria-live="polite"><div class="tmemo-h"><span class="k">Memo answer</span><span class="tmemo-lbl" id="tmemol"></span><span class="mx" id="tmemox"></span><span class="tmemo-hint">click or press V to peek</span><span class="tmemo-meth">M2 buffer U &nbsp;·&nbsp; Orozco C, helper B</span></div><div class="tmemo-b" id="tmemob"></div><span class="tmemo-k" id="tmemok"></span></div>
 </div>
 </div>
 
@@ -1359,7 +1428,7 @@ C,cat,cabin,cucumber</pre>
 (function(){
 const L='ABCDEFGHIJKLMNOPQRSTUVWX'.split(''),ALL=L.join('');
 const KEY='bld-pairs-v1';
-const DEF={F:ALL,S:ALL,noId:false,flash:false,fd:.3,hideT:false,zen:false,n:1,thr:2,drill:false,pace:false,goal:1,acc:'#67E8F9',bg:'forest',tf:1,tm:2,gap:1.75,rm:'irl',snd:true,vol:.6,sndMode:'soft',tsplit:false};
+const DEF={F:ALL,S:ALL,noId:false,flash:false,fd:.3,hideT:false,zen:false,n:1,thr:2,drill:false,pace:false,goal:1,acc:'#67E8F9',bg:'forest',tf:1,tm:2,gap:1.75,rm:'irl',snd:true,vol:.6,sndMode:'soft',tsplit:false,tmemo:false};
 const ACC=['#67E8F9','#4ADE80','#FBBF24','#A78BFA'],ACCD=['#0E7490','#15803D','#B45309','#6D28D9'];
 let D={set:Object.assign({},DEF),words:{},stats:{},flag:{},streak:{},missed:{},missedStreak:{},review:{},fails:{},hist:[]};
 try{const r=JSON.parse(localStorage.getItem(KEY)||'null');if(r){D=Object.assign(D,r);D.set=Object.assign({},DEF,r.set)}}catch(e){}
@@ -1820,7 +1889,7 @@ function cbApply(x){
   if(!TH_OK.includes(D.set.bg))D.set.bg='forest';
   CB.rev=x.rev||CB.rev;CB.dirty=false;CB.at=Date.now();cbHold=false;cbQuiet=Date.now()+2500;cbSave();
   saveDirty=true;flushSave();deck=[];deckSig='';prev=null;
-  applyAcc();syncUI();TM.sp=!!set().tsplit;tmModeSync();cbRender();
+  applyAcc();syncUI();TM.sp=!!set().tsplit;tmModeSync();try{maSync()}catch(_){}cbRender();
 }
 const TH_OK=['oled','solid','aurora','forest','ocean','ember','rose','sunset','sage','meadow','lagoon','lavender','light'];
 async function cbRestoreNow(){const x=await cbFetch();cbApply(x)}
@@ -2472,14 +2541,170 @@ function tmSplit(){
   tmPop(tmCards[0],'pop');tmPop($('#tmt'),'sflash');snd('tsplit');
 }
 const tmHint=t=>{$('#tmh').textContent=t};
+/* ---------- memo answer: the real Speffz letter pairs for the current scramble ---------- */
+const MA=(function(){
+  const CC=['URF','UFL','ULB','UBR','DFR','DLF','DBL','DRB'],EC=['UR','UF','UL','UB','DR','DF','DL','DB','FR','FL','BL','BR'];
+  const CF=[[8,9,20],[6,18,38],[0,36,47],[2,45,11],[29,26,15],[27,44,24],[33,53,42],[35,17,51]];
+  const EF=[[5,10],[7,19],[3,37],[1,46],[32,16],[28,25],[30,43],[34,52],[23,12],[21,41],[50,39],[48,14]];
+  const LCc={A:'UBL',B:'UBR',C:'UFR',D:'UFL',E:'LUB',F:'LUF',G:'LDF',H:'LDB',I:'FUL',J:'FUR',K:'FDR',L:'FDL',M:'RUF',N:'RUB',O:'RDB',P:'RDF',Q:'BUR',R:'BUL',S:'BDL',T:'BDR',U:'DFL',V:'DFR',W:'DBR',X:'DBL'};
+  const LCe={A:'UB',B:'UR',C:'UF',D:'UL',E:'LU',F:'LF',G:'LD',H:'LB',I:'FU',J:'FR',K:'FD',L:'FL',M:'RU',N:'RB',O:'RD',P:'RF',Q:'BU',R:'BL',S:'BD',T:'BR',U:'DF',V:'DR',W:'DB',X:'DL'};
+  const srt=s=>s.split('').sort().join('');
+  /* a "type" bundles one kind of piece: position names, sticker triples/pairs, facelet indices */
+  function mk(P,F,LC,k,show){
+    const lab={};for(const l in LC)lab[LC[l][0]+srt(LC[l])]=l;
+    const PL=P.map(p=>p.split('').map(ch=>lab[ch+srt(p)])),pos={};
+    PL.forEach((a,i)=>a.forEach((l,n)=>{pos[l]={i:i,n:n}}));
+    const min=PL.map(a=>a.slice().sort()[0]);
+    /* the sticker the chain starts from at the buffer: the U/D one if it has one, else F/B */
+    const start=PL.map(a=>a.find(l=>'UD'.indexOf(LC[l][0])>-1)||a.find(l=>'FB'.indexOf(LC[l][0])>-1)||a[0]);
+    return{P:P,F:F,PL:PL,pos:pos,min:min,start:start,k:k,show:show};
+  }
+  const TC=mk(CC,CF,LCc,3,['UFR','UFL','UBL','UBR','DFR','DFL','DBL','DBR']);
+  const TE=mk(EC,EF,LCe,2,EC);
+  /* where does the sticker sitting at each label belong? */
+  function home(T,f){
+    const h={};
+    T.F.forEach((fl,i)=>{
+      const cols=fl.map(x=>f[x]),key=srt(cols.join('')),j=T.P.findIndex(p=>srt(p)===key);
+      cols.forEach((c,n)=>{h[T.PL[i][n]]=T.PL[j][T.P[j].indexOf(c)]});
+    });
+    return h;
+  }
+  /* the buffer swaps that solve a state. pref = sticker letters to break cycles into, in order of preference;
+     tw = also turn corners that are twisted in place into their own "go to one side, insert on the other" pair. */
+  function trace(T,h,bi,pref,tw){
+    const out=[],done=T.P.map(()=>false),sl=T.start[bi];done[bi]=true;
+    let x=sl;
+    for(let g=0;g<30;g++){const t=h[x],j=T.pos[t].i;if(j===bi)break;out.push(t);done[j]=true;x=t}
+    const pick=(cand)=>{
+      for(const l of pref){const i=T.pos[l].i;if(cand.indexOf(i)>-1)return[i,l]}
+      const i=cand.slice().sort((p,q)=>T.min[p]<T.min[q]?-1:1)[0];return[i,T.min[i]];
+    };
+    for(;;){
+      const cand=[];
+      T.P.forEach((p,i)=>{
+        if(done[i])return;
+        if(T.PL[i].some(l=>h[l]===l)){done[i]=true;return}                        /* solved */
+        if(!tw&&T.PL[i].indexOf(h[T.min[i]])>-1){done[i]=true;return}             /* turned in place: left for a twist/flip */
+        cand.push(i);
+      });
+      if(!cand.length)break;
+      const pk=pick(cand),i=pk[0],a=pk[1];
+      out.push(a);x=a;
+      for(let g=0;g<30;g++){const t=h[x],j=T.pos[t].i;out.push(t);done[j]=true;if(j===i)break;x=t}
+      done[i]=true;
+    }
+    return{out:out};
+  }
+  /* run the letters as buffer swaps; want[i] = which piece should end up at position i (identity when solved) */
+  function leftover(T,f,letters,bi,want){
+    const st=T.F.map(a=>a.map(x=>f[x])),k=T.k,b=T.pos[T.start[bi]];
+    letters.forEach(t=>{
+      const c=T.pos[t],A=st[b.i],B=st[c.i],a2=A.slice(),b2=B.slice();
+      for(let q=0;q<k;q++){B[(c.n+q)%k]=a2[(b.n+q)%k];A[(b.n+q)%k]=b2[(c.n+q)%k]}
+    });
+    const res=[];let ok=true;
+    st.forEach((s,i)=>{
+      const P=T.P[want?want[i]:i];
+      if(s.slice().sort().join('')!==P.split('').sort().join('')){ok=false;return}
+      const r=s.indexOf(P[0]);if(r>0)res.push({n:T.show[i],r:r});
+    });
+    return{res:res,ok:ok};
+  }
+  /* ---- the personal bits: M2 edges (buffer DF = U), Orozco corners (buffer UFR = C, helper UBR = B) ---- */
+  const EI=5,CI=0;                                   /* DF edge (U), UFR corner (C) */
+  /* cycle-break preference by sticker letter. corners: then whatever is left. edges: A first, I and S dead last */
+  const HIER=['H','G','S','L','P','O','U','V','X','W'];
+  const HIERE=['A','J','L','T','R','O','G','V','X'].concat('BCDEFHKMNPQUW'.split(''),['I','S']);
+  const SE={B:'C',C:'B',M:'I',I:'M'};                /* pseudoswap: the UR and UF edges trade places */
+  const WE=[1,0,2,3,4,5,6,7,8,9,10,11];              /* the final Jb perm leaves UR/UF edges swapped */
+  function memo(scr){
+    const f=SCR.facelets(SCR.apply(scr)),he=home(TE,f),hc=home(TC,f);
+    const cl=trace(TC,hc,CI,HIER,true).out;
+    const par=cl.length%2===1;                       /* odd corners = parity */
+    let he2=he;
+    if(par){he2={};for(const l in he)he2[l]=SE[he[l]]||he[l]}
+    const el=trace(TE,he2,EI,HIERE,true).out;       /* flipped edges are cycle-break pairs too */
+    /* Orozco: N and Q only work as the first letter of a pair, so a second N is memo'd as Q and the other way round.
+       B is memo'd but has no alg. A single letter left at the end is doubled (G -> GG) and its alg done once. */
+    const pairs=(L,orozco)=>{
+      const r=[];
+      for(let i=0;i<L.length;i+=2){
+        const a=L[i],b=L[i+1],dp=b===undefined;
+        let b2=dp?a:b,sw=false;
+        if(orozco&&!dp&&(b==='N'||b==='Q')){b2=b==='N'?'Q':'N';sw=true}
+        r.push({t:a+b2,real:a+(dp?'':b),sw:sw,dp:dp,na:[orozco&&a==='B',orozco&&b2==='B']});
+      }
+      return r;
+    };
+    const fours=L=>{
+      const r=[],n=L.length-L.length%4;
+      for(let i=0;i<n;i+=4){const q=L.slice(i,i+4).join('');r.push({t:q,real:q,sw:false,dp:false,na:[false,false,false,false],q:true})}
+      return r.concat(pairs(L.slice(n),false));
+    };
+    return{c:pairs(cl,true),e:fours(el),par:par,cn:cl.length,en:el.length};
+  }
+  return{memo:memo,TC:TC,TE:TE,home:home,trace:trace,leftover:leftover,EI:EI,CI:CI,HIER:HIER,HIERE:HIERE,SE:SE,WE:WE};
+})();
+
+/* memo answer panel wiring */
+const maEl=$('#tmemo'),maBody=$('#tmemob'),maX=$('#tmemox'),maBtn=$('#tmmemo'),maLbl=$('#tmemol'),maKey=$('#tmemok');
+const MS={peek:false,prev:'',key:''};
+function maPairs(a,words){
+  if(!a.length)return'<span class="mnone">Already solved</span>';
+  return a.map((p,i)=>{
+    const w=words?D.words[p.t]:'',tip=[];
+    if(p.sw)tip.push('real letters: '+p.real);
+    if(p.na[0]||p.na[1])tip.push('B: no alg');
+    if(p.dp)tip.push('doubled to fill the pair, do the alg once');
+    const L=p.t.split('').map((l,k)=>{
+      const c=(!p.q&&k===1&&p.sw?'sw':'')+(p.na[k]||(!p.q&&k===1&&p.dp)?' na':'');
+      return'<span'+(c.trim()?' class="'+c.trim()+'"':'')+'>'+l+'</span>';
+    }).join('');
+    return'<span class="mc'+(words?'':' nw')+(p.q?' q':'')+'" style="--i:'+i+'"'+(tip.length?' title="'+tip.join(' \u00b7 ')+'"':'')+'><b>'+L+'</b>'+(words?'<i>'+(w?esc(w):'')+'</i>':'')+'</span>';
+  }).join('');
+}
+function maRender(scr){
+  const m=MA.memo(scr),x=[];
+  x.push('<span'+(m.par?' class="hot">Parity \u00b7 pseudoswap B/C, Jb + U\u2032':'>No parity')+'</span>');
+  maX.innerHTML=x.join('');
+  maBody.innerHTML='<div class="mrow"><span class="mk">Corners<em>'+m.cn+'</em></span><div class="mps">'+maPairs(m.c,true)+'</div></div>'
+    +'<div class="mrow"><span class="mk">Edges<em>'+m.en+'</em></span><div class="mps">'+maPairs(m.e,false)+'</div></div>';
+}
+function maSync(){
+  const on=!!set().tmemo;
+  maEl.hidden=!on;maBtn.textContent='Memo answer: '+(on?'on':'off')+'  [M]';maBtn.classList.toggle('on',on);
+  if(!on||!SCR.ready)return;
+  /* right after a solve the next scramble is already up, so the panel shows the answer for the solve you just did;
+     V (or a click) switches to the scramble that is on screen now */
+  const last=TM.s==='stop'&&!!MS.prev&&!MS.peek,subj=last?MS.prev:TM.scr;
+  if(!subj)return;
+  if(MS.key!==subj){MS.key=subj;maRender(subj)}
+  maEl.classList.toggle('rev',last||MS.peek);
+  maLbl.textContent=last?'Last solve':'This scramble';
+  maEl.classList.toggle('last',last);
+  maKey.textContent=last?'[V] see this scramble':MS.peek?(TM.s==='stop'&&MS.prev?'[V] back to last solve':'[V] hide'):'[V] peek';
+}
+function maToggle(){
+  if(TM.s!=='idle'&&TM.s!=='stop')return;
+  const on=!set().tmemo;set().tmemo=on;save();snd('toggle');MS.peek=false;
+  maSync();
+}
+function maPeek(){
+  if(!set().tmemo||(TM.s!=='idle'&&TM.s!=='stop'))return;
+  MS.peek=!MS.peek;snd('tab');maSync();
+}
+maBtn.addEventListener('click',e=>{e.stopPropagation();maToggle();e.currentTarget.blur()});
+maEl.addEventListener('click',maPeek);
 function tmShowScr(anim){
   if(anim)tcAnimate(TM.scr);else tcRender();
   $('#tmsc').innerHTML=TM.scr.split(' ').map((m,i)=>'<span style="--i:'+i+'">'+m[0]+(m.length>1?(m[1]==="'"?'<small class="pr">′</small>':'<small class="dbl">'+m.slice(1)+'</small>'):'')+'</span>').join('');
+  maSync();
 }
 function tmNew(){
   /* never show a placeholder scramble: wait for the real generator, then show the final one */
   if(!SCR.ready){
-    TM.scr='';tcRender();
+    TM.scr='';tcRender();maSync();
     $('#tmsc').innerHTML='<span class="tmload" style="--i:0">Preparing scramble\u2026</span>';
     tmHint('Getting ready\u2026');
     tmWarm();return;
@@ -2501,7 +2726,7 @@ function tmWarm(){
 setTimeout(tmWarm,50);
 let tmtEl=null,tmtLast='';
 function tmTick(){if(TM.s!=='run')return;if(!tmtEl)tmtEl=$('#tmt');const now=performance.now(),t=tfmt(now-TM.t0);if(t!==tmtLast){tmtLast=t;if(!(set().hideT||set().zen)){tmtEl.textContent=t;if(TM.sp){if(TM.ph==='memo')tmMe.textContent=t;else tmEe.textContent=tfmt(now-TM.t0-TM.mt)}}}TM.raf=requestAnimationFrame(tmTick)}
-function tmStart(){TM.s='run';tmtLast='';TM.t0=performance.now();clearTimeout(TM.pre);tmSpReset();TM.ph='memo';TM.mt=0;tmClass(TM.sp?'run memo':'run');tmHint(TM.sp?'Press when memo is done':'');if(set().hideT||set().zen)$('#tmt').textContent='\u00b7\u00b7\u00b7';tmTick();snd('tstart')}
+function tmStart(){MS.peek=false;MS.prev='';maSync();TM.s='run';tmtLast='';TM.t0=performance.now();clearTimeout(TM.pre);tmSpReset();TM.ph='memo';TM.mt=0;tmClass(TM.sp?'run memo':'run');tmHint(TM.sp?'Press when memo is done':'');if(set().hideT||set().zen)$('#tmt').textContent='\u00b7\u00b7\u00b7';tmTick();snd('tstart')}
 function tmStop(){
   const el=performance.now()-TM.t0;cancelAnimationFrame(TM.raf);
   TM.s='stop';$('#tmt').textContent=tfmt(el);
@@ -2516,6 +2741,7 @@ function tmStop(){
   }
   tmClass('stop');tmHint(TM_HINT);snd('tstop');tmPop($('#tmt'),'stopfx');
   clearTimeout(TM.newT);
+  if(set().tmemo){MS.prev=TM.scr;maSync()}
   requestAnimationFrame(()=>{TM.newT=setTimeout(()=>{if(TM.s==='stop'&&modal==='timer')tmNew()},120)});
 }
 function tmDown(){
@@ -2552,18 +2778,20 @@ document.addEventListener('keydown',e=>{
   else if((e.key==='n'||e.key==='N')&&(TM.s==='idle'||TM.s==='stop')){snd('tab');tmNew()}
   else if((e.key==='f'||e.key==='F')&&TM.s==='stop'&&!e.ctrlKey&&!e.metaKey&&!e.altKey){e.preventDefault();const t=$('#tmt');t.textContent='DNF';t.classList.add('dnf');snd('fail')}
   else if((e.key==='s'||e.key==='S')&&!e.ctrlKey&&!e.metaKey&&!e.altKey){e.preventDefault();tmModeToggle()}
+  else if((e.key==='m'||e.key==='M')&&!e.ctrlKey&&!e.metaKey&&!e.altKey){e.preventDefault();maToggle()}
+  else if((e.key==='v'||e.key==='V')&&!e.ctrlKey&&!e.metaKey&&!e.altKey){e.preventDefault();maPeek()}
 });
 document.addEventListener('keyup',e=>{
   if(modal!=='timer'||e.code!=='Space')return;
   e.preventDefault();tmUp();
 });
 const tmEl=$('#timer');
-tmEl.addEventListener('pointerdown',e=>{if(e.target.closest('.tclose,.tcube,.tmmode'))return;e.preventDefault();tmDown()});
-tmEl.addEventListener('pointerup',e=>{if(e.target.closest('.tclose,.tcube,.tmmode'))return;e.preventDefault();tmUp()});
+tmEl.addEventListener('pointerdown',e=>{if(e.target.closest('.tclose,.tcube,.tmmode,.tmemo'))return;e.preventDefault();tmDown()});
+tmEl.addEventListener('pointerup',e=>{if(e.target.closest('.tclose,.tcube,.tmmode,.tmemo'))return;e.preventDefault();tmUp()});
 tmEl.addEventListener('pointercancel',()=>{if(TM.s==='hold'||TM.s==='ready'){clearTimeout(TM.holdTimer);TM.s=TM.prev;tmClass(TM.prev==='stop'?'stop':'');tmHint(TM_HINT)}});
 $('#bt').onclick=openTimer;
 $('#tmmode').addEventListener('click',e=>{e.stopPropagation();tmModeToggle();e.currentTarget.blur()});
-tmModeSync();
+tmModeSync();maSync();
 /* ---------- 3D scramble cube (drag to rotate) ---------- */
 const TC={rx:-26,ry:-38,vx:0,vy:0,drag:false,lx:0,ly:0,raf:0,applyRaf:0,faces:[]};
 const TC_COL={U:'#F5F5F0',R:'#D63A3A',F:'#2FA84F',D:'#F5C518',L:'#F08A24',B:'#2F6FDB'},TC_FACE=['u','r','f','d','l','b'];

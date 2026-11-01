@@ -54,9 +54,9 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 
 #pace{width:min(420px,60vw);height:3px;background:color-mix(in srgb,var(--line) 84%,transparent);border-radius:999px;overflow:hidden;visibility:hidden;position:relative;isolation:isolate;box-shadow:0 0 0 1px color-mix(in srgb,var(--line) 20%,transparent);transition:opacity .28s ease,box-shadow .35s ease}
 #pace i{display:block;height:100%;width:100%;background:linear-gradient(90deg,color-mix(in srgb,var(--acc) 68%,transparent),var(--acc) 65%,color-mix(in srgb,var(--acc) 78%,white));transform-origin:left;transform:scaleX(0);transition:background .3s ease,filter .3s ease;position:relative;border-radius:inherit;will-change:transform}
-#pace i::after{content:"";position:absolute;inset:0;width:34%;left:-35%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);opacity:.7;animation:paceSheen 2.4s ease-in-out infinite;pointer-events:none}
+#pace i::after{content:"";position:absolute;inset:0;width:34%;left:0;transform:translateX(-102.94%);background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);opacity:.7;animation:paceSheen 2.4s ease-in-out infinite;pointer-events:none}
 #pace.over{box-shadow:0 0 8px color-mix(in srgb,#FBBF24 24%,transparent)}#pace.over i{background:linear-gradient(90deg,#FBBF24,#F59E0B);filter:saturate(1.08)}
-@keyframes paceSheen{0%,25%{left:-35%;opacity:0}45%{opacity:.7}75%,100%{left:110%;opacity:0}}
+@keyframes paceSheen{0%,25%{transform:translateX(-102.94%);opacity:0}45%{opacity:.7}75%,100%{transform:translateX(323.53%);opacity:0}}
 @media(prefers-reduced-motion:reduce){#pace i::after{animation:none}.zen-uncheck{animation:none!important}#pace,#pace i{transition:none!important}}
 #wrap{min-height:2.6rem}
 #wi{display:none;width:min(440px,86vw);background:var(--panel);border:1px solid var(--acc);border-radius:6px;padding:.6em .8em;text-align:center;user-select:text;-webkit-user-select:text}
@@ -764,8 +764,15 @@ html[data-lt="1"] .tgrid::before{background-image:linear-gradient(color-mix(in s
 html[data-lt="1"] .tgrain{display:none}
 .tcshadow{filter:none}
 /* the main page's background sits fully hidden under the timer, so it rests while the timer is open */
-html:has(#timer.on) #bgfx{visibility:hidden}
-html:has(#timer.on) #bgfx i{animation-play-state:paused}
+html.tmon #bgfx{visibility:hidden}
+html.tmon #bgfx i{animation-play-state:paused}
+/* everything under the timer is fully covered, so its idle animations (glow, floating letters, pace sheen) rest once the open animation has finished (class set from script, not :has, so the open itself stays cheap) */
+html.tmrest :is(#main,#idlefx,#wash,#top),html.tmrest :is(#main,#idlefx,#wash,#top) *,html.tmrest :is(#main,#idlefx,#wash,#top) *::before,html.tmrest :is(#main,#idlefx,#wash,#top) *::after{animation-play-state:paused!important}
+/* the timer is opaque, so the blurred backdrop it faded in with was never visible once open but was still computed on every frame: fade it with opacity only */
+@keyframes tmi{from{opacity:0}to{opacity:1}}
+@keyframes tmo{from{opacity:1}to{opacity:0}}
+#timer.on:not(.swap):not(.vt){animation-name:tmi}
+#timer.out:not(.swap):not(.vt){animation-name:tmo}
 /* digits get their own layer so updating them every frame never repaints anything else */
 .tmt{will-change:transform;contain:layout style}
 /* split timer: glow and sweep use opacity/transform only, and no backdrop blur over the moving background */
@@ -805,14 +812,14 @@ body.solving #top:hover{opacity:1}
 #time.failed{animation:tmshake .45s ease}
 @keyframes tpop{from{opacity:0;transform:scale(.95) translateY(3px)}}
 .tbg{transition:opacity .9s ease}
-#timer:has(.tpage.run) .tbg{opacity:.55}
-#timer:has(.tpage.run) .tbg,#timer:has(.tpage.run) .tbg *,#timer:has(.tpage.run) .tbg *::before,#timer:has(.tpage.run) .tbg::before{animation-play-state:paused!important}
+#timer.isrun .tbg{opacity:.55}
+#timer.isrun .tbg,#timer.isrun .tbg *,#timer.isrun .tbg *::before,#timer.isrun .tbg::before{animation-play-state:paused!important}
 
 /* sliders and text selection follow the theme accent */
 input[type=range]{accent-color:var(--acc)}
 ::selection{background:color-mix(in srgb,var(--acc) 32%,transparent)}
 
-body.solving:not(.mv),body.solving:not(.mv) *,body:not(.mv) #timer:has(.tpage.run),body:not(.mv) #timer:has(.tpage.run) *{cursor:none!important}
+body.solving:not(.mv),body.solving:not(.mv) *,body:not(.mv) #timer.isrun,body:not(.mv) #timer.isrun *{cursor:none!important}
 #tlp{display:inline-flex;align-items:center;justify-content:center}
 #tlp svg{width:1em;height:1em;display:block}
 
@@ -862,8 +869,8 @@ html[data-lt="1"] .tmt.sflash{animation-name:tmsflashL}
 html[data-lt="1"] .tms::after{box-shadow:0 0 0 1.5px color-mix(in srgb,var(--acc) 55%,transparent),0 10px 24px -10px color-mix(in srgb,var(--acc) 50%,transparent)}
 /* while solving, light themes dim to a soft dusk (fading a pastel just washes it out) */
 html[data-lt="1"] #timer::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:0;transition:opacity .9s ease;background:radial-gradient(85% 75% at 50% 46%,color-mix(in srgb,var(--fg) 7%,transparent),color-mix(in srgb,var(--fg) 24%,transparent) 100%)}
-html[data-lt="1"] #timer:has(.tpage.run)::after{opacity:1}
-html[data-lt="1"] #timer:has(.tpage.run) .tbg{opacity:.85}
+html[data-lt="1"] #timer.isrun::after{opacity:1}
+html[data-lt="1"] #timer.isrun .tbg{opacity:.85}
 
 /* ---------- round 4 ---------- */
 /* trainer tabs: the two boxes morph into each other */
@@ -1193,6 +1200,53 @@ html{scroll-behavior:smooth}
 #top #bg:hover svg .t3{stroke-dasharray:11 4 99!important}
 #top button:active{transform:scale(.94)}
 @media (hover:none){#top button:hover{transform:none;background:none;color:var(--muted)}}
+
+/* ---------- timer open: lighter first frames ---------- */
+/* the heavy decorative layers (aurora, stars, grid, grain) fade in a beat after the page itself, so the first frames only carry the plain background and the text */
+@keyframes tbgin{from{opacity:0}}
+#timer.on:not(.swap):not(.vt) .tbg{animation:tbgin 1s cubic-bezier(.32,.72,0,1) .14s backwards}
+#timer:not(.fx1) :is(.tstars,.tdots) b:nth-child(5n+1),
+#timer:not(.fx2) :is(.tstars,.tdots) b:nth-child(5n+2),
+#timer:not(.fx3) :is(.tstars,.tdots) b:nth-child(5n+3),
+#timer:not(.fx4) :is(.tstars,.tdots) b:nth-child(5n+4),
+#timer:not(.fx5) :is(.tstars,.tdots) b:nth-child(5n+0){display:none}
+/* the cube is built after the first frames, then eases in */
+.tcube.pre{opacity:0}
+.tcube.cin{animation:tcin .7s cubic-bezier(.32,.72,0,1) backwards}
+@keyframes tcin{from{opacity:0}}
+@media (prefers-reduced-motion:reduce){#timer .tbg,.tcube.cin{animation:none!important}}
+
+/* ---------- top icon bar: calm, alive hover ---------- */
+#top{--px:50%}
+#top button{position:relative;z-index:1}
+#top::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:0;opacity:0;transition:opacity .5s cubic-bezier(.32,.72,0,1);
+  background:radial-gradient(110px 70px at var(--px) 50%,color-mix(in srgb,var(--acc) 20%,transparent),transparent 72%)}
+#top.mag::before{opacity:1}
+/* the spotlight: one soft tile that glides to whichever icon is near the cursor */
+#top .tind{position:absolute;z-index:0;top:.3rem;left:0;width:2.5rem;height:2.5rem;border-radius:11px;pointer-events:none;opacity:0;--x:0px;
+  transform:translate3d(var(--x),0,0);
+  background:color-mix(in srgb,var(--acc) 13%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--acc) 24%,transparent),0 6px 18px -8px color-mix(in srgb,var(--acc) 60%,transparent);
+  transition:transform .55s cubic-bezier(.32,.72,0,1),opacity .35s cubic-bezier(.32,.72,0,1)}
+#top.mag .tind{opacity:1}
+#top.snap .tind{transition:opacity .35s cubic-bezier(.32,.72,0,1)}
+/* the icons themselves: a soft swell under the cursor (no bounce), accent colour for the nearest one */
+#top.mag button,#top.mag button:hover{background:none;background-color:transparent;transform:none}
+#top.mag button:active{transform:scale(.94)}
+#top.mag button.hot{color:var(--acc)}
+#top.mag button svg,#top.mag button:hover svg{transform:scale(var(--m,1))!important;transition:transform .35s cubic-bezier(.32,.72,0,1)!important}
+#top button svg{transform-origin:50% 55%}
+/* label under the bar */
+#top .tlbl{position:absolute;z-index:3;top:calc(100% + 9px);left:0;--lx:0px;display:flex;align-items:center;gap:.55rem;padding:.38rem .6rem;border-radius:10px;white-space:nowrap;pointer-events:none;
+  font-size:.72rem;letter-spacing:.02em;color:var(--fg);
+  background:color-mix(in srgb,var(--panel) 93%,transparent);border:1px solid color-mix(in srgb,var(--line) 85%,transparent);box-shadow:0 12px 30px -14px rgba(0,0,0,.55);
+  opacity:0;transform:translate3d(var(--lx),-5px,0);
+  transition:opacity .22s cubic-bezier(.32,.72,0,1),transform .5s cubic-bezier(.32,.72,0,1)}
+#top .tlbl b{font-weight:500}
+#top .tlbl kbd{font:inherit;font-size:.66rem;line-height:1;padding:.2rem .38rem;border-radius:6px;color:var(--muted);border:1px solid var(--line);background:color-mix(in srgb,var(--bg) 60%,transparent)}
+#top.tip .tlbl{opacity:1;transform:translate3d(var(--lx),0,0)}
+body.solving #top .tlbl{display:none}
+@media (hover:none){#top::before,#top .tind,#top .tlbl{display:none}}
+@media (prefers-reduced-motion:reduce){#top .tind,#top .tlbl,#top.mag button svg{transition:none!important}#top.mag button svg{transform:none!important}}
 </style>
 </head>
 <body>
@@ -1209,11 +1263,12 @@ html{scroll-behavior:smooth}
 <a id="sclk" href="https://cstimer.net/" target="_blank" rel="noopener noreferrer" tabindex="-1" title="Open csTimer">0:00</a>
 <div id="top">
 <button id="bd" tabindex="-1" aria-label="Word lookup" title="Word lookup [D]"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/></svg></button>
-<button id="bsl" tabindex="-1" aria-label="Trainers" title="Trainers: stickers, words and chains [L]"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1.5" y="8.5" width="3.5" height="7" rx="1.2" fill="currentColor"/><rect x="5.5" y="5" width="3.5" height="14" rx="1.2" fill="currentColor"/><rect x="15" y="5" width="3.5" height="14" rx="1.2" fill="currentColor"/><rect x="19" y="8.5" width="3.5" height="7" rx="1.2" fill="currentColor"/><path d="M9 12h6" stroke-width="2.6"/></svg></button>
+<button id="bsl" tabindex="-1" aria-label="Trainers" title="Trainers: stickers, words and chains [L]"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1.5" y="8.5" width="3.5" height="7" rx="1.2" fill="currentColor" stroke-width="1"/><rect x="5.5" y="5" width="3.5" height="14" rx="1.2" fill="currentColor" stroke-width="1"/><rect x="15" y="5" width="3.5" height="14" rx="1.2" fill="currentColor" stroke-width="1"/><rect x="19" y="8.5" width="3.5" height="7" rx="1.2" fill="currentColor" stroke-width="1"/><path d="M9 12h6" stroke-width="2.2"/></svg></button>
 <button id="bt" tabindex="-1" aria-label="Timer" title="Timer [T]"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2"/><path d="M9.5 2h5"/></svg></button>
 <button id="bh" tabindex="-1" aria-label="Heatmap" title="Heatmap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path pathLength="1" d="M3 9h18"/><path pathLength="1" d="M3 15h18"/><path pathLength="1" d="M9 3v18"/><path pathLength="1" d="M15 3v18"/></svg></button>
 <button id="bs" tabindex="-1" aria-label="Session stats" title="Session stats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 20v-6"/><path d="M12 20V4"/><path d="M18 20V10"/></svg></button>
 <button id="bg" tabindex="-1" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path class="t1" pathLength="18" d="M3 5H21"/><path class="t2" pathLength="18" d="M3 12H21"/><path class="t3" pathLength="18" d="M3 19H21"/><path class="k1" d="M15 3v4"/><path class="k2" d="M9 10v4"/><path class="k3" d="M18 17v4"/></svg></button>
+<i class="tind" aria-hidden="true"></i><span class="tlbl" aria-hidden="true"><b></b><kbd></kbd></span>
 </div>
 <div id="main">
 <div id="pace"><i></i></div>
@@ -2420,7 +2475,7 @@ let lastSt=-1;
 setInterval(()=>{if(st!==lastSt){lastSt=st;mgo.textContent=st===0?'Start':st===1?'Stop':'Next';mfail.disabled=st!==1}},80);
 
 /* ---------- 3x3x3 random-state scrambler (Kociemba two-phase, written from scratch) ---------- */
-const SCR=(function(){
+const SCR_FN=function(){
   const URF=0,UFL=1,ULB=2,UBR=3,DFR=4,DLF=5,DBL=6,DRB=7;
   const UR=0,UF=1,UL=2,UB=3,DR=4,DF=5,DL=6,DB=7,FR=8,FL=9,BL=10,BR=11;
   const Z8=[0,0,0,0,0,0,0,0],Z12=[0,0,0,0,0,0,0,0,0,0,0,0];
@@ -2562,13 +2617,43 @@ const SCR=(function(){
     return (a[Math.random()*6|0]+' '+b[Math.random()*4|0]).trim();
   }
   return{init:init,initSync:initSync,get ready(){return ready},scramble:scramble,fallback:fallback,apply:apply,facelets:facelets,orient:orient,randState:randState,solve:solve,fmt:fmt,mult:mult,moves:moves,SOLVED:SOLVED};
+};
+/* the heavy part (building the lookup tables + solving for each scramble) runs in a worker built from the very same
+   source, so the page never stalls; if a worker can't be made it falls back to the old on-page path */
+const SCR=(function(){
+  const M=SCR_FN();
+  let w=null,q=[],built=false,asked=0,cbs=[],started=false,mainMode=false;
+  const KEEP=3;
+  function top(){if(!w||!built)return;while(q.length+asked<KEEP){asked++;w.postMessage(1)}}
+  function fire(){const c=cbs;cbs=[];c.forEach(f=>f())}
+  function toMain(){
+    mainMode=true;if(w){try{w.terminate()}catch(e){}w=null}
+    M.init(fire);
+  }
+  function start(){
+    if(started)return;started=true;
+    try{
+      const src='const S=('+SCR_FN.toString()+')();onmessage=function(e){if(e.data===0){S.initSync();postMessage({r:1})}else postMessage({s:S.scramble()})};';
+      w=new Worker(URL.createObjectURL(new Blob([src],{type:'text/javascript'})));
+      w.onmessage=e=>{const d=e.data;if(d.r){built=true;top()}else{asked--;q.push(d.s);top();fire()}};
+      w.onerror=toMain;
+      w.postMessage(0);
+    }catch(err){toMain()}
+  }
+  const o={
+    init(done){if(mainMode){M.init(done);return}if(done)cbs.push(done);start()},
+    get ready(){return mainMode?M.ready:(built&&q.length>0)},
+    scramble(){if(mainMode)return M.scramble();const x=q.shift();top();return x||M.fallback()}
+  };
+  ['initSync','fallback','apply','facelets','orient','randState','solve','fmt','mult','moves','SOLVED'].forEach(k=>{o[k]=M[k]});
+  return o;
 })();
 
 /* ---------- timer: a calm, minimal page ---------- */
 const TM={s:'idle',prev:'idle',t0:0,raf:0,holdTimer:0,scr:'',fb:false,building:false,next:'',pre:0,newT:0,sp:!!set().tsplit,ph:'',mt:0,splitAt:0,spres:false,cls:''};
 const TM_HINT=matchMedia('(pointer:coarse)').matches?'Press and hold, release when green':'Hold Space until green, release to start';
 function tfmt(ms){const c=Math.floor(ms/10),cs=c%100,sec=Math.floor(c/100),m=Math.floor(sec/60);return(m?m+':'+String(sec%60).padStart(2,'0'):String(sec))+'.'+String(cs).padStart(2,'0')}
-const tmClass=c=>{TM.cls=c||'';$('#tpage').className='tpage '+(c||'')+(TM.sp?' sp':'')+(TM.spres?' spres':'')+(set().tmemo?' hasm':'')+(TM.lay?' tsm':'')};
+const tmClass=c=>{TM.cls=c||'';$('#timer').classList.toggle('isrun',/(^|\s)run(\s|$)/.test(c||''));$('#tpage').className='tpage '+(c||'')+(TM.sp?' sp':'')+(TM.spres?' spres':'')+(set().tmemo?' hasm':'')+(TM.lay?' tsm':'')};
 /* ---- memo / exec split ---- */
 const tmMe=$('#tmm'),tmEe=$('#tme'),tmBar=$('#tmbar'),tmBar2=$('#tmbar2'),tmCards=[$('#tmmc'),$('#tmec')];
 const tmPop=(el,c)=>{el.classList.remove(c);void el.offsetWidth;el.classList.add(c)};
@@ -2681,8 +2766,8 @@ const MA=(function(){
   const rank=l=>{const i=HIERE.indexOf(l);return i<0?99:i};
   const SE={B:'C',C:'B',M:'I',I:'M'};                /* pseudoswap: the UR and UF edges trade places */
   const WE=[1,0,2,3,4,5,6,7,8,9,10,11];              /* the final Jb perm leaves UR/UF edges swapped */
-  /* advanced M2: I/S and C/W are memo'd as their twin (I<->S, C<->W) when they are second in a pair whose first
-     letter sits in the M slice; the trace carries on from the real letter */
+  /* advanced M2: a second C or W is always memo'd as its twin (C<->W); a second I or S is memo'd as its twin (I<->S)
+     only when the first letter of the pair sits in the M slice; the trace carries on from the real letter */
   const SWP={I:'S',S:'I',C:'W',W:'C'},MSL='ACUWQIKS';
   /* which edges are still flipped once the letters are done: named by the shared face when there are two on one
      face, otherwise by cycle-break priority. the buffer is flipped by default so it is never listed */
@@ -2695,7 +2780,7 @@ const MA=(function(){
   }
   function edgeChunks(L){
     const D=L.slice();
-    for(let i=1;i<L.length;i+=2){const t=SWP[L[i]];if(t&&MSL.indexOf(L[i-1])>-1)D[i]=t}
+    for(let i=1;i<L.length;i+=2){const t=SWP[L[i]];if(t&&('CW'.indexOf(L[i])>-1||MSL.indexOf(L[i-1])>-1))D[i]=t}
     const r=[],n=L.length-L.length%4;
     for(let i=0;i<n;i+=4)r.push({t:D.slice(i,i+4).join('').toLowerCase(),real:L.slice(i,i+4).join(''),dp:false,na:[false,false],q:true});
     for(let i=n;i<L.length;i+=2){
@@ -2796,10 +2881,11 @@ maBtn.addEventListener('click',e=>{e.stopPropagation();maToggle();e.currentTarge
 maEl.addEventListener('click',maPeek);
 function tmShowScr(anim){
   if(anim)tcAnimate(TM.scr);else tcRender();
+  TM.shown=TM.scr;
   $('#tmsc').innerHTML=TM.scr.split(' ').map((m,i)=>'<span style="--i:'+i+'">'+m[0]+(m.length>1?(m[1]==="'"?'<small class="pr">′</small>':'<small class="dbl">'+m.slice(1)+'</small>'):'')+'</span>').join('');
   maSync();
 }
-function tmNew(){
+function tmNew(still){
   /* never show a placeholder scramble: wait for the real generator, then show the final one */
   if(!SCR.ready){
     TM.scr='';tcRender();maSync();
@@ -2808,7 +2894,7 @@ function tmNew(){
     tmWarm();return;
   }
   TM.scr=TM.next||SCR.scramble();TM.next='';
-  tmShowScr(modal==='timer');
+  tmShowScr(modal==='timer'&&!still);
   if(TM.s==='idle'||TM.s==='stop')tmHint(TM_HINT);
   tmPrefetch();
 }
@@ -2849,7 +2935,7 @@ function tmDown(){
     tmStop();return;
   }
   if(TM.s!=='idle'&&TM.s!=='stop')return;
-  if(!SCR.ready)return;
+  if(!SCR.ready||!TM.scr)return;
   {const t=$('#tmt');if(t.classList.contains('dnf')){t.classList.remove('dnf');t.textContent='0.00'}}TM.prev=TM.s;TM.s='hold';tmClass('hold');tmHint('Keep holding');
   clearTimeout(TM.holdTimer);
   TM.holdTimer=setTimeout(()=>{if(TM.s==='hold'){TM.s='ready';tmClass('ready');tmHint('Release to start')}},300);
@@ -2867,8 +2953,16 @@ function tmCancel(){
 function tmEsc(){return tmCancel()}
 function openTimer(){
   TM.s='idle';tmSpReset();tmModeSync();tmClass('');$('#tmt').textContent='0.00';tmHint(TM_HINT);
-  if(!TM.scr)tmNew();else tmShowScr();
+  /* the scramble and 3D cube used to be rebuilt in the same frame as the click, which stalled the open animation.
+     Now the page opens first; the DOM is only rebuilt (after the first frames) when it is actually out of date. */
+  const fresh=!TM.scr||TM.shown!==TM.scr,cu=$('#tcube');
+  if(fresh&&cu)cu.classList.add('pre');
   openM('timer');tmWarm();
+  if(!fresh)return;
+  requestAnimationFrame(()=>setTimeout(()=>{
+    if(modal==='timer'){if(!TM.scr)tmNew(true);else tmShowScr()}
+    if(cu){cu.classList.remove('pre');cu.classList.add('cin');setTimeout(()=>cu.classList.remove('cin'),700)}
+  },90));
 }
 document.addEventListener('keydown',e=>{
   if(modal!=='timer')return;
@@ -2888,8 +2982,56 @@ tmEl.addEventListener('pointerdown',e=>{if(e.target.closest('.tclose,.tcube,.tmm
 tmEl.addEventListener('pointerup',e=>{if(e.target.closest('.tclose,.tcube,.tmmode,.tmemo'))return;e.preventDefault();tmUp()});
 tmEl.addEventListener('pointercancel',()=>{if(TM.s==='hold'||TM.s==='ready'){clearTimeout(TM.holdTimer);TM.s=TM.prev;tmClass(TM.prev==='stop'?'stop':'');tmHint(TM_HINT)}});
 $('#bt').onclick=openTimer;
+{const th=document.documentElement;let rt=0,fxT=[];new MutationObserver(()=>{clearTimeout(rt);const on=tmEl.classList.contains('on');th.classList.toggle('tmon',on);
+  /* the 70 twinkling stars and the floating dots start at zero opacity anyway, so they are switched on in small batches once the open animation is done: far fewer layers to create in any one frame */
+  if(on){if(!fxT.length&&!tmEl.classList.contains('fx5'))for(let k=1;k<=5;k++)fxT.push(setTimeout(()=>{if(tmEl.classList.contains('on'))tmEl.classList.add('fx'+k)},650+k*140))}
+  else{fxT.forEach(clearTimeout);fxT=[];setTimeout(()=>{if(!tmEl.classList.contains('on'))tmEl.classList.remove('fx1','fx2','fx3','fx4','fx5')},450)}
+  if(on&&tmEl.classList.contains('fx5'))fxT=[];
+  rt=setTimeout(()=>th.classList.toggle('tmrest',on&&tmEl.classList.contains('on')),on?1500:350)}).observe(tmEl,{attributes:true,attributeFilter:['class']})}
 $('#tmmode').addEventListener('click',e=>{e.stopPropagation();tmModeToggle();e.currentTarget.blur()});
 tmModeSync();maSync();
+
+/* ---------- top icon bar: a spotlight that glides between icons, a gentle dock swell, a soft glow under the cursor, a label ---------- */
+(function(){
+  const bar=$('#top'),ind=bar.querySelector('.tind'),lbl=bar.querySelector('.tlbl'),btns=Array.from(bar.querySelectorAll('button'));
+  if(!bar||!ind||!lbl||!btns.length)return;
+  /* native tooltips would double up with the label */
+  btns.forEach(b=>{const t=b.getAttribute('title')||'';const m=t.match(/\[(.+?)\]\s*$/);b.dataset.key=m?m[1]:'';b.dataset.name=b.getAttribute('aria-label')||t.replace(/\s*\[.+?\]\s*$/,'');b.removeAttribute('title')});
+  const lb=lbl.querySelector('b'),lk=lbl.querySelector('kbd'),calm=matchMedia('(prefers-reduced-motion:reduce)');
+  let cx=[],cur=null,on=false,raf=0,mx=0,pw=0,showT=0;
+  function measure(){const r=bar.getBoundingClientRect();pw=r.width;cx=btns.map(b=>{const q=b.getBoundingClientRect();return {l:q.left-r.left,w:q.width,c:q.left-r.left+q.width/2}});return r}
+  function frame(){
+    raf=0;if(!on)return;
+    const r=bar.getBoundingClientRect(),x=mx-r.left;
+    bar.style.setProperty('--px',x+'px');
+    let best=0,bd=1e9;
+    cx.forEach((c,i)=>{const d=Math.abs(x-c.c);if(d<bd){bd=d;best=i}
+      /* swell falls off smoothly with distance from the cursor */
+      const k=Math.exp(-Math.pow(d/(c.w*.95),2));btns[i].style.setProperty('--m',calm.matches?1:(1+.2*k).toFixed(3))});
+    if(best!==cur){
+      const first=cur===null;cur=best;
+      if(first){bar.classList.add('snap');}
+      ind.style.setProperty('--x',cx[best].l+'px');
+      if(first){void ind.offsetWidth;bar.classList.remove('snap')}
+      btns.forEach((b,i)=>b.classList.toggle('hot',i===best));
+      const b=btns[best];lb.textContent=b.dataset.name;lk.textContent=b.dataset.key;lk.style.display=b.dataset.key?'':'none';
+      const lw=lbl.offsetWidth;let lx=cx[best].c-lw/2;lx=Math.max(0,Math.min(lx,pw-lw));
+      lbl.style.setProperty('--lx',lx+'px');
+    }
+  }
+  const sched=()=>{if(!raf)raf=requestAnimationFrame(frame)};
+  bar.addEventListener('pointerenter',e=>{
+    if(e.pointerType==='touch')return;
+    on=true;measure();mx=e.clientX;bar.classList.add('mag');
+    clearTimeout(showT);showT=setTimeout(()=>bar.classList.add('tip'),380);sched()});
+  bar.addEventListener('pointermove',e=>{if(e.pointerType==='touch'||!on)return;mx=e.clientX;sched()});
+  bar.addEventListener('pointerleave',()=>{
+    on=false;cur=null;clearTimeout(showT);bar.classList.remove('mag','tip');
+    btns.forEach(b=>{b.style.setProperty('--m',1);b.classList.remove('hot')})});
+  /* a press closes the label straight away; the spotlight stays */
+  bar.addEventListener('pointerdown',()=>{clearTimeout(showT);bar.classList.remove('tip')});
+  addEventListener('resize',()=>{if(on)measure()});
+})();
 /* ---------- 3D scramble cube (drag to rotate) ---------- */
 const TC={rx:-26,ry:-38,vx:0,vy:0,drag:false,lx:0,ly:0,raf:0,applyRaf:0,faces:[]};
 const TC_COL={U:'#F5F5F0',R:'#D63A3A',F:'#2FA84F',D:'#F5C518',L:'#F08A24',B:'#2F6FDB'},TC_FACE=['u','r','f','d','l','b'];

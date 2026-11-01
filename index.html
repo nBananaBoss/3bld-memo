@@ -214,7 +214,7 @@ html[data-lt="1"]{--ga:14%;--gb:5%}
 @media(max-width:520px){.poolcolumns{grid-template-columns:1fr;gap:.6rem}.poolcolumn .chips{grid-template-columns:repeat(8,minmax(0,1fr))}.poolhead{gap:.5rem}.poolpresets{gap:.35rem}.presetdivider{display:none}}
 @media(prefers-reduced-motion:reduce){#pair.space-enter,.poolhint.changed{animation:none!important}}
 /* ---------- top icons ---------- */
-#top button{transition:transform .4s cubic-bezier(.34,1.56,.64,1),color .2s,background-color .25s}
+#top button{transition:transform .4s cubic-bezier(.32,.72,0,1),color .2s,background-color .25s}
 #top button:hover{color:var(--acc);background:color-mix(in srgb,var(--acc) 14%,transparent);transform:translateY(-2px) scale(1.15)}
 #bg:hover{transform:rotate(90deg) scale(1.15)}
 #bh:hover{transform:rotate(-8deg) scale(1.2)}
@@ -226,7 +226,7 @@ body{transition:background-color .6s,color .4s}
 .box{transition:background-color .4s,border-color .4s;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
 button:hover{transform:translateY(-1px)}
 button:active{transform:scale(.97)}
-.chips button{transition:background-color .18s,color .18s,border-color .18s,transform .25s cubic-bezier(.34,1.56,.64,1)}
+.chips button{transition:background-color .18s,color .18s,border-color .18s,transform .25s cubic-bezier(.32,.72,0,1)}
 .chips button:hover{transform:scale(1.1)}
 .grp>.it{transition:background-color .2s}
 .grp>label.it:hover,.grp>.it:hover{background:color-mix(in srgb,var(--acc) 6%,transparent)}
@@ -240,9 +240,9 @@ input:focus,select:focus,textarea:focus{border-color:var(--acc);box-shadow:0 0 0
 #settings.on .box>*{animation:sin .55s cubic-bezier(.32,.72,0,1) backwards}
 #settings.on .box>:nth-child(2){animation-delay:.05s}#settings.on .box>:nth-child(3){animation-delay:.08s}#settings.on .box>:nth-child(4){animation-delay:.11s}#settings.on .box>:nth-child(5){animation-delay:.14s}#settings.on .box>:nth-child(6){animation-delay:.17s}#settings.on .box>:nth-child(7){animation-delay:.2s}#settings.on .box>:nth-child(8){animation-delay:.23s}#settings.on .box>:nth-child(9){animation-delay:.26s}#settings.on .box>:nth-child(10){animation-delay:.29s}#settings.on .box>:nth-child(n+11){animation-delay:.32s}
 #drawer.on .stat,#drawer.on .lr,#help.on .box>*{animation:sin .45s cubic-bezier(.32,.72,0,1) backwards}
-#heat.on #hm div{animation:cell .5s cubic-bezier(.34,1.56,.64,1) backwards}
+#heat.on #hm div{animation:cell .5s cubic-bezier(.32,.72,0,1) backwards}
 @keyframes cell{from{opacity:0;transform:scale(.4)}}
-#hm div[data-p]{transition:transform .18s cubic-bezier(.34,1.56,.64,1),box-shadow .18s}
+#hm div[data-p]{transition:transform .18s cubic-bezier(.32,.72,0,1),box-shadow .18s}
 #hm div[data-p]:hover{transform:scale(1.5);position:relative;z-index:3;border-radius:3px;box-shadow:0 4px 14px rgba(0,0,0,.5)}
 
 @media (prefers-reduced-motion:reduce){#intro{display:none}#pair.idle{animation:none!important}}
@@ -391,7 +391,7 @@ body.ready #top button:nth-child(5){animation-delay:.33s}
 #top #bs:hover{transform:translateY(-2px) scale(1.2,1.1)}
 @media (hover:none){#top #bg:hover,#top #bh:hover,#top #bs:hover,#top #bch:hover{transform:none}}
 
-#hm .hmhl{cursor:pointer;color:var(--fg);transition:transform .18s cubic-bezier(.34,1.56,.64,1),color .15s}
+#hm .hmhl{cursor:pointer;color:var(--fg);transition:transform .18s cubic-bezier(.32,.72,0,1),color .15s}
 #hm .hmhl:hover{color:var(--acc);transform:scale(1.4);font-weight:700}
 
 /* ---------- timer page ---------- */
@@ -406,9 +406,9 @@ body.ready #top button:nth-child(5){animation-delay:.33s}
 .tmsc small{font-size:.72em;margin-left:.06em;color:var(--acc);font-weight:600}
 @keyframes mv{from{opacity:0;transform:translateY(10px)}}
 .tmmain{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%}
-.tmt{font-size:clamp(4.6rem,21vw,12rem);font-weight:600;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:.015em}
+.tmt{font-size:clamp(4.6rem,21vw,12rem);font-weight:600;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:.015em;transition:color .35s ease,text-shadow .6s ease,transform .6s cubic-bezier(.32,.72,0,1)}
 .tmline{width:min(380px,62vw);height:3px;border-radius:2px;background:var(--line);overflow:hidden;margin-top:1.6rem}
-#tmbar{display:block;height:100%;width:0;background:var(--r)}
+#tmbar{display:block;height:100%;width:0;background:var(--r);transition:width .4s cubic-bezier(.32,.72,0,1),background-color .35s ease,opacity .45s ease}
 .tpage.hold #tmbar{width:100%}
 .tpage.ready #tmbar{width:100%;background:var(--g)}
 .tpage.run #tmbar{width:100%;background:var(--acc);opacity:.3}
@@ -673,18 +673,17 @@ html[data-lt="1"] .tgrid{opacity:.45}
 .fld.shake{animation:shk .3s}
 @keyframes shk{20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}
 
-.tmt.sflash{animation:tmsflash .55s cubic-bezier(.34,1.56,.64,1)}
+.tmt.sflash{animation:tmsflash .7s cubic-bezier(.32,.72,0,1)}
 /* ready: bloom when the hold turns green */
-.tpage.ready .tmt{animation:tmready .55s cubic-bezier(.34,1.56,.64,1) both}
-@keyframes tmready{0%{transform:scale(.95);text-shadow:0 0 0 transparent}45%{transform:scale(1.07);text-shadow:0 0 .5em color-mix(in srgb,var(--g) 75%,transparent),0 0 1.2em color-mix(in srgb,var(--g) 45%,transparent)}100%{transform:scale(1.03);text-shadow:0 0 .3em color-mix(in srgb,var(--g) 45%,transparent),0 0 .9em color-mix(in srgb,var(--g) 22%,transparent)}}
+.tpage.ready .tmt{transform:scale(1.03);text-shadow:0 0 .3em color-mix(in srgb,var(--g) 50%,transparent),0 0 .9em color-mix(in srgb,var(--g) 26%,transparent)}
 /* stop: thud, glow and a ripple ring (a second ring when memo/exec split is on) */
-.tmt.stopfx{animation:tmstop .65s cubic-bezier(.2,.9,.3,1.3)}
+.tmt.stopfx{animation:tmstop .8s cubic-bezier(.32,.72,0,1)}
 .tmt.stopfx::before,.tmt.stopfx::after{content:"";position:absolute;left:50%;top:50%;width:100%;height:100%;border-radius:999px;border:2px solid var(--acc);opacity:0;pointer-events:none;transform:translate(-50%,-50%) scale(.5);animation:tmring .95s cubic-bezier(.2,.7,.2,1) forwards}
 .tmt.stopfx::before{display:none;border-color:var(--fg);animation-delay:.14s}
 .tpage.spres .tmt.stopfx::before{display:block}
-@keyframes tmstop{0%{transform:scale(1.09);text-shadow:0 0 .45em color-mix(in srgb,var(--acc) 70%,transparent)}55%{transform:scale(.985)}100%{transform:none;text-shadow:0 0 0 transparent}}
+@keyframes tmstop{0%{transform:scale(1.05);text-shadow:0 0 .45em color-mix(in srgb,var(--acc) 65%,transparent)}100%{transform:none;text-shadow:0 0 0 transparent}}
 @keyframes tmring{0%{opacity:.65;transform:translate(-50%,-50%) scale(.5)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.6)}}
-@keyframes tmsflash{0%{transform:scale(1.07);color:var(--acc);text-shadow:0 0 .4em color-mix(in srgb,var(--acc) 60%,transparent)}100%{transform:none}}
+@keyframes tmsflash{0%{transform:scale(1.04);color:var(--acc);text-shadow:0 0 .4em color-mix(in srgb,var(--acc) 60%,transparent)}100%{transform:none}}
 /* ---------- memo / exec split ---------- */
 .tmline{display:flex}
 #tmbar2{display:block;height:100%;width:0;flex:none}
@@ -692,8 +691,11 @@ html[data-lt="1"] .tgrid{opacity:.45}
 .tpage.spres #tmbar,.tpage.spres #tmbar2{transition:width .85s cubic-bezier(.32,.72,0,1)}
 .tpage.sp.run.memo #tmbar{background-size:40% 100%;}
 @keyframes tmsweep{from{background-position:-67% 0}to{background-position:167% 0}}
-.tmsp{display:none;gap:.75rem;margin-top:1.3rem;justify-content:center}
-.tpage.sp .tmsp{display:flex}
+/* split cards: collapse/expand smoothly (row height 0fr -> 1fr) instead of popping in and out of the layout */
+.tmspw{display:grid;grid-template-rows:0fr;margin-top:0;opacity:0;transform:translateY(-8px) scale(.97);pointer-events:none;
+  transition:grid-template-rows .55s cubic-bezier(.32,.72,0,1),margin-top .55s cubic-bezier(.32,.72,0,1),opacity .35s ease,transform .55s cubic-bezier(.32,.72,0,1)}
+.tpage.sp .tmspw{grid-template-rows:1fr;margin-top:1.3rem;opacity:1;transform:none;pointer-events:auto;transition-delay:0s,0s,.08s,0s}
+.tmsp{display:flex;gap:.75rem;justify-content:center;min-height:0;overflow:clip;overflow-clip-margin:30px}
 .tms{min-width:min(8.2rem,38vw);padding:.6rem 1rem .55rem;border-radius:16px;border:1px solid var(--line);text-align:center;opacity:.5;transition:opacity .35s,border-color .35s,box-shadow .35s}
 .tms .k{display:block;font-size:.64rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);margin-right:-.24em}
 .tms b{display:block;font-size:clamp(1.3rem,3.6vw,1.9rem);font-weight:600;font-variant-numeric:tabular-nums;margin-top:.1rem;line-height:1.25}
@@ -703,17 +705,18 @@ html[data-lt="1"] .tgrid{opacity:.45}
 .tpage.run.exec .tmm{opacity:1}
 .tpage.spres.stop .tms{opacity:1}
 @keyframes tmact{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--acc) 0%,transparent)}50%{box-shadow:0 0 26px -4px color-mix(in srgb,var(--acc) 55%,transparent)}}
-.tms.pop{animation:tmpop .55s cubic-bezier(.34,1.56,.64,1)}
-@keyframes tmpop{0%{transform:scale(.82);box-shadow:0 0 0 0 color-mix(in srgb,var(--acc) 60%,transparent)}60%{box-shadow:0 0 0 14px color-mix(in srgb,var(--acc) 0%,transparent)}100%{transform:none}}
+.tms.pop{animation:tmpop .7s cubic-bezier(.32,.72,0,1)}
+@keyframes tmpop{0%{transform:scale(.93);box-shadow:0 0 0 0 color-mix(in srgb,var(--acc) 60%,transparent)}60%{box-shadow:0 0 0 14px color-mix(in srgb,var(--acc) 0%,transparent)}100%{transform:none}}
 .tms.fin{animation:tmfin .6s cubic-bezier(.32,.72,0,1) backwards}
 @keyframes tmfin{from{opacity:0;transform:translateY(12px) scale(.94)}}
 .tmmode{margin-top:.9rem;font-size:.7rem;letter-spacing:.08em;color:var(--muted);border-radius:999px;padding:.35em .9em;border-color:color-mix(in srgb,var(--line) 80%,transparent);transition:opacity .3s,color .2s,border-color .2s,background-color .2s,transform .12s}
 .tmmode.on{color:var(--acc);border-color:color-mix(in srgb,var(--acc) 55%,var(--line));background:color-mix(in srgb,var(--acc) 9%,transparent)}
-.tpage.run .tmmode,.tpage.hold .tmmode,.tpage.ready .tmmode{opacity:0;pointer-events:none}
+.tmpills{transition:opacity .35s ease,transform .5s cubic-bezier(.32,.72,0,1),filter .35s ease}
+.tpage.run .tmpills,.tpage.hold .tmpills,.tpage.ready .tmpills{opacity:0;transform:translateY(-8px) scale(.96);filter:blur(3px);pointer-events:none}
 .tmline{transition:height .4s cubic-bezier(.32,.72,0,1),margin .4s}
 .tpage.spres .tmline{height:6px;border-radius:3px}
 /* ---------- heatmap crosshair ---------- */
-#hm div[data-p],#hm .hmavg{transition:transform .18s cubic-bezier(.34,1.56,.64,1),box-shadow .18s,opacity .25s,filter .25s}
+#hm div[data-p],#hm .hmavg{transition:transform .18s cubic-bezier(.32,.72,0,1),box-shadow .18s,opacity .25s,filter .25s}
 #hm.hmx div[data-p]:not(.xr):not(.xc){opacity:.3}
 #hm.hmx .hmavg:not(.xr):not(.xc){opacity:.45}
 #hm .xr,#hm .xc{filter:brightness(1.16) saturate(1.1)}
@@ -780,7 +783,7 @@ html:has(#timer.on) #bgfx i{animation-play-state:paused}
 /* ---------- top bar: one icon family, one size, one glass pill ---------- */
 #top{top:calc(env(safe-area-inset-top,0px) + .6rem);right:.6rem;gap:.15rem;padding:.3rem;border-radius:16px;background:color-mix(in srgb,var(--panel) 55%,transparent);border:1px solid color-mix(in srgb,var(--line) 75%,transparent);-webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3);transition:opacity .6s ease}
 #top button{width:2.5rem;height:2.5rem;padding:0;display:inline-flex;align-items:center;justify-content:center;border-radius:11px}
-#top button svg{width:1.3rem;height:1.3rem;display:block;transition:transform .35s cubic-bezier(.34,1.56,.64,1)}
+#top button svg{width:1.3rem;height:1.3rem;display:block;transition:transform .35s cubic-bezier(.32,.72,0,1)}
 #top #bd:hover,#top #bch:hover,#top #bsl:hover,#top #bt:hover,#top #bh:hover,#top #bs:hover,#top #bg:hover{transform:none}
 #top #bd:hover svg{transform:rotate(-8deg) scale(1.15)}
 #top #bch:hover svg{transform:rotate(-14deg) scale(1.15)}
@@ -833,7 +836,7 @@ body:not(:has(#pair.idle)) #idlefx b{animation-play-state:paused}
 @keyframes tgring{0%{opacity:1;box-shadow:0 0 0 0 color-mix(in srgb,var(--acc) 55%,transparent)}100%{opacity:0;box-shadow:0 0 0 9px color-mix(in srgb,var(--acc) 0%,transparent)}}
 /* switching between trainers fades the box instead of replaying the whole open */
 .ov.on.swap{animation:none;-webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3)}
-.ov.on.swap .box{animation:swapin .28s cubic-bezier(.32,.72,0,1) both}
+.ov.on.swap .box{animation:swapin .34s cubic-bezier(.32,.72,0,1) both}
 @keyframes swapin{from{opacity:0;transform:translateY(10px) scale(.985)}}
 /* film grain on the main page too */
 #grain{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.045;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
@@ -850,13 +853,12 @@ html[data-bg=oled] #grain{display:none}
 html[data-lt="1"]{--rdy:#16A34A}
 html[data-lt="1"] #pair:not(.idle){font-weight:500}
 html[data-lt="1"] #pair.run{text-shadow:none;box-shadow:0 0 0 1px color-mix(in srgb,var(--acc) 26%,transparent),0 16px 44px -16px color-mix(in srgb,var(--acc) 40%,transparent)}
-html[data-lt="1"] .tpage.ready .tmt{color:var(--rdy);animation-name:tmreadyL}
+html[data-lt="1"] .tpage.ready .tmt{color:var(--rdy);text-shadow:0 .07em .26em color-mix(in srgb,var(--rdy) 30%,transparent)}
 html[data-lt="1"] .tpage.ready #tmbar{background:var(--rdy)}
-@keyframes tmreadyL{0%{transform:scale(.95);text-shadow:0 0 0 transparent}45%{transform:scale(1.06);text-shadow:0 .1em .32em color-mix(in srgb,var(--rdy) 40%,transparent)}100%{transform:scale(1.03);text-shadow:0 .07em .26em color-mix(in srgb,var(--rdy) 28%,transparent)}}
 html[data-lt="1"] .tmt.stopfx{animation-name:tmstopL}
-@keyframes tmstopL{0%{transform:scale(1.08);text-shadow:0 .1em .32em color-mix(in srgb,var(--acc) 42%,transparent)}55%{transform:scale(.985)}100%{transform:none;text-shadow:0 0 0 transparent}}
+@keyframes tmstopL{0%{transform:scale(1.05);text-shadow:0 .1em .32em color-mix(in srgb,var(--acc) 40%,transparent)}100%{transform:none;text-shadow:0 0 0 transparent}}
 html[data-lt="1"] .tmt.sflash{animation-name:tmsflashL}
-@keyframes tmsflashL{0%{transform:scale(1.07);color:var(--acc);text-shadow:0 .1em .3em color-mix(in srgb,var(--acc) 36%,transparent)}100%{transform:none}}
+@keyframes tmsflashL{0%{transform:scale(1.04);color:var(--acc);text-shadow:0 .1em .3em color-mix(in srgb,var(--acc) 36%,transparent)}100%{transform:none}}
 html[data-lt="1"] .tms::after{box-shadow:0 0 0 1.5px color-mix(in srgb,var(--acc) 55%,transparent),0 10px 24px -10px color-mix(in srgb,var(--acc) 50%,transparent)}
 /* while solving, light themes dim to a soft dusk (fading a pastel just washes it out) */
 html[data-lt="1"] #timer::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:0;transition:opacity .9s ease;background:radial-gradient(85% 75% at 50% 46%,color-mix(in srgb,var(--fg) 7%,transparent),color-mix(in srgb,var(--fg) 24%,transparent) 100%)}
@@ -865,11 +867,19 @@ html[data-lt="1"] #timer:has(.tpage.run) .tbg{opacity:.85}
 
 /* ---------- round 4 ---------- */
 /* trainer tabs: the two boxes morph into each other */
-#sloc.on .box,#wd.on .box{view-transition-name:trainerbox}
+#sloc.on .box,#wd.on .box,#chain.on .box{view-transition-name:trainerbox}
 .ov.on.vt{animation:none;-webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3)}
 .ov.on.vt .box{animation:none}
-::view-transition-group(trainerbox){animation-duration:.34s;animation-timing-function:cubic-bezier(.32,.72,0,1)}
-html.vtq::view-transition-old(root),html.vtq::view-transition-new(root){animation-duration:.3s}
+::view-transition-group(trainerbox){animation-duration:.42s;animation-timing-function:cubic-bezier(.32,.72,0,1)}
+/* trainer tabs swipe the way the tabs are laid out: forward slides left, back slides right, with a light blur */
+html[data-vtd="f"]{--vx:1}
+html[data-vtd="b"]{--vx:-1}
+::view-transition-old(trainerbox),::view-transition-new(trainerbox){mix-blend-mode:normal}
+::view-transition-old(trainerbox){animation:vtbOut .24s cubic-bezier(.4,0,1,1) both}
+::view-transition-new(trainerbox){animation:vtbIn .42s cubic-bezier(.32,.72,0,1) .06s both}
+@keyframes vtbOut{to{opacity:0;transform:translateX(calc(var(--vx,1) * -30px));filter:blur(2px)}}
+@keyframes vtbIn{from{opacity:0;transform:translateX(calc(var(--vx,1) * 30px));filter:blur(2px)}}
+html.vtq::view-transition-old(root),html.vtq::view-transition-new(root){animation-duration:.35s}
 /* Deep forest: moss halo behind the pair while it runs, fireflies on the idle screen */
 html[data-bg=forest] #pair.run{box-shadow:0 0 0 1px color-mix(in srgb,var(--acc) 35%,transparent),0 0 40px color-mix(in srgb,var(--acc) 18%,transparent),0 0 140px 10px color-mix(in srgb,#14532D 55%,transparent)}
 body:not(:has(#pair.idle)) #idlefx i{animation-play-state:paused}
@@ -923,7 +933,7 @@ html[data-bg=meadow] #idlefx i,html[data-bg=light] #idlefx i{display:block;backg
 #cyes:disabled{opacity:.35;cursor:not-allowed}
 
 /* ---------- practice polish: staggered letters, glow flare, result tint, ghost of previous pair ---------- */
-:root{--sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;--rc:8px;--ease:cubic-bezier(.2,.7,.25,1)}
+:root{--sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;--rc:8px;--ease:cubic-bezier(.32,.72,0,1)}
 #pair{position:relative}
 #pair.run span{animation:letIn .22s var(--ease) both;animation-delay:calc(min(var(--i,0),4) * 26ms)}
 @keyframes letIn{from{opacity:.55;transform:translateY(6px) scale(.95)}}
@@ -1000,7 +1010,7 @@ html[data-lt="1"] #gt th.hl{text-shadow:0 0 .6em color-mix(in srgb,var(--acc) 45
   #top #bh:hover svg{transform:rotate(10deg) scale(1.15)}
   #top #bg:hover svg{transform:rotate(90deg) scale(1.12)}
   #top #bs:hover svg{transform:scale(1.1);transform-origin:50% 50%}
-  #top #bs:hover svg path{animation:barGrow .55s cubic-bezier(.34,1.56,.64,1) backwards}
+  #top #bs:hover svg path{animation:barGrow .55s cubic-bezier(.32,.72,0,1) backwards}
   #top #bs:hover svg path:nth-child(2){animation-delay:.06s}
   #top #bs:hover svg path:nth-child(3){animation-delay:.12s}
 }
@@ -1056,8 +1066,8 @@ html[data-lt="1"] #gt th.hl{text-shadow:0 0 .6em color-mix(in srgb,var(--acc) 45
 @media(prefers-reduced-motion:reduce){.stblk,.sbar i,.dbar{animation:none}}
 
 /* ---------- top bar: every icon animates its own parts (these replace the whole-icon tilts) ---------- */
-#top #bd svg path{transform-box:view-box;transform-origin:12px 21px;transition:transform .5s cubic-bezier(.34,1.56,.64,1)}
-#top #bg svg path{transition:stroke-dasharray .5s cubic-bezier(.34,1.56,.64,1),transform .5s cubic-bezier(.34,1.56,.64,1)}
+#top #bd svg path{transform-box:view-box;transform-origin:12px 21px;transition:transform .5s cubic-bezier(.32,.72,0,1)}
+#top #bg svg path{transition:stroke-dasharray .5s cubic-bezier(.32,.72,0,1),transform .5s cubic-bezier(.32,.72,0,1)}
 #top #bg svg .t1{stroke-dasharray:8 4 99}
 #top #bg svg .t2{stroke-dasharray:5 4 99}
 #top #bg svg .t3{stroke-dasharray:11 4 99}
@@ -1067,7 +1077,7 @@ html[data-lt="1"] #gt th.hl{text-shadow:0 0 .6em color-mix(in srgb,var(--acc) 45
 @keyframes linkB{0%{transform:none}35%{transform:translate(-1.9px,1.9px)}100%{transform:none}}
 @keyframes handSpin{to{transform:rotate(360deg)}}
 @keyframes capPress{40%{transform:translateY(1.3px)}}
-@keyframes cubeSpin{to{transform:rotate(120deg)}}
+@keyframes cubeSpin{0%{transform:none}45%{transform:translateY(-1.6px) scale(1.05)}100%{transform:none}}
 @keyframes lineDraw{from{stroke-dashoffset:1}}
 @media(hover:hover){
   #top #bd:hover svg,#top #bch:hover svg,#top #bsl:hover svg,#top #bt:hover svg,#top #bh:hover svg,#top #bg:hover svg{transform:scale(1.1)}
@@ -1075,10 +1085,11 @@ html[data-lt="1"] #gt th.hl{text-shadow:0 0 .6em color-mix(in srgb,var(--acc) 45
   #top #bd:hover svg path:first-child{transform:rotate(-8deg)}
   #top #bd:hover svg path:last-child{transform:rotate(8deg)}
   /* chain: the links tug apart and snap back */
-  #top #bch:hover svg path:first-child{animation:linkA .65s cubic-bezier(.34,1.56,.64,1)}
-  #top #bch:hover svg path:last-child{animation:linkB .65s cubic-bezier(.34,1.56,.64,1)}
+  #top #bch:hover svg path:first-child{animation:linkA .65s cubic-bezier(.32,.72,0,1)}
+  #top #bch:hover svg path:last-child{animation:linkB .65s cubic-bezier(.32,.72,0,1)}
   /* trainers: the cube spins one face */
-  #top #bsl:hover svg path{transform-box:view-box;transform-origin:12px 12px;animation:cubeSpin .8s cubic-bezier(.45,.05,.2,1)}
+  #top #bsl:hover svg path{transform-box:view-box;transform-origin:12px 12px;animation:cubeSpin .6s cubic-bezier(.32,.72,0,1)}
+  #top #bsl:hover svg path:last-child{animation-delay:.05s}
   /* timer: the hand sweeps a full turn, the crown presses */
   #top #bt:hover svg path:nth-child(2){animation:handSpin .9s cubic-bezier(.45,.05,.2,1)}
   #top #bt:hover svg path:nth-child(3){animation:capPress .4s ease}
@@ -1101,8 +1112,11 @@ html[data-lt="1"] #gt th.hl{text-shadow:0 0 .6em color-mix(in srgb,var(--acc) 45
 .tmpills{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-top:.9rem}
 .tmpills .tmmode{margin-top:0}
 .tmemo[hidden]{display:none}
-.tmemo{position:fixed;z-index:3;left:50%;bottom:1rem;transform:translateX(-50%);width:min(900px,92vw);padding:.75rem 1.1rem .85rem;border:1px solid color-mix(in srgb,var(--line) 85%,transparent);border-radius:16px;background:color-mix(in srgb,var(--panel) 52%,transparent);-webkit-backdrop-filter:blur(14px) saturate(1.2);backdrop-filter:blur(14px) saturate(1.2);transition:opacity .3s}
-.tpage.run .tmemo,.tpage.hold .tmemo,.tpage.ready .tmemo{opacity:0;pointer-events:none}
+.tmemo{position:fixed;z-index:3;left:50%;bottom:1rem;transform:translateX(-50%);width:min(900px,92vw);padding:.75rem 1.1rem .85rem;border:1px solid color-mix(in srgb,var(--line) 85%,transparent);border-radius:16px;background:color-mix(in srgb,var(--panel) 52%,transparent);-webkit-backdrop-filter:blur(14px) saturate(1.2);backdrop-filter:blur(14px) saturate(1.2);
+  opacity:0;transform:translate(-50%,18px) scale(.97);pointer-events:none;
+  transition:opacity .35s ease,transform .5s cubic-bezier(.32,.72,0,1)}
+.tmemo.show{opacity:1;transform:translateX(-50%);pointer-events:auto}
+.tpage.run .tmemo,.tpage.hold .tmemo,.tpage.ready .tmemo{opacity:0;transform:translate(-50%,18px) scale(.97);pointer-events:none}
 .tmemo-h{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem 1rem;font-size:.7rem;letter-spacing:.08em;color:var(--muted);margin-bottom:.5rem}
 .tmemo-h .k{text-transform:uppercase;font-weight:600}
 .tmemo-lbl{padding:.12rem .7rem;border-radius:999px;border:1px solid color-mix(in srgb,var(--acc) 55%,var(--line));font-size:.74rem;font-weight:700;letter-spacing:.05em;text-transform:none;color:var(--acc);background:color-mix(in srgb,var(--acc) 10%,transparent);transition:color .3s,border-color .3s,background .3s}
@@ -1125,14 +1139,22 @@ html[data-lt="1"] .tmemo.last .tmemo-lbl{color:#d92d3a;border-color:rgba(217,45,
 .mc{display:flex;flex-direction:column;align-items:center;min-width:2.7rem;padding:.2rem .55rem .25rem;border-radius:10px;background:color-mix(in srgb,var(--fg) 5%,transparent);border:1px solid color-mix(in srgb,var(--line) 70%,transparent)}
 .mc b{font-size:1.15rem;letter-spacing:.12em;color:var(--fg);font-weight:650}
 .mc i{font-style:normal;font-size:.68rem;color:var(--muted);max-width:7.5em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-height:1.1em}
-.tpage:has(.tmemo:not([hidden])) .tmmain{margin-bottom:170px}
-.tpage:has(.tmemo:not([hidden])) .tcube{--cs:clamp(130px,17vw,215px)}
-.tmemo.rev .mc{animation:mv .45s cubic-bezier(.32,.72,0,1) backwards;animation-delay:calc(var(--i) * 35ms)}
+.tmmain{transition:margin-bottom .55s cubic-bezier(.32,.72,0,1)}
+.tpage.hasm .tmmain{margin-bottom:170px}
+.tpage.hasm .tcube{--cs:clamp(130px,17vw,215px)}
+/* --cs is registered as a length so the cube (and everything sized from it) can glide between sizes */
+@property --cs{syntax:'<length>';inherits:true;initial-value:190px}
+.tpage.tsm .tcube{transition:--cs .55s cubic-bezier(.32,.72,0,1)}
+@media (prefers-reduced-motion:reduce){.tmspw,.tmemo,.tmmain,.tmpills,.tmt,#tmbar,.tpage.tsm .tcube{transition-duration:.01s!important}}
+.tmemo.rev.ent .mc{animation:mv .45s cubic-bezier(.32,.72,0,1) backwards;animation-delay:calc(var(--i) * 35ms)}
 .mc.nw{padding-top:.3rem;padding-bottom:.3rem}
 .mc.q{padding-left:.8rem;padding-right:.8rem}
 .mnone{color:var(--muted);font-size:.85rem;padding-top:.35rem}
 .mx{display:flex;flex-wrap:wrap;gap:.35rem;font-size:.72rem;letter-spacing:.02em;filter:blur(8px);opacity:.5;transition:filter .5s cubic-bezier(.32,.72,0,1),opacity .4s}
 .tmemo.rev .mx{filter:none;opacity:1}
+/* right after a solve the answer is simply there: no 'peek' hint and no blur fading away while the panel fades in */
+.tmemo.last .tmemo-hint{opacity:0;transition:none}
+.tmemo.last .tmemo-b,.tmemo.last .mx{transition:none}
 .mx span{padding:.1rem .6rem;border-radius:999px;border:1px solid color-mix(in srgb,var(--line) 80%,transparent);color:var(--muted)}
 .mx span.hot{color:var(--acc);border-color:color-mix(in srgb,var(--acc) 55%,var(--line));background:color-mix(in srgb,var(--acc) 9%,transparent)}
 
@@ -1146,6 +1168,31 @@ html[data-lt="1"] .tmemo.last .tmemo-lbl{color:#d92d3a;border-color:rgba(217,45,
   #sclk{opacity:1}
   @keyframes breathe{0%,100%{opacity:.78}50%{opacity:1}}
 }
+
+/* ---------- polish pass: one calm easing language across the whole site ---------- */
+button{border-radius:9px}
+.btnlike{border-radius:9px}
+input[type=number],select,textarea{border-radius:9px;transition:border-color .2s var(--ease),box-shadow .3s var(--ease),background-color .2s}
+input[type=number]:hover,select:hover,textarea:hover{border-color:color-mix(in srgb,var(--acc) 45%,var(--line))}
+input[type=number]:focus,select:focus,textarea:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px color-mix(in srgb,var(--acc) 18%,transparent)}
+button:hover{background-color:color-mix(in srgb,var(--acc) 7%,transparent)}
+#top button:hover{background-color:color-mix(in srgb,var(--acc) 12%,transparent)}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline-offset:3px;transition:outline-offset .25s var(--ease)}
+#wi{border-radius:12px;transition:border-color .25s,box-shadow .35s var(--ease)}
+#toast{border-radius:12px;box-shadow:0 14px 40px -14px rgba(0,0,0,.5)}
+.stat{transition:background-color .2s}
+html{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* ---------- top bar: still icons, one calm hover (colour + soft tint + 1px lift) ---------- */
+#top button svg,#top button svg *{transition:none!important}
+#top button:hover{transform:translateY(-1px);color:var(--acc);background-color:color-mix(in srgb,var(--acc) 12%,transparent)}
+#top button:hover svg,#top button:hover svg *{animation:none!important;transform:none!important}
+#top #bg:hover svg .t1{stroke-dasharray:8 4 99!important}
+#top #bg:hover svg .t2{stroke-dasharray:5 4 99!important}
+#top #bg:hover svg .t3{stroke-dasharray:11 4 99!important}
+#top button:active{transform:scale(.94)}
+@media (hover:none){#top button:hover{transform:none;background:none;color:var(--muted)}}
 </style>
 </head>
 <body>
@@ -1162,8 +1209,7 @@ html[data-lt="1"] .tmemo.last .tmemo-lbl{color:#d92d3a;border-color:rgba(217,45,
 <a id="sclk" href="https://cstimer.net/" target="_blank" rel="noopener noreferrer" tabindex="-1" title="Open csTimer">0:00</a>
 <div id="top">
 <button id="bd" tabindex="-1" aria-label="Word lookup" title="Word lookup [D]"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/></svg></button>
-<button id="bch" tabindex="-1" aria-label="Memo chain" title="Memo chain [C]"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
-<button id="bsl" tabindex="-1" aria-label="Trainers" title="Trainers: stickers and words [L]"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M12 12l9-5M12 12v10M12 12L3 7"/></svg></button>
+<button id="bsl" tabindex="-1" aria-label="Trainers" title="Trainers: stickers, words and chains [L]"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1.5" y="8.5" width="3.5" height="7" rx="1.2" fill="currentColor"/><rect x="5.5" y="5" width="3.5" height="14" rx="1.2" fill="currentColor"/><rect x="15" y="5" width="3.5" height="14" rx="1.2" fill="currentColor"/><rect x="19" y="8.5" width="3.5" height="7" rx="1.2" fill="currentColor"/><path d="M9 12h6" stroke-width="2.6"/></svg></button>
 <button id="bt" tabindex="-1" aria-label="Timer" title="Timer [T]"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2"/><path d="M9.5 2h5"/></svg></button>
 <button id="bh" tabindex="-1" aria-label="Heatmap" title="Heatmap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path pathLength="1" d="M3 9h18"/><path pathLength="1" d="M3 15h18"/><path pathLength="1" d="M9 3v18"/><path pathLength="1" d="M15 3v18"/></svg></button>
 <button id="bs" tabindex="-1" aria-label="Session stats" title="Session stats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 20v-6"/><path d="M12 20V4"/><path d="M18 20V10"/></svg></button>
@@ -1319,7 +1365,7 @@ C,cat,cabin,cucumber</pre>
 <h3>Word drill</h3>
 <p>Press <kbd>[W]</kbd> or use the Words tab. A pair appears and you type its saved word; it is accepted the moment it matches, and the clock runs until then. Enter submits a wrong try (three misses reveal the word), Tab shows it. Only pairs with saved words in your letter pool are used, and weak or slow ones come up more often. Results are stored separately from the heatmap.</p>
 <h3>Memo chains</h3>
-<p>Press <kbd>[C]</kbd> or the Ch button. Memorise 4 to 10 pairs in order, press Space, then type them back. Results show which positions you got right, with your saved words. Memo chains are stored separately and never change your heatmap, times or stats.</p>
+<p>Press <kbd>[C]</kbd>, or open Trainers and pick Chain. Memorise 4 to 10 pairs in order, press Space, then type them back. Results show which positions you got right, with your saved words. Memo chains are stored separately and never change your heatmap, times or stats.</p>
 <h3>Failed pairs on the heatmap</h3>
 <p>A pair you mark as failed turns darkest red with a × on the heatmap, so it stands out from merely slow pairs. It returns to its normal colour once two clean single-pair recalls clear it from the missed-word list. Hover or tap the cell to see how many times it has been failed.</p>
 <h3>Cloud backup</h3>
@@ -1349,13 +1395,14 @@ C,cat,cabin,cucumber</pre>
 <button class="tclose" data-close type="button" aria-label="Close timer">Close</button>
 <div class="tpage" id="tpage">
 <div id="tmsc" class="tmsc"></div>
-<div class="tmmain"><div class="tmcol"><div id="tmt" class="tmt">0.00</div><div class="tmline"><i id="tmbar"></i><i id="tmbar2"></i></div><div class="tmsp" id="tmsp"><div class="tms tmm" id="tmmc"><span class="k">Memo</span><b id="tmm">&ndash;</b><em id="tmmp"></em></div><div class="tms tme" id="tmec"><span class="k">Exec</span><b id="tme">&ndash;</b><em id="tmep"></em></div></div><div id="tmh" class="tmh"></div><div class="tmpills"><button type="button" class="tmmode" id="tmmode" tabindex="-1"></button><button type="button" class="tmmode" id="tmmemo" tabindex="-1"></button></div></div><div class="tcube" id="tcube" title="Drag to rotate, double-click to reset" aria-label="3D view of the scramble, drag to rotate"><div class="tcshadow"></div><div class="tcfloat"><div class="tc3d" id="tc3d"></div></div></div></div>
+<div class="tmmain"><div class="tmcol"><div id="tmt" class="tmt">0.00</div><div class="tmline"><i id="tmbar"></i><i id="tmbar2"></i></div><div class="tmspw"><div class="tmsp" id="tmsp"><div class="tms tmm" id="tmmc"><span class="k">Memo</span><b id="tmm">&ndash;</b><em id="tmmp"></em></div><div class="tms tme" id="tmec"><span class="k">Exec</span><b id="tme">&ndash;</b><em id="tmep"></em></div></div></div><div id="tmh" class="tmh"></div><div class="tmpills"><button type="button" class="tmmode" id="tmmode" tabindex="-1"></button><button type="button" class="tmmode" id="tmmemo" tabindex="-1"></button></div></div><div class="tcube" id="tcube" title="Drag to rotate, double-click to reset" aria-label="3D view of the scramble, drag to rotate"><div class="tcshadow"></div><div class="tcfloat"><div class="tc3d" id="tc3d"></div></div></div></div>
 <div class="tmemo" id="tmemo" hidden aria-live="polite"><div class="tmemo-h"><span class="k">Memo answer</span><span class="tmemo-lbl" id="tmemol"></span><span class="mx" id="tmemox"></span><span class="tmemo-hint">click or press V to peek</span><span class="tmemo-meth">M2 buffer U &nbsp;·&nbsp; Orozco C, helper B</span></div><div class="tmemo-b" id="tmemob"></div><span class="tmemo-k" id="tmemok"></span></div>
 </div>
 </div>
 
 <div class="ov" id="chain"><div class="box" role="dialog" aria-label="Memo chain" style="width:min(640px,100%)">
-<h2>Memo chain <button data-close>Close</button></h2>
+<h2>Trainers <button data-close>Close</button></h2>
+<div class="seg tabs"><button type="button" data-go="sloc">Stickers</button><button type="button" data-go="wd">Words</button><button type="button" data-go="chain" class="on">Chain</button></div>
 <div id="chsetup">
 <p class="mut">Memorise a chain of pairs in order, then recall it from memory. Chains are kept completely separate: they never touch your heatmap, times or session stats.</p>
 <div class="row"><label>Length <select id="chlen"><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label></div>
@@ -1369,7 +1416,7 @@ C,cat,cabin,cucumber</pre>
 
 <div class="ov" id="sloc"><div class="box" role="dialog" aria-label="Sticker locator">
 <h2>Trainers <button data-close>Close</button></h2>
-<div class="seg tabs"><button type="button" data-go="sloc" class="on">Stickers</button><button type="button" data-go="wd">Words</button></div>
+<div class="seg tabs"><button type="button" data-go="sloc" class="on">Stickers</button><button type="button" data-go="wd">Words</button><button type="button" data-go="chain">Chain</button></div>
 <div id="slplay" style="display:none"><div class="slhud"><span id="slprog"></span><span id="slacc"></span><span id="slstk"></span><button id="slend" type="button">Finish</button></div><div id="slq" class="slq"></div></div>
 <div id="slnetw"><svg id="slnet" viewBox="-2 -2 278 208" role="img" aria-label="Unfolded cube net"></svg></div>
 <div id="slplay2" style="display:none"><div id="slfb" class="slfb"></div><div id="slkeys" class="slkeys"></div></div>
@@ -1388,7 +1435,7 @@ C,cat,cabin,cucumber</pre>
 
 <div class="ov" id="wd"><div class="box" role="dialog" aria-label="Word drill">
 <h2>Trainers <button data-close>Close</button></h2>
-<div class="seg tabs"><button type="button" data-go="sloc">Stickers</button><button type="button" data-go="wd" class="on">Words</button></div>
+<div class="seg tabs"><button type="button" data-go="sloc">Stickers</button><button type="button" data-go="wd" class="on">Words</button><button type="button" data-go="chain">Chain</button></div>
 <div id="wdsetup">
 <p class="mut">A pair appears and you type the word you saved for it. The clock keeps running until you get it right. Pairs come from your letter pool and need a saved word. Slow and missed pairs return more often. Stats are separate from your heatmap, since typing time would skew it.</p>
 <div class="slrow"><span>Questions</span><select id="wdlen" aria-label="Questions per round"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="0">Endless</option></select></div>
@@ -1666,10 +1713,10 @@ addEventListener('blur',()=>{});
 $$('#top button').forEach(b=>b.addEventListener('mousedown',e=>e.preventDefault()));
 
 /* modals */
-var TRN={sloc:1,wd:1};
+var TRN={sloc:1,wd:1,chain:1};
 function openM(id){
   if(modal&&modal!==id&&TRN[modal]&&TRN[id]&&document.startViewTransition&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
-    try{document.documentElement.classList.add('vtq');const t=document.startViewTransition(()=>openM0(id,true));t.finished.finally(()=>document.documentElement.classList.remove('vtq'));return}catch(e){document.documentElement.classList.remove('vtq')}
+    try{const ord=['sloc','wd','chain'];document.documentElement.dataset.vtd=ord.indexOf(id)>ord.indexOf(modal)?'f':'b';document.documentElement.classList.add('vtq');const t=document.startViewTransition(()=>openM0(id,true));t.finished.finally(()=>document.documentElement.classList.remove('vtq'));return}catch(e){document.documentElement.classList.remove('vtq')}
   }
   openM0(id,false);
 }
@@ -2354,7 +2401,6 @@ function chSubmit(){
   $('#chrows').innerHTML=rows.join('');
   chShow('res');snd(ok===chPairs.length?'grad':'lookup');
 }
-$('#bch').onclick=openChain;
 $('#chgo').onclick=chStart;$('#chagain').onclick=chStart;$('#chdone').onclick=chDone;$('#chsub').onclick=chSubmit;
 document.addEventListener('keydown',e=>{
   if(modal!=='chain')return;
@@ -2522,7 +2568,7 @@ const SCR=(function(){
 const TM={s:'idle',prev:'idle',t0:0,raf:0,holdTimer:0,scr:'',fb:false,building:false,next:'',pre:0,newT:0,sp:!!set().tsplit,ph:'',mt:0,splitAt:0,spres:false,cls:''};
 const TM_HINT=matchMedia('(pointer:coarse)').matches?'Press and hold, release when green':'Hold Space until green, release to start';
 function tfmt(ms){const c=Math.floor(ms/10),cs=c%100,sec=Math.floor(c/100),m=Math.floor(sec/60);return(m?m+':'+String(sec%60).padStart(2,'0'):String(sec))+'.'+String(cs).padStart(2,'0')}
-const tmClass=c=>{TM.cls=c||'';$('#tpage').className='tpage '+(c||'')+(TM.sp?' sp':'')+(TM.spres?' spres':'')};
+const tmClass=c=>{TM.cls=c||'';$('#tpage').className='tpage '+(c||'')+(TM.sp?' sp':'')+(TM.spres?' spres':'')+(set().tmemo?' hasm':'')+(TM.lay?' tsm':'')};
 /* ---- memo / exec split ---- */
 const tmMe=$('#tmm'),tmEe=$('#tme'),tmBar=$('#tmbar'),tmBar2=$('#tmbar2'),tmCards=[$('#tmmc'),$('#tmec')];
 const tmPop=(el,c)=>{el.classList.remove(c);void el.offsetWidth;el.classList.add(c)};
@@ -2536,7 +2582,9 @@ function tmModeSync(){
 }
 function tmModeToggle(){
   if(TM.s!=='idle'&&TM.s!=='stop')return;
-  TM.sp=!TM.sp;set().tsplit=TM.sp;save();if(!TM.sp)tmSpReset();snd('toggle');tmModeSync();
+  TM.sp=!TM.sp;set().tsplit=TM.sp;save();snd('toggle');tmModeSync();
+  /* when turning off, let the cards collapse with their values intact, then clear them */
+  clearTimeout(TM.spT);if(!TM.sp)TM.spT=setTimeout(()=>{if(!TM.sp&&(TM.s==='idle'||TM.s==='stop')){tmSpReset();tmClass(TM.cls)}},650);
 }
 function tmSplit(){
   const now=performance.now();TM.mt=now-TM.t0;TM.splitAt=now;TM.ph='exec';
@@ -2664,7 +2712,7 @@ const MA=(function(){
     if(par){he2={};for(const l in he)he2[l]=SE[he[l]]||he[l]}
     const el=trace(TE,he2,EI,HIERE,false,true).out;
     let fp=leftover(TE,f,el,EI,par?WE:null).res.map(x=>EC.indexOf(x.n)).filter(i=>i!==EI);
-    if(par)fp=fp.map(i=>i===0?1:i===1?0:i);          /* the Jb swaps UR and UF, so a flipped edge there ends up on the other */
+    /* flips are done at the end of the edges, before the Jb, so they are named by the spot they are in at that moment (B stays B, C stays C) */
     /* Orozco: N and Q only work as the first letter of a pair, so a second N is memo'd as Q and the other way round.
        B is memo'd but has no alg. A single letter left at the end is doubled (G -> GG) and its alg done once. */
     const pairs=L=>{
@@ -2700,21 +2748,37 @@ function maPairs(a,words){
 }
 function maRender(scr){
   const m=MA.memo(scr),x=[];
-  x.push('<span'+(m.par?' class="hot">Parity \u00b7 pseudoswap B/C, Jb + U\u2032':'>No parity')+'</span>');
+  x.push('<span'+(m.par?' class="hot">Parity':'>No parity')+'</span>');
   maX.innerHTML=x.join('');
   maBody.innerHTML='<div class="mrow"><span class="mk">Corners<em>'+m.cn+'</em></span><div class="mps">'+maPairs(m.c,true)+'</div></div>'
     +'<div class="mrow"><span class="mk">Edges<em>'+m.en+'</em></span><div class="mps">'+maPairs(m.e,false)+(m.fl.length?'<span class="mc nw fl" title="flip these edges (the buffer flips by default)" style="--i:'+m.e.length+'"><b>'+m.fl.join('')+'</b></span>':'')+'</div></div>';
 }
+let maShown=false,maHideT=0;
+function maVis(on){
+  if(on===maShown)return;
+  maShown=on;clearTimeout(maHideT);clearTimeout(TM.layT);
+  TM.lay=true;tmClass(TM.cls);                      /* the layout and cube size glide while this is set */
+  TM.layT=setTimeout(()=>{TM.lay=false;tmClass(TM.cls)},700);
+  if(on){maEl.hidden=false;void maEl.offsetWidth;maEl.classList.add('show')}
+  else{maEl.classList.remove('show');maHideT=setTimeout(()=>{if(!maShown)maEl.hidden=true},560)}
+}
 function maSync(){
   const on=!!set().tmemo;
-  maEl.hidden=!on;maBtn.textContent='Memo answer: '+(on?'on':'off')+'  [M]';maBtn.classList.toggle('on',on);
+  maVis(on);maBtn.textContent='Memo answer: '+(on?'on':'off')+'  [M]';maBtn.classList.toggle('on',on);
   if(!on||!SCR.ready)return;
   /* right after a solve the next scramble is already up, so the panel shows the answer for the solve you just did;
      V (or a click) switches to the scramble that is on screen now */
   const last=TM.s==='stop'&&!!MS.prev&&!MS.peek,subj=last?MS.prev:TM.scr;
   if(!subj)return;
-  if(MS.key!==subj){MS.key=subj;maRender(subj)}
-  maEl.classList.toggle('rev',last||MS.peek);
+  const fresh=MS.key!==subj,rev=last||MS.peek;
+  if(fresh){MS.key=subj;maRender(subj)}
+  /* the pair-by-pair entrance only plays when new content is revealed (a fresh render, or right after a solve);
+     peeking at an answer that is already on screen just unblurs it */
+  if(fresh)maEl.classList.toggle('ent',rev);
+  else if(!rev)maEl.classList.remove('ent');
+  else if(!MS.wasRev)maEl.classList.toggle('ent',last);
+  MS.wasRev=rev;
+  maEl.classList.toggle('rev',rev);
   maLbl.textContent=last?'Last solve':'This scramble';
   maEl.classList.toggle('last',last);
   maKey.textContent=last?'[V] see this scramble':MS.peek?(TM.s==='stop'&&MS.prev?'[V] back to last solve':'[V] hide'):'[V] peek';
@@ -2958,6 +3022,9 @@ function tcAnimate(scr){
   (function frame(now){
     if(TC.anim!==id)return;
     const el=Math.max(0,now-t0);
+    /* the cube can be gliding to a new size (memo panel toggled mid-scramble): re-measure and re-place every cubie,
+       because the pixel offsets used while turning are only correct for the size they were measured at */
+    if(TM.lay){const px=$('#tc3d').offsetWidth/3;if(Math.abs(px-TC.px)>.01){TC.px=px;cubies.forEach(c=>{c.el.style.transform=tcBase(c,px)})}}
     /* gentle sweep: the whole cube swings in while it scrambles and settles on your view angle */
     const g=Math.min(1,el/(total+60)),sw=1-g,ent=Math.min(1,el/220);
     const swd=-70*sw*sw*sw;TC.gs.sw=swd;
@@ -3219,7 +3286,7 @@ $('#wd').addEventListener('mousedown',e=>{if(e.target.closest('button'))e.preven
 /* trainer tabs */
 document.addEventListener('click',e=>{
   const b=e.target.closest('[data-go]');if(!b)return;e.stopPropagation();
-  const g=b.dataset.go;if(g!==modal)({sloc:openLoc,wd:openWd})[g]();
+  const g=b.dataset.go;if(g!==modal){cancelAnimationFrame(chRaf);({sloc:openLoc,wd:openWd,chain:openChain})[g]()}
 });
 })();
 

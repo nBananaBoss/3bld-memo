@@ -1105,13 +1105,16 @@ html[data-lt="1"] #gt th.hl{text-shadow:0 0 .6em color-mix(in srgb,var(--acc) 45
 .tpage.run .tmemo,.tpage.hold .tmemo,.tpage.ready .tmemo{opacity:0;pointer-events:none}
 .tmemo-h{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem 1rem;font-size:.7rem;letter-spacing:.08em;color:var(--muted);margin-bottom:.5rem}
 .tmemo-h .k{text-transform:uppercase;font-weight:600}
-.tmemo-lbl{padding:.12rem .7rem;border-radius:999px;border:1px solid color-mix(in srgb,var(--line) 85%,transparent);font-size:.74rem;font-weight:600;letter-spacing:.05em;text-transform:none;color:var(--fg);transition:color .3s,border-color .3s,background .3s}
-.tmemo.last .tmemo-lbl{color:var(--acc);border-color:color-mix(in srgb,var(--acc) 55%,var(--line));background:color-mix(in srgb,var(--acc) 10%,transparent)}
+.tmemo-lbl{padding:.12rem .7rem;border-radius:999px;border:1px solid color-mix(in srgb,var(--acc) 55%,var(--line));font-size:.74rem;font-weight:700;letter-spacing:.05em;text-transform:none;color:var(--acc);background:color-mix(in srgb,var(--acc) 10%,transparent);transition:color .3s,border-color .3s,background .3s}
+.tmemo.last{border-color:rgba(255,90,95,.4)}
+.tmemo.last .tmemo-lbl{color:#ff5a5f;border-color:rgba(255,90,95,.7);background:rgba(255,90,95,.14)}
+html[data-lt="1"] .tmemo.last .tmemo-lbl{color:#d92d3a;border-color:rgba(217,45,58,.6);background:rgba(217,45,58,.1)}
 .tmemo-k{position:absolute;right:1.1rem;bottom:.5rem;font-size:.66rem;letter-spacing:.06em;color:var(--muted);opacity:.55;pointer-events:none}
 .tmemo-hint{position:absolute;left:0;right:0;top:58%;text-align:center;font-size:.78rem;letter-spacing:.06em;color:var(--fg);pointer-events:none;transition:opacity .3s}
 .tmemo.rev .tmemo-hint{opacity:0}
 .tmemo-meth{margin-left:auto;letter-spacing:.02em;opacity:.7;white-space:nowrap}
-.mc .sw{color:var(--acc)}
+.mc.fl{margin-left:.5rem;border-color:color-mix(in srgb,var(--acc) 55%,var(--line));background:color-mix(in srgb,var(--acc) 9%,transparent)}
+.mc.fl b{color:var(--acc)}
 .mc .na{color:var(--muted)}
 .tmemo-b{filter:blur(9px);opacity:.5;cursor:pointer;user-select:none;transition:filter .5s cubic-bezier(.32,.72,0,1),opacity .4s}
 .tmemo.rev .tmemo-b{filter:none;opacity:1;cursor:default;user-select:text}
@@ -2572,11 +2575,22 @@ const MA=(function(){
   }
   /* the buffer swaps that solve a state. pref = sticker letters to break cycles into, in order of preference;
      tw = also turn corners that are twisted in place into their own "go to one side, insert on the other" pair. */
-  function trace(T,h,bi,pref,tw){
-    const out=[],done=T.P.map(()=>false),sl=T.start[bi];done[bi]=true;
+  function trace(T,h,bi,pref,tw,edgeRule){
+    const out=[],brk=[],done=T.P.map(()=>false),sl=T.start[bi];done[bi]=true;
     let x=sl;
     for(let g=0;g<30;g++){const t=h[x],j=T.pos[t].i;if(j===bi)break;out.push(t);done[j]=true;x=t}
     const pick=(cand)=>{
+      if(edgeRule){
+        /* a break names a sticker a and the letter t that follows it. never I, S or Q (as a or t), C and W only as a last
+           resort, otherwise by priority. either sticker of a piece may be used */
+        const bad=l=>'ISQ'.indexOf(l)>-1?2:'CW'.indexOf(l)>-1?1:0;   /* A is fine; Q never (A names the same piece) */
+        let best=null;
+        cand.forEach(i=>T.PL[i].forEach(a=>{
+          const k=[Math.max(bad(a),bad(h[a])),pref.indexOf(a)<0?99:pref.indexOf(a),a];
+          if(!best||k[0]<best.k[0]||(k[0]===best.k[0]&&(k[1]<best.k[1]||(k[1]===best.k[1]&&k[2]<best.k[2]))))best={i:i,a:a,k:k};
+        }));
+        return[best.i,best.a];
+      }
       for(const l of pref){const i=T.pos[l].i;if(cand.indexOf(i)>-1)return[i,l]}
       const i=cand.slice().sort((p,q)=>T.min[p]<T.min[q]?-1:1)[0];return[i,T.min[i]];
     };
@@ -2590,11 +2604,11 @@ const MA=(function(){
       });
       if(!cand.length)break;
       const pk=pick(cand),i=pk[0],a=pk[1];
-      out.push(a);x=a;
+      brk.push(out.length);out.push(a);x=a;
       for(let g=0;g<30;g++){const t=h[x],j=T.pos[t].i;out.push(t);done[j]=true;if(j===i)break;x=t}
       done[i]=true;
     }
-    return{out:out};
+    return{out:out,brk:brk};
   }
   /* run the letters as buffer swaps; want[i] = which piece should end up at position i (identity when solved) */
   function leftover(T,f,letters,bi,want){
@@ -2613,38 +2627,59 @@ const MA=(function(){
   }
   /* ---- the personal bits: M2 edges (buffer DF = U), Orozco corners (buffer UFR = C, helper UBR = B) ---- */
   const EI=5,CI=0;                                   /* DF edge (U), UFR corner (C) */
-  /* cycle-break preference by sticker letter. corners: then whatever is left. edges: A first, I and S dead last */
-  const HIER=['H','G','S','L','P','O','U','V','X','W'];
-  const HIERE=['A','J','L','T','R','O','G','V','X'].concat('BCDEFHKMNPQUW'.split(''),['I','S']);
+  const HIER=['G','H','K','T','A','D'];              /* corner cycle breaks, then whatever is left */
+  /* edge cycle breaks: either sticker of a piece may be named, I and S are never used (C and W stand in) */
+  const HIERE=['A','L','J','R','T','B','D','V','X','C','W'];
+  const rank=l=>{const i=HIERE.indexOf(l);return i<0?99:i};
   const SE={B:'C',C:'B',M:'I',I:'M'};                /* pseudoswap: the UR and UF edges trade places */
   const WE=[1,0,2,3,4,5,6,7,8,9,10,11];              /* the final Jb perm leaves UR/UF edges swapped */
+  /* advanced M2: I/S and C/W are memo'd as their twin (I<->S, C<->W) when they are second in a pair whose first
+     letter sits in the M slice; the trace carries on from the real letter */
+  const SWP={I:'S',S:'I',C:'W',W:'C'},MSL='ACUWQIKS';
+  /* which edges are still flipped once the letters are done: named by the shared face when there are two on one
+     face, otherwise by cycle-break priority. the buffer is flipped by default so it is never listed */
+  function flipLetters(pos){
+    if(pos.length===2){
+      const A=TE.P[pos[0]],B=TE.P[pos[1]],f=A.split('').find(c=>B.indexOf(c)>-1);
+      if(f)return pos.map(i=>TE.PL[i][TE.P[i].indexOf(f)]);
+    }
+    return pos.map(i=>TE.PL[i].slice().sort((a,b)=>rank(a)-rank(b))[0]).sort((a,b)=>rank(a)-rank(b));
+  }
+  function edgeChunks(L){
+    const D=L.slice();
+    for(let i=1;i<L.length;i+=2){const t=SWP[L[i]];if(t&&MSL.indexOf(L[i-1])>-1)D[i]=t}
+    const r=[],n=L.length-L.length%4;
+    for(let i=0;i<n;i+=4)r.push({t:D.slice(i,i+4).join('').toLowerCase(),real:L.slice(i,i+4).join(''),dp:false,na:[false,false],q:true});
+    for(let i=n;i<L.length;i+=2){
+      const a=D[i],b=D[i+1],dp=b===undefined;
+      r.push({t:(a+(dp?a:b)).toLowerCase(),real:L[i]+(dp?'':L[i+1]),dp:dp,na:[false,false]});
+    }
+    return r;
+  }
   function memo(scr){
     const f=SCR.facelets(SCR.apply(scr)),he=home(TE,f),hc=home(TC,f);
     const cl=trace(TC,hc,CI,HIER,true).out;
     const par=cl.length%2===1;                       /* odd corners = parity */
     let he2=he;
     if(par){he2={};for(const l in he)he2[l]=SE[he[l]]||he[l]}
-    const el=trace(TE,he2,EI,HIERE,true).out;       /* flipped edges are cycle-break pairs too */
+    const el=trace(TE,he2,EI,HIERE,false,true).out;
+    let fp=leftover(TE,f,el,EI,par?WE:null).res.map(x=>EC.indexOf(x.n)).filter(i=>i!==EI);
+    if(par)fp=fp.map(i=>i===0?1:i===1?0:i);          /* the Jb swaps UR and UF, so a flipped edge there ends up on the other */
     /* Orozco: N and Q only work as the first letter of a pair, so a second N is memo'd as Q and the other way round.
        B is memo'd but has no alg. A single letter left at the end is doubled (G -> GG) and its alg done once. */
-    const pairs=(L,orozco)=>{
+    const pairs=L=>{
       const r=[];
       for(let i=0;i<L.length;i+=2){
         const a=L[i],b=L[i+1],dp=b===undefined;
-        let b2=dp?a:b,sw=false;
-        if(orozco&&!dp&&(b==='N'||b==='Q')){b2=b==='N'?'Q':'N';sw=true}
-        r.push({t:a+b2,real:a+(dp?'':b),sw:sw,dp:dp,na:[orozco&&a==='B',orozco&&b2==='B']});
+        let b2=dp?a:b;
+        if(!dp&&(b==='N'||b==='Q'))b2=b==='N'?'Q':'N';
+        r.push({t:a+b2,real:a+(dp?'':b),dp:dp,na:[a==='B',b2==='B']});
       }
       return r;
     };
-    const fours=L=>{
-      const r=[],n=L.length-L.length%4;
-      for(let i=0;i<n;i+=4){const q=L.slice(i,i+4).join('');r.push({t:q,real:q,sw:false,dp:false,na:[false,false,false,false],q:true})}
-      return r.concat(pairs(L.slice(n),false));
-    };
-    return{c:pairs(cl,true),e:fours(el),par:par,cn:cl.length,en:el.length};
+    return{c:pairs(cl),e:edgeChunks(el),fl:flipLetters(fp),par:par,cn:cl.length,en:el.length};
   }
-  return{memo:memo,TC:TC,TE:TE,home:home,trace:trace,leftover:leftover,EI:EI,CI:CI,HIER:HIER,HIERE:HIERE,SE:SE,WE:WE};
+  return{memo:memo,TC:TC,TE:TE,home:home,trace:trace,leftover:leftover,EI:EI,CI:CI,HIER:HIER,HIERE:HIERE,SE:SE,WE:WE,flipLetters:flipLetters,edgeChunks:edgeChunks};
 })();
 
 /* memo answer panel wiring */
@@ -2654,12 +2689,11 @@ function maPairs(a,words){
   if(!a.length)return'<span class="mnone">Already solved</span>';
   return a.map((p,i)=>{
     const w=words?D.words[p.t]:'',tip=[];
-    if(p.sw)tip.push('real letters: '+p.real);
     if(p.na[0]||p.na[1])tip.push('B: no alg');
     if(p.dp)tip.push('doubled to fill the pair, do the alg once');
     const L=p.t.split('').map((l,k)=>{
-      const c=(!p.q&&k===1&&p.sw?'sw':'')+(p.na[k]||(!p.q&&k===1&&p.dp)?' na':'');
-      return'<span'+(c.trim()?' class="'+c.trim()+'"':'')+'>'+l+'</span>';
+      const c=(p.na[k]||(!p.q&&k===1&&p.dp)?'na':'');
+      return'<span'+(c?' class="'+c+'"':'')+'>'+l+'</span>';
     }).join('');
     return'<span class="mc'+(words?'':' nw')+(p.q?' q':'')+'" style="--i:'+i+'"'+(tip.length?' title="'+tip.join(' \u00b7 ')+'"':'')+'><b>'+L+'</b>'+(words?'<i>'+(w?esc(w):'')+'</i>':'')+'</span>';
   }).join('');
@@ -2669,7 +2703,7 @@ function maRender(scr){
   x.push('<span'+(m.par?' class="hot">Parity \u00b7 pseudoswap B/C, Jb + U\u2032':'>No parity')+'</span>');
   maX.innerHTML=x.join('');
   maBody.innerHTML='<div class="mrow"><span class="mk">Corners<em>'+m.cn+'</em></span><div class="mps">'+maPairs(m.c,true)+'</div></div>'
-    +'<div class="mrow"><span class="mk">Edges<em>'+m.en+'</em></span><div class="mps">'+maPairs(m.e,false)+'</div></div>';
+    +'<div class="mrow"><span class="mk">Edges<em>'+m.en+'</em></span><div class="mps">'+maPairs(m.e,false)+(m.fl.length?'<span class="mc nw fl" title="flip these edges (the buffer flips by default)" style="--i:'+m.e.length+'"><b>'+m.fl.join('')+'</b></span>':'')+'</div></div>';
 }
 function maSync(){
   const on=!!set().tmemo;

@@ -960,7 +960,6 @@ button:focus-visible,.btnlike:focus-visible{outline:none;border-color:var(--acc)
 
 /* ---------- clock: same glass pill as the icon bar ---------- */
 #sclk{left:.6rem;border-radius:16px;background:color-mix(in srgb,var(--panel) 55%,transparent);border:1px solid color-mix(in srgb,var(--line) 75%,transparent);-webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3);transition:color .18s,opacity .6s ease,background-color .25s}
-#sclk:hover{background:color-mix(in srgb,var(--acc) 14%,color-mix(in srgb,var(--panel) 55%,transparent))}
 body.solving #sclk{opacity:.3}
 body.solving #sclk:hover{opacity:1}
 
@@ -1242,6 +1241,40 @@ body.solving #top .tlbl{display:none}
 @media (hover:none){#top::before,#top .tind,#top .tlbl{display:none}}
 @media (prefers-reduced-motion:reduce){#top .tind,#top .tlbl,#top.mag button svg{transition:none!important}#top.mag button svg{transform:none!important}}
 
+/* ---------- clock: same hover as the icon bar (glow under the cursor, spotlight tile, swell, accent colour, label) ---------- */
+#sclk{--px:50%}
+#sclk .ct{position:relative;z-index:1;display:block;transform:scale(var(--m,1));transition:transform .2s cubic-bezier(.25,.8,.25,1)}
+#sclk::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:0;opacity:0;transition:opacity .5s cubic-bezier(.32,.72,0,1);
+  background:radial-gradient(110px 70px at var(--px) 50%,color-mix(in srgb,var(--acc) 20%,transparent),transparent 72%)}
+#sclk.mag::before{opacity:1}
+#sclk .tind{position:absolute;z-index:0;inset:.3rem;border-radius:11px;pointer-events:none;opacity:0;
+  background:color-mix(in srgb,var(--acc) 13%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--acc) 24%,transparent),0 6px 18px -8px color-mix(in srgb,var(--acc) 60%,transparent);
+  transition:opacity .3s cubic-bezier(.32,.72,0,1)}
+#sclk.mag .tind{opacity:1}
+#sclk.mag{color:var(--acc);opacity:1}
+#sclk .tlbl{position:absolute;z-index:3;top:calc(100% + 9px);left:0;display:flex;align-items:center;gap:.55rem;padding:.38rem .6rem;border-radius:10px;white-space:nowrap;pointer-events:none;
+  font-size:.72rem;letter-spacing:.02em;color:var(--fg);
+  background:color-mix(in srgb,var(--panel) 93%,transparent);border:1px solid color-mix(in srgb,var(--line) 85%,transparent);box-shadow:0 12px 30px -14px rgba(0,0,0,.55);
+  opacity:0;transform:translate3d(0,-5px,0);
+  transition:opacity .22s cubic-bezier(.32,.72,0,1),transform .3s cubic-bezier(.25,.8,.25,1)}
+#sclk .tlbl b{font-weight:500}
+#sclk.tip .tlbl{opacity:1;transform:none}
+body.solving #sclk .tlbl{display:none}
+@media (hover:none){#sclk::before,#sclk .tind,#sclk .tlbl{display:none}#sclk .ct{transform:none}}
+@media (prefers-reduced-motion:reduce){#sclk .ct,#sclk .tlbl{transition:none!important}#sclk .ct{transform:none!important}}
+
+/* ---------- heatmap performance ---------- */
+/* the page behind the open heatmap rests: its blurred glow, floating letters and pace sheen were being re-blurred behind the glass on every frame */
+html.hmopen #bgfx i,html.hmopen :is(#main,#idlefx,#wash),html.hmopen :is(#main,#idlefx,#wash) *,html.hmopen :is(#main,#idlefx,#wash) *::before,html.hmopen :is(#main,#idlefx,#wash) *::after{animation-play-state:paused!important}
+/* cells: only transform (and a quick opacity dim) animate; no filter or shadow transitions across hundreds of cells */
+#hm div[data-p],#hm .hmavg{transition:transform .14s cubic-bezier(.32,.72,0,1),opacity .12s linear}
+/* the crosshair lift is a plain inset tint instead of a per-cell filter (filters made every lit cell its own render surface) */
+#hm .xr,#hm .xc{filter:none}
+#hm div[data-p].xr,#hm div[data-p].xc{box-shadow:inset 0 0 0 1px rgba(255,255,255,.3),inset 0 0 0 40px rgba(255,255,255,.12)}
+#hm .hmavg.xr,#hm .hmavg.xc{box-shadow:inset 0 0 0 1px rgba(255,255,255,.28),inset 0 0 0 40px rgba(255,255,255,.12)}
+/* hover card: moves with the compositor-only translate property and no live backdrop blur */
+#hmcard{-webkit-backdrop-filter:none;backdrop-filter:none;background:color-mix(in srgb,var(--panel) 96%,transparent);will-change:translate,opacity}
+
 /* ---------- round 8: timer keep-alive ----------
    The timer used to be display:none until the first open, so that click had to build styles, layout and layers for the
    whole page, and a few more layout passes landed 0.8-1.5s later (stars switched on in batches, the page behind paused).
@@ -1278,6 +1311,83 @@ html[data-font]:not([data-font=jb]) :is(.box kbd,.spark .ctx){font-family:var(--
 /* inactivity: results/pair drift out, idle prompt drifts back in */
 #main.dr #pair,#main.dr #time,#main.dr #word{opacity:0!important;filter:blur(6px);transition:opacity .6s cubic-bezier(.32,.72,0,1),filter .6s cubic-bezier(.32,.72,0,1)!important}
 #main.dri #pair,#main.dri #time,#main.dri #word{transition:opacity .8s cubic-bezier(.32,.72,0,1),filter .8s cubic-bezier(.32,.72,0,1)!important}
+
+/* ---------- tutorial: live demo, shortcut tiles, smooth accordions ---------- */
+@property --thn{syntax:'<integer>';inherits:true;initial-value:0}
+@property --tha{syntax:'<number>';inherits:true;initial-value:0}
+#help .box{padding:1.4rem 1.3rem 1.6rem}
+#help.on .box>*{animation:sin .55s var(--ease) backwards}
+#help.on .box>:nth-child(3){animation-delay:.12s}
+#help.on .box>:nth-child(4),#help.on .box>:nth-child(5){animation-delay:.16s}
+#help.on .box>:nth-child(6),#help.on .box>:nth-child(7){animation-delay:.2s}
+#help.on .box>.accs{animation:none}
+.th-h{margin:1.4rem .2rem .55rem;font-family:var(--sans);font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.th-note{margin:.7rem .2rem 0;color:var(--muted);font-family:var(--sans)}
+.th-hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:1.1rem;align-items:center;padding:.9rem;border:1px solid var(--line);border-radius:16px;background:color-mix(in srgb,var(--bg) 50%,var(--panel))}
+.th-screen{position:relative;height:9.5rem;border-radius:12px;border:1px solid var(--line);background:var(--bg);overflow:hidden}
+.th-screen>span{position:absolute;left:0;right:0;text-align:center;opacity:0}
+.th-screen>.th-idle{top:50%;margin-top:-.6em;font-size:.78rem;color:var(--muted);letter-spacing:.05em;opacity:1}
+.th-pair{top:20%;font-size:2.3rem;font-weight:600;letter-spacing:.15em;text-shadow:0 0 .4em color-mix(in srgb,var(--acc) 50%,transparent)}
+.th-time{top:57%;font-size:1.05rem;letter-spacing:.05em;color:var(--muted)}
+.th-time::after{counter-reset:thn var(--thn);content:"0." counter(thn,decimal-leading-zero) "s"}
+.th-word{top:76%;font-size:.9rem;font-family:var(--sans);color:var(--fg);letter-spacing:.06em}
+.th-bar{position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--acc);transform-origin:left;transform:scaleX(0);opacity:0}
+.th-steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.55rem}
+.th-steps li{display:flex;align-items:center;gap:.65rem;font-family:var(--sans);font-size:.84rem;line-height:1.35;opacity:calc(.5 + var(--tha) * .5)}
+.th-steps kbd{flex:none;background:color-mix(in srgb,var(--acc) calc(var(--tha) * 22%),var(--bg));border-color:color-mix(in srgb,var(--acc) calc(30% + var(--tha) * 70%),var(--line))}
+#help.on .th-idle{animation:thIdle 7s ease-in-out infinite}
+#help.on .th-pair{animation:thPair 7s var(--ease) infinite}
+#help.on .th-time{animation:thTime 7s linear infinite}
+#help.on .th-word{animation:thWord 7s var(--ease) infinite}
+#help.on .th-bar{animation:thBar 7s linear infinite}
+#help.on .th-steps .s1{animation:thS1 7s ease-in-out infinite}
+#help.on .th-steps .s2{animation:thS2 7s ease-in-out infinite}
+#help.on .th-steps .s3{animation:thS3 7s ease-in-out infinite}
+@keyframes thIdle{0%,9%{opacity:1}14%,100%{opacity:0}}
+@keyframes thPair{0%,13%{opacity:0;transform:scale(.96)}19%,80%{opacity:1;transform:none}88%,100%{opacity:0;transform:none}}
+@keyframes thTime{0%,15%{opacity:0;--thn:0;color:var(--muted)}17%{opacity:1;--thn:0;color:var(--muted)}51%{opacity:1;--thn:84;color:var(--muted)}53%,84%{opacity:1;--thn:84;color:var(--g)}90%,100%{opacity:0;--thn:84;color:var(--g)}}
+@keyframes thWord{0%,56%{opacity:0;transform:translateY(5px)}62%,84%{opacity:1;transform:none}90%,100%{opacity:0;transform:none}}
+@keyframes thBar{0%,15%{opacity:0;transform:scaleX(0)}17%{opacity:1;transform:scaleX(0)}52%{opacity:1;transform:scaleX(1)}58%,100%{opacity:0;transform:scaleX(1)}}
+@keyframes thS1{0%,10%{--tha:0}15%,49%{--tha:1}55%,100%{--tha:0}}
+@keyframes thS2{0%,49%{--tha:0}55%,83%{--tha:1}89%,100%{--tha:0}}
+@keyframes thS3{0%,83%{--tha:0}89%,98%{--tha:1}100%{--tha:0}}
+.th-keys{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.4rem}
+.th-keys>div{display:flex;align-items:center;gap:.65rem;padding:.5rem .65rem;border:1px solid var(--line);border-radius:12px;font-family:var(--sans);font-size:.82rem;line-height:1.35;transition:border-color .3s var(--ease),background-color .3s var(--ease),transform .4s var(--ease)}
+.th-keys>div:hover{border-color:color-mix(in srgb,var(--acc) 45%,var(--line));background:color-mix(in srgb,var(--acc) 6%,transparent);transform:translateY(-1px)}
+.th-keys .wide{grid-column:1/-1}
+.th-keys kbd{flex:none;min-width:1.9rem;text-align:center;padding:.15em .45em;background:var(--bg)}
+.th-keys .wide kbd{min-width:0;letter-spacing:.04em}
+.th-keys span{min-width:0}
+#help.on .th-keys>div{animation:sin .5s var(--ease) backwards;animation-delay:calc(.14s + var(--i) * .03s)}
+.accs{display:flex;flex-direction:column;gap:.5rem}
+#help.on .ac{animation:sin .5s var(--ease) backwards;animation-delay:calc(.3s + var(--i) * .05s)}
+.ac{border:1px solid var(--line);border-radius:14px;background:color-mix(in srgb,var(--bg) 50%,var(--panel));overflow:hidden;transition:border-color .35s var(--ease)}
+.ac.open{border-color:color-mix(in srgb,var(--acc) 45%,var(--line))}
+.ach{display:flex;align-items:center;gap:.7rem;width:100%;border:0;border-radius:0;padding:.85rem 1rem;text-align:left;font-family:var(--sans);font-size:.95rem;font-weight:600;color:var(--fg);transition:background-color .25s}
+.ach:hover{background:color-mix(in srgb,var(--acc) 6%,transparent)}
+.acv{margin-left:auto;width:.5rem;height:.5rem;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:translateY(-2px) rotate(45deg);transition:transform .45s var(--ease),border-color .3s}
+.ac.open .acv{transform:translateY(2px) rotate(225deg);border-color:var(--acc)}
+.acb{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s var(--ease)}
+.ac.open .acb{grid-template-rows:1fr}
+.acb>div{min-height:0;overflow:hidden;visibility:hidden;transition:visibility 0s .45s}
+.ac.open .acb>div{visibility:visible;transition-delay:0s}
+.acb>div>div{padding:0 1rem 1rem;opacity:0;transform:translateY(-6px);transition:opacity .35s var(--ease),transform .45s var(--ease)}
+.ac.open .acb>div>div{opacity:1;transform:none;transition-delay:.06s}
+.acb li{margin:.2rem 0}.acb p{margin:.1rem 0 .6rem}.acb pre{margin:.3rem 0 .7rem}
+.th-hm{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:3px;margin:.1rem 0 .8rem}
+.th-hm i{aspect-ratio:1;border-radius:4px;background:var(--r);opacity:.85}
+.th-hm i.u{background:var(--line);opacity:1}
+.ac.open .th-hm i:not(.u){animation:thHm 6s ease-in-out infinite;animation-delay:calc(var(--i) * -110ms)}
+@keyframes thHm{0%{background:var(--r)}33%{background:var(--y)}66%,83%{background:var(--g)}100%{background:var(--r)}}
+.th-fl{display:inline-flex;align-items:center;gap:.5rem;margin-left:.4rem;padding:.05rem .5rem;border:1px solid var(--line);border-radius:999px;vertical-align:middle}
+.th-fl b{font-family:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;letter-spacing:.12em;color:var(--acc)}
+.th-fl em{width:2rem;height:3px;border-radius:99px;background:var(--acc);transform-origin:left;transform:scaleX(0)}
+.ac.open .th-fl b{animation:thFlB 3.2s ease-in-out infinite}
+.ac.open .th-fl em{animation:thFlE 3.2s linear infinite}
+@keyframes thFlB{0%{opacity:0}8%,20%{opacity:1}30%,100%{opacity:0}}
+@keyframes thFlE{0%{transform:scaleX(0)}85%,100%{transform:scaleX(1)}}
+@media(max-width:560px){.th-hero{grid-template-columns:1fr}.th-keys{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){#help .th-screen *,#help .th-steps li,.th-hm i,.th-fl *{animation:none!important}.th-pair,.th-time,.th-word{opacity:1!important}.th-idle{opacity:0!important}.th-time::after{--thn:84}.th-steps li{--tha:1}}
 </style>
 </head>
 <body>
@@ -1291,7 +1401,7 @@ html[data-font]:not([data-font=jb]) :is(.box kbd,.spark .ctx){font-family:var(--
 <div id="idlefx" aria-hidden="true"></div>
 <div id="grain" aria-hidden="true"></div>
 <div id="wash" aria-hidden="true"></div>
-<a id="sclk" href="https://cstimer.net/" target="_blank" rel="noopener noreferrer" tabindex="-1" title="Open csTimer">0:00</a>
+<a id="sclk" href="https://cstimer.net/" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-label="Open csTimer"><span class="ct">0:00</span><i class="tind" aria-hidden="true"></i><span class="tlbl" aria-hidden="true"><b>Open csTimer</b></span></a>
 <div id="top">
 <button id="bd" tabindex="-1" aria-label="Word lookup" title="Word lookup [D]"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/></svg></button>
 <button id="bsl" tabindex="-1" aria-label="Trainers" title="Trainers: stickers, words and chains [L]"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1.5" y="8.5" width="3.5" height="7" rx="1.2" fill="currentColor" stroke-width="1"/><rect x="5.5" y="5" width="3.5" height="14" rx="1.2" fill="currentColor" stroke-width="1"/><rect x="15" y="5" width="3.5" height="14" rx="1.2" fill="currentColor" stroke-width="1"/><rect x="19" y="8.5" width="3.5" height="7" rx="1.2" fill="currentColor" stroke-width="1"/><path d="M9 12h6" stroke-width="2.2"/></svg></button>
@@ -1319,10 +1429,8 @@ html[data-font]:not([data-font=jb]) :is(.box kbd,.spark .ctx){font-family:var(--
 
 <div class="sec">Practice &amp; Randomisation</div>
 <div class="grp">
-<div class="it"><span class="lb">Randomisation mode<i class="inf" tabindex="0" data-tip="Choose true-random practice or review pairs that are untested, slow, or failed.">i</i></span>
-<select data-k="rm"><option value="irl">3BLD IRL (True Random)</option><option value="review">Slow / Failed / Untested Review</option></select></div>
-<div class="it"><span class="lb">Pairs per attempt</span><select data-k="n"><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
-<label class="it"><span class="lb">Exclude identical pairs<i class="inf" tabindex="0" data-tip="Skips AA, BB, CC and the other doubled pairs.">i</i></span><input type="checkbox" class="tg" data-k="noId"></label>
+<div class="it"><span class="lb">Randomisation mode<i class="inf" tabindex="0" data-tip="Random draws from your whole letter pool. Weak focuses on pairs that are untested, slow or failed.">i</i></span>
+<select data-k="rm"><option value="irl">Random</option><option value="review">Weak</option></select></div>
 </div>
 <div class="grp poolgrp">
 <div class="pad poolpad">
@@ -1365,7 +1473,6 @@ html[data-font]:not([data-font=jb]) :is(.box kbd,.spark .ctx){font-family:var(--
 <div class="grp">
 <div class="it"><span class="lb">Font</span><select data-k="font"><option value="jb">JetBrains Mono</option><option value="plex">IBM Plex Mono</option><option value="space">Space Mono</option><option value="martian">Martian Mono (wide)</option><option value="share">Share Tech Mono</option><option value="courier">Courier Prime (typewriter)</option><option value="vt">VT323 (pixel terminal)</option><option value="grotesk">Space Grotesk (sans)</option><option value="sora">Sora (sans)</option><option value="inter">Inter (sans)</option></select></div>
 <div class="it"><span class="lb">Theme</span><select data-k="bg"><optgroup label="Dark"><option value="oled">OLED pure black</option><option value="solid">Solid dark navy</option><option value="aurora">Dark aurora</option><option value="forest">Deep forest</option><option value="ocean">Midnight ocean</option><option value="ember">Dark ember</option><option value="rose">Midnight rose</option></optgroup><optgroup label="Light"><option value="sunset">Warm sunset</option><option value="sage">Nature and sage</option><option value="meadow">Spring meadow</option><option value="lagoon">Coastal lagoon</option><option value="lavender">Lavender field</option><option value="light">Modern light minimal</option></optgroup></select></div>
-<div class="it"><span class="lb">Spacing between pairs</span><span class="ctl"><input type="number" min="0.5" max="4" step="0.25" data-k="gap"><span class="mut">rem</span></span></div>
 </div>
 <div class="fn">Accent colours follow the theme. All themes except OLED, Solid navy and Modern light have a slow animated background.</div>
 
@@ -1411,56 +1518,107 @@ html[data-font]:not([data-font=jb]) :is(.box kbd,.spark .ctx){font-family:var(--
 <div class="tl" id="tl"><button id="tlp" type="button" aria-label="Play time-lapse"><svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M7 4.5v15l12-7.5z"/></svg></button><input type="range" id="tlr" min="0" max="0" value="0" aria-label="Time-lapse day"><span id="tld" class="mut"></span><button id="tll" type="button">Live</button></div>
 <div class="mut" id="hmi" style="margin-top:.6rem;min-height:1.3em">Hover or tap a cell for details.</div>
 <button id="hmdrill" type="button" class="primary" style="display:none;margin-top:.5rem"></button>
-<div class="mut"><span id="hl"></span> Dark cells are untested. Multi-pair attempts are not counted.</div>
+<div class="mut"><span id="hl"></span> Dark cells are untested.</div>
 </div></div>
 
 <div class="ov" id="help"><div class="box" role="dialog" aria-label="Tutorial and help">
-<h2>Tutorial &amp; Help <button data-close>Close</button></h2>
-<h3>Importing word lists from Google Sheets or Excel</h3>
-<p>In Google Sheets or Excel, put the pair in column A and the word in column B. Select the cells and copy them, then paste into the Backup box in Settings and press Import. You can also download the sheet as a CSV (File, Download, Comma Separated Values), open it in a text editor, and paste that.</p>
+<h2>Tutorial <button data-close>Close</button></h2>
+
+<div class="th-hero">
+<div class="th-screen" aria-hidden="true">
+<span class="th-idle">Press Spacebar to Start</span>
+<span class="th-pair">BX</span>
+<span class="th-time"></span>
+<span class="th-word">box</span>
+<i class="th-bar"></i>
+</div>
+<ol class="th-steps">
+<li class="s1"><kbd>Space</kbd><span>A pair appears and the clock starts</span></li>
+<li class="s2"><kbd>Space</kbd><span>Think of its word, then stop the clock</span></li>
+<li class="s3"><kbd>Space</kbd><span>Next pair</span></li>
+</ol>
+</div>
+<p class="th-note">Your saved word shows under the pair when you stop. Green, yellow and red come from the cut-offs in Settings.</p>
+
+<div class="th-h">Shortcuts</div>
+<div class="th-keys">
+<div style="--i:0"><kbd>Space</kbd><span>Start, stop, next</span></div>
+<div style="--i:1"><kbd>Tab</kbd><span>Edit the word, <kbd>Enter</kbd> saves</span></div>
+<div style="--i:2"><kbd>Esc</kbd><span>Reset the current run</span></div>
+<div style="--i:3"><kbd>\</kbd><span>Undo last time and mark it failed</span></div>
+<div class="wide" style="--i:4"><kbd>Y U I O P J H K L N M B</kbd><span>Fail the running attempt (punctuation and 8 9 0 work too). No time is logged.</span></div>
+<div style="--i:5"><kbd>T</kbd><span>Timer page</span></div>
+<div style="--i:6"><kbd>C</kbd><span>Memo chain</span></div>
+<div style="--i:7"><kbd>L</kbd><span>Sticker locator</span></div>
+<div style="--i:8"><kbd>W</kbd><span>Word drill</span></div>
+<div style="--i:9"><kbd>D</kbd><span>Look up or edit a word</span></div>
+<div style="--i:10"><kbd>G</kbd><span>Word grid</span></div>
+</div>
+
+<div class="th-h">Guides</div>
+<div class="accs">
+
+<div class="ac" style="--i:0"><button type="button" class="ach" aria-expanded="false">Practice modes<i class="acv"></i></button><div class="acb"><div><div>
+<ul>
+<li><b>Random</b> draws from your letter pool. The same pair never comes up twice in a row.</li>
+<li><b>Weak</b> only serves pairs you haven&rsquo;t tested yet, pairs that average yellow or red, and pairs you&rsquo;ve failed. A green time removes a pair from Weak.</li>
+<li><b>Flash mode</b> shows the pair for a moment, then hides it while the clock keeps running. <span class="th-fl" aria-hidden="true"><b>BX</b><em></em></span></li>
+<li><b>Fast and Medium cut-offs</b> set the green and yellow on your times and the heatmap. Anything slower is red.</li>
+<li><b>Hide timer</b> shows only the final time. <b>Zen</b> hides every time and stat.</li>
+</ul>
+</div></div></div></div>
+
+<div class="ac" style="--i:1"><button type="button" class="ach" aria-expanded="false">Heatmap and drills<i class="acv"></i></button><div class="acb"><div><div>
+<div class="th-hm" id="thhm" aria-hidden="true"></div>
+<ul>
+<li>Colours follow a recent-weighted average, so a pair really can move from red to green as you improve. Dark cells are untested.</li>
+<li>A failed pair turns darkest red with a &times;. Two clean recalls clear it.</li>
+<li>The edge cells are row and column averages, and the corner is your overall average. Use the slider or play button to replay the map day by day. <b>Live</b> returns to today.</li>
+<li>Click a row or column letter to drill every pair that starts or ends with it. In the stats drawer, <b>Drill these</b> drills your slowest pairs from the last 48 hours.</li>
+<li>Tap the Drilling chip under the timer to end a drill and see a recap.</li>
+</ul>
+</div></div></div></div>
+
+<div class="ac" style="--i:2"><button type="button" class="ach" aria-expanded="false">Timer page<i class="acv"></i></button><div class="acb"><div><div>
+<ul>
+<li>Hold <kbd>Space</kbd> until the line turns green, release to start, press to stop. On a phone, press and hold anywhere.</li>
+<li><kbd>N</kbd> gives a new scramble, <kbd>F</kbd> after a stop shows DNF.</li>
+<li><kbd>S</kbd> turns on the memo and exec split. Press once when memo is done, again when the solve ends. You get memo, exec and total, with a bar showing the split.</li>
+<li>It keeps no history on purpose. Use csTimer for stats.</li>
+</ul>
+</div></div></div></div>
+
+<div class="ac" style="--i:3"><button type="button" class="ach" aria-expanded="false">Trainers<i class="acv"></i></button><div class="acb"><div><div>
+<ul>
+<li><b>Chain</b>: memorise 4 to 10 pairs in order, press Space, then type them back.</li>
+<li><b>Stickers</b>: <i>Find it</i> shows a letter and you tap its sticker. <i>Name it</i> glows a sticker and you give its letter. Misses come up more often.</li>
+<li><b>Words</b>: type the saved word for each pair. It&rsquo;s accepted the moment it matches. <kbd>Enter</kbd> submits a wrong try (three misses reveal the word), <kbd>Tab</kbd> shows it.</li>
+</ul>
+<p>Trainer results are stored separately and never touch your heatmap, times or stats.</p>
+</div></div></div></div>
+
+<div class="ac" style="--i:4"><button type="button" class="ach" aria-expanded="false">Import your words<i class="acv"></i></button><div class="acb"><div><div>
+<p>Put the pair in column A and the word in column B, copy the cells, paste them into the Backup box in Settings and press Import. CSV, tab-separated and JSON all work, and the header row is optional.</p>
 <pre>pair,word
 BX,Box
-HR,Hair
-LQ,Liquid</pre>
-<p>Tab-separated pastes straight from a sheet also work, and the header row is optional. Pairs use letters A to X. Importing adds to your existing words and overwrites any matching pairs.</p>
-<p>Speffz grid spreadsheets work too. Put the first letters (A to X) down the first column and the second letters across the top row, with the word in each crossing cell. Row G and column N gives the pair GN. Labels like words or X / SH are cleaned up automatically (X / SH counts as X), and empty cells are skipped. Every imported word is converted to lowercase.</p>
-<pre>,A,B,C
-A,aqua,abbey,acorn
-B,bat,bubble,
-C,cat,cabin,cucumber</pre>
-<p>JSON is accepted too:</p>
-<pre>{"words":{"BX":"Box","HR":"Hair"}}</pre>
-<h3>Where words appear</h3>
-<p>Saved words automatically appear directly below the timer and pair as soon as you stop the timer. In batch mode, each pair’s word shows in order.</p>
-<h3>Keyboard shortcuts</h3>
-<ul><li><kbd>[Space]</kbd> Start or stop the timer; after stopping, press it again to load the next pair</li><li><kbd>[\]</kbd> Undo the most recent stopped time and mark that pair as failed</li><li><kbd>[Esc]</kbd> or <kbd>[R]</kbd> Reset: cancel the current run</li><li><kbd>[Tab]</kbd> Edit Word after stopping, then <kbd>[Enter]</kbd> to save</li><li><kbd>[T]</kbd> Timer: a calm scramble and timer page</li><li><kbd>[C]</kbd> Memo chain: memorise a longer chain of pairs, then recall it</li><li><kbd>[L]</kbd> Sticker locator: learn where each corner and edge letter sits on the cube</li><li><kbd>[W]</kbd> Word drill: type the word for each pair</li><li><kbd>[D]</kbd> Lookup: find or edit any pair&rsquo;s word</li><li><kbd>[Y U I O P J H K L N M B]</kbd>, punctuation keys, or <kbd>[8 9 0]</kbd>: mark an active attempt as failed without logging a time</li></ul>
-<h3>Randomisation modes</h3>
-<ul><li><b>3BLD IRL (True Random)</b>: draws randomly from your active letter-pair pool. The same pair never appears twice in a row.</li><li><b>Slow / Failed / Untested Review</b>: prioritises pairs with no recorded single-pair time, yellow or red recall times, or a failed attempt. Untested pairs stay here until tested. A green result removes a pair from this review pool; yellow, red, and failed pairs remain available for more practice. Green pairs are still available in True Random.</li></ul>
-<h3>Heatmap that follows improvement</h3>
-<p>The heatmap uses a recent-weighted average rather than treating every old attempt equally. Each new single-pair time shifts the colour toward your current speed, so a pair can genuinely move from red to green as you improve. Your complete history remains available for the session and leaderboard, but it does not permanently hold the heatmap back.</p>
-<h3>Heatmap averages and time-lapse</h3>
-<p>The outlined cells on the right and bottom edges are the average for each first letter (row) and each second letter (column), with the overall average in the corner. They show whether a whole letter is the problem rather than single pairs. Below the grid, drag the slider or press play to watch your heatmap change day by day; Live returns to today. Failed marks only show in the live view.</p>
-<h3>Drill these</h3>
-<p>In the stats drawer, Drill these starts a session on exactly your slowest pairs from the last 48 hours. Tap the Drilling chip under the timer to end it and see a recap of how each pair compares with before. Drill attempts count in your stats and heatmap like normal.</p>
-<h3>Drill a letter from the heatmap</h3>
-<p>Click any row letter (first letter) or column letter (second letter) on the heatmap to start drilling every pair that starts or ends with it straight away. Tap a row or column average cell to get a Drill button instead. The Drilling chip under the timer ends it and shows a recap.</p>
-<h3>Timer</h3>
-<p>Press <kbd>[T]</kbd> or the stopwatch button for a calm, full-screen scramble and timer. Hold Space (or press and hold anywhere on a phone) until the line turns green, release to start, and press to stop. A fresh random-state scramble appears after every solve; press <kbd>[N]</kbd> for a new one at any time. Press <kbd>[F]</kbd> after a stop to show DNF. If the hide-time setting is on, the digits stay hidden while the clock runs. It keeps no history on purpose; use csTimer when you want stats.</p>
-<p><b>Memo / exec split:</b> press <kbd>[S]</kbd> (or the chip under the timer) to turn it on. Press once when memo is done, the clock keeps running and the memo time is locked in. Press again when the solve is finished. You get memo, exec and the total, with a bar showing how the time was split. The choice is remembered.</p>
-<h3>Sticker locator</h3>
-<p>Press <kbd>[L]</kbd> or the cube button. Pick corners, edges or both, then <b>Find it</b> (a letter appears and you tap its sticker) or <b>Name it</b> (a sticker glows and you type or tap its letter). After each answer the other stickers on the same piece are outlined, so you learn the pieces as well as the letters. Letters you miss or answer slowly come up more often. The preview in settings shows every letter on the net, and your progress per letter. Locator stats are stored separately and never change your heatmap or times.</p>
-<h3>Word drill</h3>
-<p>Press <kbd>[W]</kbd> or use the Words tab. A pair appears and you type its saved word; it is accepted the moment it matches, and the clock runs until then. Enter submits a wrong try (three misses reveal the word), Tab shows it. Only pairs with saved words in your letter pool are used, and weak or slow ones come up more often. Results are stored separately from the heatmap.</p>
-<h3>Memo chains</h3>
-<p>Press <kbd>[C]</kbd>, or open Trainers and pick Chain. Memorise 4 to 10 pairs in order, press Space, then type them back. Results show which positions you got right, with your saved words. Memo chains are stored separately and never change your heatmap, times or stats.</p>
-<h3>Failed pairs on the heatmap</h3>
-<p>A pair you mark as failed turns darkest red with a × on the heatmap, so it stands out from merely slow pairs. It returns to its normal colour once two clean single-pair recalls clear it from the missed-word list. Hover or tap the cell to see how many times it has been failed.</p>
-<h3>Cloud backup</h3>
-<p>In Settings, Cloud Backup saves everything to a private GitHub Gist. Create a token with only the gist permission, paste it in and press Connect. After that it backs up on its own a minute after you change anything. GitHub keeps every version in the Gist&rsquo;s revision history, so you can always go back. On a new device, connect with the same token and your data comes back. If another device saved a newer backup, backups pause until you choose Restore or Overwrite.</p>
-<h3>Lookup and leaderboard</h3>
-<p>Press <kbd>[D]</kbd> or the Aa button to look up or edit any pair&rsquo;s word. The stats drawer shows your 10 slowest single pairs from the last 48 hours, with their words. The clock at the top left is your session time.</p>
-<h3>Multi-pair attempts</h3>
-<p>When Pairs per attempt is 2 or more, the final time keeps your accent colour and the attempt is left out of the heatmap and the fast/medium/slow counts, since those thresholds are for single pairs.</p>
+HR,Hair</pre>
+<p>Speffz grids work too: first letters down the side, second letters across the top, a word in each crossing cell. Empty cells are skipped, labels like <i>X / SH</i> are cleaned up, and every word is lowercased.</p>
+<pre>,A,B
+A,aqua,abbey
+B,bat,bubble</pre>
+<p>Importing adds to your words and overwrites any matching pairs.</p>
+</div></div></div></div>
+
+<div class="ac" style="--i:5"><button type="button" class="ach" aria-expanded="false">Cloud backup<i class="acv"></i></button><div class="acb"><div><div>
+<ul>
+<li>Create a GitHub token with only the <b>gist</b> permission, paste it into Cloud Backup in Settings and press Connect.</li>
+<li>It then backs up on its own a minute after you change anything. GitHub keeps every version in the Gist&rsquo;s history.</li>
+<li>On a new device, connect with the same token and your data comes back.</li>
+<li>If another device saved a newer backup, backups pause until you choose Restore or Overwrite.</li>
+</ul>
+</div></div></div></div>
+
+</div>
 </div></div>
 
 <div class="ov" id="confirm"><div class="box" role="dialog" aria-label="Confirm clear" style="width:min(420px,100%)">
@@ -1565,11 +1723,11 @@ C,cat,cabin,cucumber</pre>
 (function(){
 const L='ABCDEFGHIJKLMNOPQRSTUVWX'.split(''),ALL=L.join('');
 const KEY='bld-pairs-v1';
-const DEF={F:ALL,S:ALL,noId:false,flash:false,fd:.3,hideT:false,zen:false,n:1,thr:2,drill:false,pace:false,goal:1,acc:'#67E8F9',bg:'forest',tf:1,tm:2,gap:1.75,rm:'irl',snd:true,vol:.6,sndMode:'soft',tsplit:false,tmemo:false,font:'jb'};
+const DEF={F:ALL,S:ALL,flash:false,fd:.3,hideT:false,zen:false,thr:2,drill:false,pace:false,goal:1,acc:'#67E8F9',bg:'forest',tf:1,tm:2,rm:'irl',snd:true,vol:.6,sndMode:'soft',tsplit:false,tmemo:false,font:'jb'};
 const ACC=['#67E8F9','#4ADE80','#FBBF24','#A78BFA'],ACCD=['#0E7490','#15803D','#B45309','#6D28D9'];
 let D={set:Object.assign({},DEF),words:{},stats:{},flag:{},streak:{},missed:{},missedStreak:{},review:{},fails:{},hist:[]};
 try{const r=JSON.parse(localStorage.getItem(KEY)||'null');if(r){D=Object.assign(D,r);D.set=Object.assign({},DEF,r.set)}}catch(e){}
-D.missed||={};D.missedStreak||={};D.review||={};D.fails||={};D.chains||=[];D.set.sndMode='soft';delete D.mn;if(D.set.goal===3)D.set.goal=1;if(!['irl','review'].includes(D.set.rm))D.set.rm='irl';
+D.missed||={};D.missedStreak||={};D.review||={};D.fails||={};D.chains||=[];D.set.sndMode='soft';delete D.mn;if(D.set.goal===3)D.set.goal=1;if(!['irl','review'].includes(D.set.rm))D.set.rm='irl';delete D.set.n;delete D.set.noId;delete D.set.gap;
 // One-time migration: start with a neutral timer/pacing setup, then preserve the user's choices.
 if(!D.set.timerDefaultsV){D.set.zen=false;D.set.pace=false;D.set.hideT=false;D.set.flash=false;D.set.timerDefaultsV=1;}
 const set=()=>D.set;
@@ -1617,7 +1775,7 @@ function applyAcc0(){
 
 let deck=[],deckSig='',warned=false,pickFail=0;
 function rnd(a){return a[Math.random()*a.length|0]}
-function activePool(){const s=set(),out=[];for(const a of s.F)for(const b of s.S){if(s.noId&&a===b)continue;out.push(a+b)}return out}
+function activePool(){const s=set(),out=[];for(const a of s.F)for(const b of s.S)out.push(a+b);return out}
 function avgT(k){const t=D.stats[k];return t?(typeof t.ema==='number'?t.ema:t.s/t.n):0}
 function weakSet(base){
   const f=base.filter(k=>D.flag[k]);if(f.length)return f;
@@ -1651,27 +1809,12 @@ function fromDeck(base,out,avoid){
 function pick(){
   if(drill)return drillPick();
   const base=activePool();if(!base.length)return null;
-  const s=set(),rm=s.rm,n=Math.min(s.n,rm==='review'?reviewSet(base).length:base.length),out=[];
-  let wk=null,missed=null;
-  if(rm==='review'){
-    missed=reviewSet(base);
-    if(!missed.length){toast('All pairs are green or already tested. Try True Random.');pickFail=1;return null}
+  if(set().rm==='review'){
+    const weak=reviewSet(base);
+    if(!weak.length){toast('Every pair is green. Switch to Random.');pickFail=1;return null}
+    return [choose(weak,base,[],prev,true)];
   }
-  if(rm==='drill'||rm==='hybrid'){
-    wk=weakSet(base);
-    if(rm==='drill'&&!warned&&!base.some(k=>D.flag[k])){warned=true;toast('No flagged pairs yet. Drilling your slowest or untested pairs.')}
-  }
-  if(rm==='missed'){
-    missed=missedSet(base);
-    if(!missed.length){toast('No missed-word pairs yet. Mark a pair failed first.');pickFail=1;return null}
-  }
-  for(let i=0;i<n;i++){
-    const avoid=i?out[i-1]:prev;let k;
-    if(rm==='full')k=fromDeck(base,out,avoid);
-    else{const src=rm==='review'?missed:rm==='drill'?wk:rm==='missed'?missed:rm==='spaced'?spacedSet(base):(rm==='hybrid'&&Math.random()<.4?wk:base);k=choose(src,base,out,avoid,rm==='review'||rm==='drill'||rm==='missed')}
-    out.push(k);
-  }
-  return out;
+  return [choose(base,base,[],prev,false)];
 }
 
 function showLive(){return !set().hideT&&!set().zen}
@@ -1684,7 +1827,7 @@ function tick(){
 }
 function hideWI(){WI.style.display='none';WI.value=''}
 function setWord(t){W.textContent=t;W.classList.remove('pop');if(t){void W.offsetWidth;W.classList.add('pop')}}
-function savedWords(){return cur.map(k=>D.words[k]).filter(Boolean).join('   ')}
+function savedWords(){return D.words[cur[0]]||''}
 const SNAP_F=['stats','flag','streak','review','missed','missedStreak','fails'];
 const cl1=x=>x===undefined?undefined:JSON.parse(JSON.stringify(x));
 function snapKeys(ks){const o={ks:ks.slice(),v:{}};SNAP_F.forEach(f=>{o.v[f]=ks.map(k=>cl1(D[f]&&D[f][k]))});return o}
@@ -1695,9 +1838,9 @@ function start(){
   if(!c){snd('err');if(!pickFail)toast('No pairs selected. Open settings.');pickFail=0;return}
   attemptHist=D.hist.slice();attemptD=snapKeys(c);attemptSess=JSON.parse(JSON.stringify(sess));
   cur=c;prev=c[c.length-1];
-  P.className='run space-enter';P.style.setProperty('--n',c.length);
+  P.className='run space-enter';
   {const r=(a,b)=>(a+Math.random()*(b-a)).toFixed(2);P.style.setProperty('--ex',r(-12,12)+'px');P.style.setProperty('--ey',r(2,7)+'px');P.style.setProperty('--er',r(-1.4,1.4)+'deg');P.style.setProperty('--es',r(.975,.995))}
-  P.innerHTML=c.map((k,i)=>'<span style="--i:'+i+'">'+k+'</span>').join('');P.style.setProperty('--gap',set().gap+'rem');P.addEventListener('animationend',e=>{if(e.target===P)P.classList.remove('space-enter')});
+  P.innerHTML=c.map((k,i)=>'<span style="--i:'+i+'">'+k+'</span>').join('');P.addEventListener('animationend',e=>{if(e.target===P)P.classList.remove('space-enter')});
   
   T.textContent='';T.className='';W.textContent='';W.classList.remove('pop');
   PB.style.visibility=set().pace?'visible':'hidden';PBI.style.transform='scaleX(0)';PB.classList.remove('over');
@@ -1707,33 +1850,33 @@ function start(){
   raf=requestAnimationFrame(tick);
 }
 function stop(){
-  document.body.classList.remove('solving');el=performance.now()-t0;st=2;postStop=true;sndLv=(set().zen||cur.length!==1)?1:rate(el/cur.length);snd('stop');buzz(sndLv===2?[14]:[8]);cancelAnimationFrame(raf);clearTimeout(ft);
+  document.body.classList.remove('solving');el=performance.now()-t0;st=2;postStop=true;sndLv=set().zen?1:rate(el);snd('stop');buzz(sndLv===2?[14]:[8]);cancelAnimationFrame(raf);clearTimeout(ft);
   P.classList.remove('hid','pulse','run');
-  const per=el/cur.length,single=cur.length===1,levelNow=rate(per);
-  cur.forEach(k=>{
-    if(!single)return;const s=D.stats[k]||(D.stats[k]={n:0,s:0});const previous=typeof s.ema==='number'?s.ema:(s.n?s.s/s.n:per);s.n++;s.s+=per;s.ema=previous+.28*(per-previous);
+  const per=el,k=cur[0];
+  {
+    const s=D.stats[k]||(D.stats[k]={n:0,s:0});const previous=typeof s.ema==='number'?s.ema:(s.n?s.s/s.n:per);s.n++;s.s+=per;s.ema=previous+.28*(per-previous);
     if(per/1000>set().thr){D.flag[k]=1;D.streak[k]=0}
     else if(D.flag[k]&&(set().rm==='drill'||set().rm==='hybrid')){const c=(D.streak[k]||0)+1;if(c>=3){delete D.flag[k];delete D.streak[k];snd('grad',.3);toast(k+' graduated and left your weak pairs')}else D.streak[k]=c}
     const now=Date.now(),level=rate(per),baseDelay=[60*60e3,20*60e3,6*60e3][level];
     D.review[k]={last:now,due:now+baseDelay,interval:baseDelay};
-    if(set().rm==='review'&&single&&level===0){delete D.missed[k];delete D.missedStreak[k]}
-    if(D.missed[k]&&!(set().rm==='review'&&single&&level===0)){const c=(D.missedStreak[k]||0)+1;if(c>=2){delete D.missed[k];delete D.missedStreak[k];toast(k+' cleared from missed-word review')}else D.missedStreak[k]=c}
-  });
-  sess.n+=cur.length;if(single)sess.r[rate(per)]+=cur.length;sess.sum+=el;sess.rec.unshift({p:cur.join(' '),t:el});if(sess.rec.length>50)sess.rec.pop();
+    if(set().rm==='review'&&level===0){delete D.missed[k];delete D.missedStreak[k]}
+    if(D.missed[k]&&!(set().rm==='review'&&level===0)){const c=(D.missedStreak[k]||0)+1;if(c>=2){delete D.missed[k];delete D.missedStreak[k];toast(k+' cleared from missed-word review')}else D.missedStreak[k]=c}
+  }
+  sess.n+=1;sess.r[rate(per)]++;sess.sum+=el;sess.rec.unshift({p:k,t:el});if(sess.rec.length>50)sess.rec.pop();
   if(sess.best===null||per<sess.best)sess.best=per;
-  if(drill&&single&&drill.list.some(x=>x.k===cur[0])){(drill.times[cur[0]]||(drill.times[cur[0]]=[])).push(per);drill.n++}
-  D.hist.push({p:cur.join(' '),t:Math.round(el),d:Date.now()});if(D.hist.length>HIST_CAP)D.hist.splice(0,D.hist.length-HIST_CAP);
+  if(drill&&drill.list.some(x=>x.k===k)){(drill.times[k]||(drill.times[k]=[])).push(per);drill.n++}
+  D.hist.push({p:k,t:Math.round(el),d:Date.now()});if(D.hist.length>HIST_CAP)D.hist.splice(0,D.hist.length-HIST_CAP);
   save();
-  if(!set().zen){T.textContent=fmt(el);T.className=single?'r'+rate(per):'done';if(single){washFx(rate(per));pairFx(RC[rate(per)])}else pairFx('var(--acc)')}else T.textContent='';
+  if(!set().zen){T.textContent=fmt(el);T.className='r'+rate(per);washFx(rate(per));pairFx(RC[rate(per)])}else T.textContent='';
   PB.style.visibility='hidden';
   setWord(savedWords());
 }
 function fail(){
   if(st!==1)return;
-  if(drill&&cur.length===1)drill.fails[cur[0]]=(drill.fails[cur[0]]||0)+1;
+  if(drill)drill.fails[cur[0]]=(drill.fails[cur[0]]||0)+1;
   document.body.classList.remove('solving');postStop=false;st=2;cancelAnimationFrame(raf);clearTimeout(ft);
   P.classList.remove('hid','pulse','run');
-  const now=Date.now();if(cur.length===1)D.fails[cur[0]]=(D.fails[cur[0]]||0)+1;cur.forEach(k=>{D.missed[k]=1;D.missedStreak[k]=0;D.review[k]={last:now,due:now,interval:0}});save();
+  const now=Date.now();D.fails[cur[0]]=(D.fails[cur[0]]||0)+1;cur.forEach(k=>{D.missed[k]=1;D.missedStreak[k]=0;D.review[k]={last:now,due:now,interval:0}});save();
   T.textContent='Failed';T.className='failed';washFx(2);pairFx(RC[2]);
   PB.style.visibility='hidden';
   setWord(savedWords());
@@ -1742,7 +1885,7 @@ function fail(){
 }
 function reset(){
   document.body.classList.remove('solving');cancelAnimationFrame(raf);clearTimeout(ft);st=0;cur=[];postStop=false;hideWI();
-  P.className='idle';P.style.removeProperty('--n');P.textContent='Press Spacebar to Start';
+  P.className='idle';P.textContent='Press Spacebar to Start';
   T.textContent='';T.className='';W.textContent='';PB.style.visibility='hidden';idleLast();
 }
 function idleLast(){
@@ -1756,16 +1899,14 @@ function washFx(l){const w=$('#wash');if(!w)return;w.className='';void w.offsetW
 function press(){if(st===1)stop();else start()}
 function openWI(){
   snd('tab');
-  WI.placeholder=cur.length>1?'Words for '+cur.join(' ')+', separated by spaces':'Word for '+cur[0];
-  WI.value=cur.map(k=>D.words[k]||'').join(' ').trim();
+  WI.placeholder='Word for '+cur[0];
+  WI.value=D.words[cur[0]]||'';
   WI.style.display='block';WI.focus();WI.select();
 }
 function saveWI(){
-  const parts=WI.value.trim().split(/\s+/).filter(Boolean);
-  if(cur.length===1)D.words[cur[0]]=WI.value.trim();
-  else cur.forEach((k,i)=>{if(parts[i])D.words[k]=parts[i]});
-  if(cur.length===1&&!D.words[cur[0]])delete D.words[cur[0]];
-  save();snd('dictionary');setWord(cur.map(k=>D.words[k]).filter(Boolean).join('   '));
+  const w=WI.value.trim();
+  if(w)D.words[cur[0]]=w;else delete D.words[cur[0]];
+  save();snd('dictionary');setWord(w);
   hideWI();WI.blur();
 }
 
@@ -1782,7 +1923,7 @@ addEventListener('keydown',e=>{
     e.preventDefault();
     unsnap(attemptD);D.hist=attemptHist.slice();
     Object.keys(sess).forEach(k=>delete sess[k]);Object.assign(sess,JSON.parse(JSON.stringify(attemptSess)));
-    const now=Date.now();if(cur.length===1)D.fails[cur[0]]=(D.fails[cur[0]]||0)+1;cur.forEach(k=>{D.missed[k]=1;D.missedStreak[k]=0;D.review[k]={last:now,due:now,interval:0}});
+    const now=Date.now();D.fails[cur[0]]=(D.fails[cur[0]]||0)+1;cur.forEach(k=>{D.missed[k]=1;D.missedStreak[k]=0;D.review[k]={last:now,due:now,interval:0}});
     postStop=false;save();T.textContent='Failed';T.className='failed';washFx(2);pairFx(RC[2]);setWord(savedWords());snd('fail');toast('Time undone — marked as failed');return;
   }
   if(st===1&&FAIL_KEYS.has(e.key.toLowerCase())){e.preventDefault();fail();return}
@@ -1823,7 +1964,7 @@ function openM(id){
   openM0(id,false);
 }
 function openM0(id,vt){reset();const sw=!!modal;if(id!=='lookup')snd('open');if(modal)$('#'+modal).classList.remove('on','out');modal=id;const o=$('#'+id);o.classList.remove('out');o.classList.toggle('swap',sw&&!vt);o.classList.toggle('sl',vt==='sl');o.classList.add('on');tmFx(id);if(document.activeElement)document.activeElement.blur()}
-function tmFx(id){clearTimeout(tmFx.t);const h=document.documentElement;h.classList.remove('tmopen');if(id==='timer')tmFx.t=setTimeout(()=>h.classList.add('tmopen'),900)}
+function tmFx(id){clearTimeout(tmFx.t);const h=document.documentElement;h.classList.toggle('hmopen',id==='heat');h.classList.remove('tmopen');if(id==='timer')tmFx.t=setTimeout(()=>h.classList.add('tmopen'),900)}
 function closeM(){if(!modal)return;hmHide();snd('close');tlStop();cancelAnimationFrame(chRaf);if(modal==='timer')tmCancel();const o=$('#'+modal);modal=null;tmFx();o.classList.remove('on');o.classList.add('out');setTimeout(()=>o.classList.remove('out'),230);if(document.activeElement)document.activeElement.blur()}
 $$('[data-close]').forEach(b=>b.addEventListener('click',closeM));
 $$('.ov').forEach(o=>o.addEventListener('mousedown',e=>{if(e.target===o)closeM()}));
@@ -1866,7 +2007,7 @@ function zenUntoggle(k,delay){
 }
 $$('[data-k]').forEach(i=>i.addEventListener('input',()=>{
   const k=i.dataset.k;let v=i.type==='checkbox'?i.checked:i.value;
-  if(i.type==='range'||i.type==='number'||k==='n'){v=parseFloat(v);if(isNaN(v))return}
+  if(i.type==='range'||i.type==='number'){v=parseFloat(v);if(isNaN(v))return}
   set()[k]=v;
   if(k==='zen'&&v){['pace','hideT','flash'].forEach((x,i)=>zenUntoggle(x,160+i*100))}
   else if(v&&['pace','hideT','flash'].includes(k)){zenUntoggle('zen',160)}
@@ -1956,6 +2097,8 @@ function importCSVOld(raw){
 }
 $('#bcsv').onclick=()=>{$('#dj').value='pair,word\n'+Object.keys(D.words).sort().map(k=>k+',"'+D.words[k].replace(/"/g,'""')+'"').join('\n')};
 $('#bhelp').onclick=()=>openM('help');
+$('#help').addEventListener('click',e=>{const b=e.target.closest('.ach');if(!b)return;const a=b.parentElement,o=!a.classList.contains('open');a.classList.toggle('open',o);b.setAttribute('aria-expanded',o)});
+{const h=$('#thhm');let o='';for(let r=0;r<3;r++)for(let c=0;c<12;c++)o+='<i'+((r*7+c*5)%11===3?' class="u"':'')+' style="--i:'+(c+r*2)+'"></i>';h.innerHTML=o}
 let pend=null;
 const ACT={
   stats:{t:'Clear session history and heatmap?',p:'This permanently deletes heatmap data, average times, weak-pair flags, missed-word and spaced-repetition progress, attempt history and the session log. Your saved words, settings and theme stay as they are.',y:'Yes, clear stats',f:()=>{D.stats={};D.flag={};D.streak={};D.missed={};D.missedStreak={};D.review={};D.fails={};D.hist=[];sess={n:0,sum:0,best:null,rec:[],r:[0,0,0]};prev=null}},
@@ -2175,7 +2318,7 @@ const VR=document.querySelector('[data-k="vol"]');
 VR.addEventListener('input',()=>{$('#vlv').textContent=Math.round(VR.value*100)+'%'});
 
 /* heatmap */
-let hmCtx=null,hmSel=null,tlTimer=0,tlFirst=0,tlH=[],hmKids=[],hmX=[],hmRevT=0,hmOver=null;
+let hmCtx=null,hmSel=null,tlTimer=0,tlFirst=0,tlH=[],hmKids=[],hmX=[],hmRevT=0,hmOver=null,hmP=[],hmR=[],hmC=[],hmA=null,tlCache=new Map();
 /* the diagonal reveal owns opacity while it runs, so the crosshair waits for it to finish, then fades in smoothly */
 function hmLock(g){g.classList.add('hmrev');clearTimeout(hmRevT);hmRevT=setTimeout(()=>{g.classList.remove('hmrev');if(hmOver&&hmOver.isConnected&&hmOver.matches(':hover'))hmCross(hmOver.dataset)},1160)}
 function liveCtx(){return{live:true,avg:k=>D.stats[k]?avgT(k):null,cnt:k=>D.stats[k]?D.stats[k].n:0}}
@@ -2184,7 +2327,7 @@ function renderHeat(){
   const g=$('#hm');let h='<div></div>'+L.map(l=>'<div class="hmhl" data-hc="'+l+'" title="Drill all _'+l+' pairs">'+l+'</div>').join('')+'<div class="hmh">avg</div>';
   for(const a of L){h+='<div class="hmhl" data-hr="'+a+'" title="Drill all '+a+'_ pairs">'+a+'</div>';for(const b of L)h+='<div data-p="'+a+b+'"></div>';h+='<div class="hmavg" data-r="'+a+'"></div>'}
   h+='<div class="hmh">avg</div>'+L.map(l=>'<div class="hmavg" data-c="'+l+'"></div>').join('')+'<div class="hmavg" data-all="1"></div>';
-  g.innerHTML=h;hmKids=[...g.children];hmX=[];g.classList.remove('hmx');hmOver=null;
+  g.innerHTML=h;hmKids=[...g.children];hmP=[];hmX=[];g.classList.remove('hmx');hmOver=null;
   hmKids.forEach((d,i)=>{d.style.animationDelay=((i%26)+((i/26)|0))*12+'ms'});hmLock(g);
   paintHeat(liveCtx());
   $('#hmi').textContent='Hover or tap a cell for details. Click a row or column letter to drill it. Recent attempts count most.';$('#hmdrill').style.display='none';hmSel=null;
@@ -2193,19 +2336,22 @@ function renderHeat(){
 }
 function paintHeat(ctx){
   hmCtx=ctx;const hc=['#1E8E4E','#B8941F','#B94646'],rows={},cols={},all=[];
-  $$('#hm [data-p]').forEach(c=>{
-    const k=c.dataset.p,v=ctx.avg(k);
-    if(ctx.live&&D.missed[k]&&D.fails[k]){c.style.background='#5A0B14';c.style.color='#FCA5A5';c.textContent='×';return}
-    c.textContent='';c.style.color='';
-    if(v==null){c.style.background='var(--line)';return}
-    c.style.background=hc[rate(v)];
+  if(!hmP.length){hmP=$$('#hm [data-p]');hmR=$$('#hm [data-r]');hmC=$$('#hm [data-c]');hmA=$('#hm [data-all]')}
+  /* only touch the DOM when a value actually changed (time-lapse steps change few cells) */
+  const bg=(c,v)=>{if(c._bg!==v){c._bg=v;c.style.background=v}},fg=(c,v)=>{if(c._fg!==v){c._fg=v;c.style.color=v}},tx=(c,v)=>{if(c._tx!==v){c._tx=v;c.textContent=v}};
+  for(const c of hmP){
+    const k=c._k||(c._k=c.dataset.p),v=ctx.avg(k);
+    if(ctx.live&&D.missed[k]&&D.fails[k]){bg(c,'#5A0B14');fg(c,'#FCA5A5');tx(c,'\u00d7');continue}
+    tx(c,'');fg(c,'');
+    if(v==null){bg(c,'var(--line)');continue}
+    bg(c,hc[rate(v)]);
     (rows[k[0]]||(rows[k[0]]=[])).push(v);(cols[k[1]]||(cols[k[1]]=[])).push(v);all.push(v);
-  });
+  }
   const mean=a=>a.reduce((x,y)=>x+y,0)/a.length;
-  const fill=(c,a)=>{if(!a||!a.length){c.style.background='var(--line)';c.textContent='';return}const m=mean(a);c.style.background=hc[rate(m)];c.textContent=(m/1000).toFixed(1)};
-  $$('#hm [data-r]').forEach(c=>fill(c,rows[c.dataset.r]));
-  $$('#hm [data-c]').forEach(c=>fill(c,cols[c.dataset.c]));
-  fill($('#hm [data-all]'),all);
+  const fill=(c,a)=>{if(!a||!a.length){bg(c,'var(--line)');tx(c,'');return}const m=mean(a);bg(c,hc[rate(m)]);tx(c,(m/1000).toFixed(1))};
+  hmR.forEach(c=>fill(c,rows[c.dataset.r]));
+  hmC.forEach(c=>fill(c,cols[c.dataset.c]));
+  fill(hmA,all);
 }
 function hmInfo(e){
   const d=e.target.dataset;if(!d)return;
@@ -2233,6 +2379,7 @@ var TL_PLAY='<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" 
 function tlStop(){clearInterval(tlTimer);tlTimer=0;const b=$('#tlp');if(b)b.innerHTML=TL_PLAY}
 function tlInit(){
   const box=$('#tl');
+  tlCache.clear();
   tlH=D.hist.filter(h=>h.d&&h.p.indexOf(' ')<0).sort((a,b)=>a.d-b.d);
   if(tlH.length<2){box.style.display='none';return}
   const f=new Date(tlH[0].d);f.setHours(0,0,0,0);tlFirst=f.getTime();
@@ -2243,9 +2390,12 @@ function tlInit(){
   const r=$('#tlr');r.min=0;r.max=n-1;r.value=n-1;tlSync();
 }
 function tlCtx(i){
+  const hit=tlCache.get(i);if(hit)return hit;
   const d=new Date(tlFirst);d.setDate(d.getDate()+i+1);const end=d.getTime(),ema={},cnt={};
   for(const h of tlH){if(h.d>=end)break;const k=h.p;ema[k]=(k in ema)?ema[k]+.28*(h.t-ema[k]):h.t;cnt[k]=(cnt[k]||0)+1}
-  return{live:false,avg:k=>(k in ema)?ema[k]:null,cnt:k=>cnt[k]||0};
+  const out={live:false,avg:k=>(k in ema)?ema[k]:null,cnt:k=>cnt[k]||0};
+  tlCache.set(i,out);if(tlCache.size>120)tlCache.delete(tlCache.keys().next().value);
+  return out;
 }
 function tlSync(){
   const r=$('#tlr'),i=+r.value,max=+r.max;
@@ -2259,14 +2409,20 @@ $('#tlp').onclick=()=>{
   tlTimer=setInterval(()=>{r.value=+r.value+1;tlSync();snd('slider');if(+r.value>=+r.max)tlStop()},Math.max(120,Math.min(450,6000/(+r.max+1))));
 };
 let tlSnd=0;
-$('#tlr').addEventListener('input',()=>{tlStop();tlSync();const n=performance.now();if(n-tlSnd>70){tlSnd=n;snd('slider')}});
+let tlRaf=0;
+$('#tlr').addEventListener('input',()=>{tlStop();if(!tlRaf)tlRaf=requestAnimationFrame(()=>{tlRaf=0;tlSync()});const n=performance.now();if(n-tlSnd>70){tlSnd=n;snd('slider')}});
 $('#tll').onclick=()=>{tlStop();const r=$('#tlr');r.value=r.max;tlSync()};
 $('#hm').addEventListener('mouseover',hmInfo);
 $('#hm').addEventListener('click',hmInfo);
 /* heatmap hover card */
 const hmCard=document.createElement('div');hmCard.id='hmcard';hmCard.setAttribute('aria-hidden','true');document.body.appendChild(hmCard);
-function hmHide(){hmCard.classList.remove('on')}
-function hmPlace(e){const w=hmCard.offsetWidth,h=hmCard.offsetHeight;let x=e.clientX+16,y=e.clientY+16;if(x+w>innerWidth-8)x=e.clientX-w-16;if(y+h>innerHeight-8)y=e.clientY-h-16;hmCard.style.left=Math.max(8,x)+'px';hmCard.style.top=Math.max(8,y)+'px'}
+let hmCW=0,hmCH=0,hmPX=0,hmPY=0,hmPRaf=0,hmDirty=false,hmWant=false;
+function hmHide(){hmWant=false;hmCard.classList.remove('on')}
+/* positions once per frame; the card is measured only when its content changed, and moved with translate (no layout) */
+function hmFrame(){hmPRaf=0;if(!hmWant)return;if(hmDirty){hmCW=hmCard.offsetWidth;hmCH=hmCard.offsetHeight;hmDirty=false}
+  let x=hmPX+16,y=hmPY+16;if(x+hmCW>innerWidth-8)x=hmPX-hmCW-16;if(y+hmCH>innerHeight-8)y=hmPY-hmCH-16;
+  hmCard.style.translate=Math.max(8,x)+'px '+Math.max(8,y)+'px';hmCard.classList.add('on')}
+function hmPlace(e){hmPX=e.clientX;hmPY=e.clientY;if(!hmPRaf)hmPRaf=requestAnimationFrame(hmFrame)}
 $('#hm').addEventListener('mouseover',e=>{
   const p=e.target.dataset&&e.target.dataset.p;if(!p||modal!=='heat'){hmHide();return}
   const c=hmCtx||liveCtx(),v=c.avg(p),n=c.cnt(p),w=D.words[p];
@@ -2278,15 +2434,15 @@ $('#hm').addEventListener('mouseover',e=>{
     let r=n+' attempt'+(n>1?'s':'');
     if(c.live){
       if(D.fails[p])r+=' \u00b7 failed '+D.fails[p]+'\u00d7'+(D.missed[p]?' (still missed)':'');
-      const hs=D.hist.filter(x=>x.p===p).slice(-8);
+      const hs=[];for(let i=D.hist.length-1;i>=0&&hs.length<8;i--)if(D.hist[i].p===p)hs.unshift(D.hist[i]);
       if(hs.length>=4){const m=Math.floor(hs.length/2),f=a=>a.reduce((s,x)=>s+x.t,0)/a.length,o=f(hs.slice(0,m)),q=f(hs.slice(m)),d=(q-o)/o;
         r+='<br><em style="color:'+(d<-.08?'var(--g)':d>.08?'var(--r)':'var(--muted)')+'">'+(d<-.08?'Getting faster':d>.08?'Getting slower':'Holding steady')+'</em>'}
     }
     h+='<div class="hcr">'+r+'</div>';
   }
-  hmCard.innerHTML=h;hmPlace(e);hmCard.classList.add('on');
+  hmCard.innerHTML=h;hmDirty=true;hmWant=true;hmPlace(e);
 });
-$('#hm').addEventListener('mousemove',e=>{if(hmCard.classList.contains('on'))hmPlace(e)},{passive:true});
+$('#hm').addEventListener('mousemove',e=>{if(hmWant)hmPlace(e)},{passive:true});
 $('#hm').addEventListener('mouseleave',hmHide);
 /* crosshair: hovering a cell lights up its whole row and column and dims the rest */
 function hmCrossClear(){hmX.forEach(e=>e.classList.remove('xr','xc','xh'));hmX=[];$('#hm').classList.remove('hmx')}
@@ -2321,7 +2477,7 @@ const stN=h=>h.p.split(' ').length;
 const stDay=ms=>{const d=new Date(ms);return d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate()};
 const stWord=k=>D.words[k]?esc(String(D.words[k]).toLowerCase()):'-';
 const stSec=ms=>(ms/1000).toFixed(2)+'s';
-function stPool(){const o=[],q=set();for(const a of(q.F||ALL))for(const c of(q.S||ALL)){if(q.noId&&a===c)continue;o.push(a+c)}return o}
+function stPool(){const o=[],q=set();for(const a of(q.F||ALL))for(const c of(q.S||ALL))o.push(a+c);return o}
 function stTile(l,v,sub,col){return '<div class="tile"><span>'+l+'</span><b'+(col?' style="color:'+col+'"':'')+'>'+v+'</b>'+(sub?'<small>'+sub+'</small>':'')+'</div>'}
 function stBlk(i,t,body){return '<div class="stblk" style="--i:'+i+'">'+(t?'<h3>'+t+'</h3>':'')+body+'</div>'}
 function stBar(parts){
@@ -2429,14 +2585,9 @@ $('#sb').addEventListener('click',e=>{
 /* drill the slowest pairs */
 let drill=null;
 function drillPick(){
-  const ks=drill.list.map(x=>x.k),out=[],n=Math.min(set().n,ks.length);
-  for(let i=0;i<n;i++){
-    const avoid=i?out[i-1]:prev;
-    let c=ks.filter(k=>!out.includes(k)&&k!==avoid);
-    if(!c.length)c=ks.filter(k=>!out.includes(k));
-    out.push(rnd(c));
-  }
-  return out;
+  const ks=drill.list.map(x=>x.k);
+  let c=ks.filter(k=>k!==prev);if(!c.length)c=ks;
+  return [rnd(c)];
 }
 function startDrill(list,label){
   if(!list.length)return;
@@ -2446,7 +2597,7 @@ function startDrill(list,label){
   closeM();snd('start',.12);toast('Drilling '+list.length+' '+label+'. Press Space to start.');
 }
 function drillLetter(kind,l){
-  const keys=(kind==='first'?L.map(b=>l+b):L.map(a=>a+l)).filter(k=>!(set().noId&&k[0]===k[1]));
+  const keys=(kind==='first'?L.map(b=>l+b):L.map(a=>a+l));
   startDrill(keys.map(k=>({k:k,a:D.stats[k]?avgT(k):null})),kind==='first'?'pairs starting with '+l:'pairs ending with '+l);
 }
 function endDrill(){
@@ -3470,7 +3621,7 @@ document.addEventListener('keydown',e=>{
 const WD={ph:'setup',q:'',t0:0,ok:0,tot:0,first:0,tries:0,lock:false,lastOk:false,tm:0,last:'',ms:[],log:[]};
 const wst=()=>D.wd||(D.wd={}),wlen=()=>D.wdLen===undefined?25:D.wdLen,nw=x=>String(x||'').toLowerCase().replace(/\s+/g,' ').trim();
 const wavg=a=>a.reduce((q,x)=>q+x,0)/a.length;
-function wdPool(){const s=set(),o=[];for(const a of(s.F||ALL))for(const b of(s.S||ALL)){if(s.noId&&a===b)continue;if(D.words[a+b])o.push(a+b)}return o}
+function wdPool(){const s=set(),o=[];for(const a of(s.F||ALL))for(const b of(s.S||ALL)){if(D.words[a+b])o.push(a+b)}return o}
 function wdShow(p){WD.ph=p;['setup','play','res'].forEach(x=>$('#wd'+x).style.display=x===p?'':'none')}
 function wdSync(){
   const p=wdPool(),st=wst(),pr=p.filter(k=>st[k]&&st[k].n),ms=pr.filter(k=>st[k].ms).map(k=>st[k].ms);
@@ -3566,7 +3717,7 @@ lw.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();lkSave(
 $('#lsave').onclick=lkSave;
 $('#ldel').onclick=()=>{lw.value='';lkSave();lkRefresh()};
 function openLookup(){
-  const k=cur.length===1?cur[0]:'';
+  const k=cur[0]||'';
   openM('lookup');snd('dictionary');lq.value=k;lkRefresh();
   setTimeout(()=>(k?lw:lq).focus(),60);
 }
@@ -3741,14 +3892,26 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')hideTip()},true);
 let mvT=0;addEventListener('mousemove',()=>{document.body.classList.add('mv');clearTimeout(mvT);mvT=setTimeout(()=>document.body.classList.remove('mv'),1500)},{passive:true});
 
 /* session clock */
-const SC=$('#sclk');
+const SC=$('#sclk'),SCT=SC.querySelector('.ct');
 SC.addEventListener('click',()=>{snd('click');setTimeout(()=>SC.blur(),0)});
+
+/* clock hover: mirrors the top icon bar */
+(function(){
+  const calm=matchMedia('(prefers-reduced-motion:reduce)');let on=false,showT=0,r=null;
+  const swell=x=>{if(!r)return;const d=Math.abs(x-r.width/2),k=Math.exp(-Math.pow(d/(r.width*.95),2));SC.style.setProperty('--m',calm.matches?1:(1+.15*k).toFixed(3))};
+  SC.addEventListener('pointerenter',e=>{if(e.pointerType==='touch')return;on=true;r=SC.getBoundingClientRect();
+    SC.style.setProperty('--px',(e.clientX-r.left)+'px');swell(e.clientX-r.left);SC.classList.add('mag');
+    clearTimeout(showT);showT=setTimeout(()=>SC.classList.add('tip'),380)});
+  SC.addEventListener('pointermove',e=>{if(e.pointerType==='touch'||!on)return;const x=e.clientX-r.left;SC.style.setProperty('--px',x+'px');swell(x)});
+  SC.addEventListener('pointerleave',()=>{on=false;clearTimeout(showT);SC.classList.remove('mag','tip');SC.style.setProperty('--m',1)});
+  SC.addEventListener('pointerdown',()=>{clearTimeout(showT);SC.classList.remove('tip')});
+})();
 /* session clock only counts time while this tab is visible and focused */
 let SA=0,SL=Date.now();const slive=()=>!document.hidden&&document.hasFocus();let son=slive();
 function clk(){
   const n=Date.now();if(son)SA+=n-SL;SL=n;son=slive();
   const q=Math.floor(SA/1000),h=q/3600|0,m=(q%3600)/60|0,x=q%60,p=n=>String(n).padStart(2,'0');
-  SC.textContent=(h?h+':'+p(m):m)+':'+p(x);
+  SCT.textContent=(h?h+':'+p(m):m)+':'+p(x);
 }
 clk();setInterval(clk,1000);
 document.addEventListener('visibilitychange',clk);addEventListener('blur',clk);addEventListener('focus',clk);addEventListener('pagehide',clk);

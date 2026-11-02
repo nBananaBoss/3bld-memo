@@ -1388,6 +1388,102 @@ html[data-font]:not([data-font=jb]) :is(.box kbd,.spark .ctx){font-family:var(--
 @keyframes thFlE{0%{transform:scaleX(0)}85%,100%{transform:scaleX(1)}}
 @media(max-width:560px){.th-hero{grid-template-columns:1fr}.th-keys{grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){#help .th-screen *,#help .th-steps li,.th-hm i,.th-fl *{animation:none!important}.th-pair,.th-time,.th-word{opacity:1!important}.th-idle{opacity:0!important}.th-time::after{--thn:84}.th-steps li{--tha:1}}
+/* ---------- heatmap: buttery exit ----------
+   Leaving the grid used to un-dim ~676 cells in 120ms linear while the hovered cell's z-index, shadow and ring snapped off
+   mid-scale. Now: cells keep their stacking order until the scale has settled, shadows/ring/label glow fade, and a slow
+   expo/cubic ease-out un-dims everything. Entering and cell-to-cell moves keep the quick feel. */
+#hm div[data-p],#hm .hmavg{position:relative;transition:transform .16s cubic-bezier(.32,.72,0,1),opacity .12s linear,box-shadow .16s ease-out,z-index 0s linear .32s}
+#hm .hmavg{transition:transform .16s cubic-bezier(.32,.72,0,1),opacity .12s linear,box-shadow .16s ease-out,filter .2s ease-out,z-index 0s linear .32s}
+#hm div[data-p]:hover,#hm .hmavg:hover{z-index:3;transition:transform .16s cubic-bezier(.32,.72,0,1),opacity .12s linear,box-shadow .16s ease-out,filter .2s ease-out,z-index 0s}
+#hm .hmhl{transition:transform .18s cubic-bezier(.32,.72,0,1),color .15s,text-shadow .25s ease-out}
+#hm.hmleave div[data-p],#hm.hmleave .hmavg{transition:transform .42s cubic-bezier(.16,1,.3,1),opacity .46s cubic-bezier(.33,1,.68,1),box-shadow .4s ease-out,filter .35s ease-out,z-index 0s linear .44s}
+#hm.hmleave .hmhl{transition:transform .42s cubic-bezier(.16,1,.3,1),color .35s ease-out,text-shadow .4s ease-out}
+/* cells are pre-promoted while the heatmap is open so the big un-dim runs on the compositor without a layer-build hitch */
+#heat.on #hm div[data-p],#heat.on #hm .hmavg{will-change:opacity}
+#hmcard{transition:opacity .3s ease-out,transform .42s cubic-bezier(.16,1,.3,1)}
+#hmcard.on{transition:opacity .14s ease,transform .22s cubic-bezier(.16,1,.3,1)}
+@media (prefers-reduced-motion:reduce){#hm.hmleave *,#hmcard{transition-duration:.01s!important;transition-delay:0s!important}}
+/* ---------- final polish: newest heatmap cell ---------- */
+#hm div.hmnew{position:relative;z-index:2}
+#hm div.hmnew::after{content:"";position:absolute;inset:0;border-radius:3px;pointer-events:none;opacity:0;animation:hmpulse 1.9s cubic-bezier(.16,1,.3,1) 1.25s 3 both}
+@keyframes hmpulse{0%{opacity:1;box-shadow:0 0 0 0 color-mix(in srgb,var(--fg) 70%,transparent),inset 0 0 0 1.5px color-mix(in srgb,var(--fg) 80%,transparent)}70%{opacity:1}100%{opacity:0;box-shadow:0 0 0 8px color-mix(in srgb,var(--fg) 0%,transparent),inset 0 0 0 1.5px color-mix(in srgb,var(--fg) 0%,transparent)}}
+@media (prefers-reduced-motion:reduce){#hm div.hmnew::after{animation:none;opacity:1;box-shadow:inset 0 0 0 1.5px var(--fg)}}
+
+/* ---------- settings redesign: clearer groups, real contrast in dark themes, sticky header with section jump bar ---------- */
+#settings .box{width:min(680px,100%);padding:0 1.5rem 2.6rem;scrollbar-color:color-mix(in srgb,var(--fg) 28%,transparent) transparent}
+#settings .shead{position:sticky;top:0;z-index:6;margin:0 -1.5rem;padding:1.35rem 1.5rem .8rem;background:color-mix(in srgb,var(--panel) 94%,transparent);-webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4);border-bottom:1px solid transparent;transition:border-color .35s var(--ease),box-shadow .35s var(--ease)}
+#settings .box.scrolled .shead{border-bottom-color:color-mix(in srgb,var(--fg) 12%,var(--line));box-shadow:0 14px 26px -20px rgba(0,0,0,.7)}
+#settings .shead h2{margin:0 0 .8rem;font-size:1.6rem;font-weight:700;letter-spacing:-.01em;display:flex;justify-content:space-between;align-items:center}
+#settings .shead h2 button{font-size:.76rem;font-weight:500;letter-spacing:.02em;padding:.4em 1em;border-radius:999px;color:var(--muted);border-color:color-mix(in srgb,var(--fg) 20%,var(--line));background:color-mix(in srgb,var(--fg) 5%,transparent)}
+#settings .shead h2 button:hover{color:var(--fg);border-color:var(--acc)}
+.snav{position:relative;display:flex;gap:.4rem;overflow-x:auto;scrollbar-width:none;margin:0 -1.5rem;padding:.15rem 1.5rem .2rem;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 1.4rem,#000 calc(100% - 1.4rem),transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 1.4rem,#000 calc(100% - 1.4rem),transparent 100%)}
+.snav::-webkit-scrollbar{display:none}
+.snav button{flex:none;font-size:.74rem;padding:.4rem .85rem;border-radius:999px;color:var(--muted);border:1px solid color-mix(in srgb,var(--fg) 14%,var(--line));background:color-mix(in srgb,var(--fg) 4%,transparent);transition:color .3s var(--ease),background-color .3s var(--ease),border-color .3s var(--ease),box-shadow .3s var(--ease)}
+.snav button:hover{color:var(--fg);border-color:color-mix(in srgb,var(--acc) 55%,var(--line));background:color-mix(in srgb,var(--acc) 9%,transparent);transform:none}
+.snav button.on{color:var(--on);background:var(--acc);border-color:var(--acc);font-weight:600;box-shadow:0 4px 16px -6px color-mix(in srgb,var(--acc) 70%,transparent)}
+
+#settings .sec{display:flex;align-items:center;gap:.7rem;font-size:.78rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--fg);margin:2.5rem .2rem .85rem}
+#settings .shead+.sec{margin-top:1.6rem}
+#settings .sec::before{content:"";flex:none;width:4px;height:1.1em;border-radius:3px;background:var(--acc);box-shadow:0 0 12px color-mix(in srgb,var(--acc) 60%,transparent)}
+#settings .sec::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,color-mix(in srgb,var(--fg) 18%,transparent),transparent)}
+
+#settings .grp{background:color-mix(in srgb,var(--fg) 4.5%,var(--panel));border:1px solid color-mix(in srgb,var(--fg) 14%,var(--line));border-radius:16px;box-shadow:0 1px 0 0 color-mix(in srgb,var(--fg) 7%,transparent) inset,0 10px 28px -18px rgba(0,0,0,.55)}
+#settings .it,#settings .pad{border-top-color:color-mix(in srgb,var(--fg) 9%,transparent)}
+#settings .grp>:first-child{border-top:0}
+#settings .it{padding:.9rem 1.15rem}
+#settings .lb{color:var(--fg)}
+#settings .fn{color:color-mix(in srgb,var(--muted) 86%,var(--fg));font-size:.78rem;line-height:1.55;margin:.15rem .5rem .4rem}
+#settings .mut{color:color-mix(in srgb,var(--muted) 86%,var(--fg))}
+
+/* toggles: a visible off state, a glowing on state */
+#settings .tg{background:color-mix(in srgb,var(--fg) 24%,var(--panel));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--fg) 22%,transparent);transition:background-color .3s var(--ease),box-shadow .3s var(--ease)}
+#settings .tg:checked{background:var(--acc);box-shadow:0 0 0 1px var(--acc),0 0 16px -2px color-mix(in srgb,var(--acc) 55%,transparent)}
+#settings .tg::after{transition:transform .3s cubic-bezier(.32,.72,0,1),width .18s ease,background-color .3s var(--ease)}
+#settings .tg:checked::after{background:var(--on)}
+
+/* dropdowns and number boxes */
+#settings select{-webkit-appearance:none;appearance:none;cursor:pointer;font-size:.88rem;padding:.5em 2.3em .5em .85em;background-color:color-mix(in srgb,var(--fg) 7%,var(--panel));border:1px solid color-mix(in srgb,var(--fg) 20%,var(--line));background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 1.15em) 52%,calc(100% - .8em) 52%;background-size:.38em .38em,.38em .38em;background-repeat:no-repeat}
+#settings select option,#settings select optgroup{background:var(--panel);color:var(--fg)}
+#settings input[type=number]{width:4.6rem;text-align:center;font-size:.9rem;padding:.5em .4em;font-variant-numeric:tabular-nums;background-color:color-mix(in srgb,var(--fg) 7%,var(--panel));border:1px solid color-mix(in srgb,var(--fg) 20%,var(--line))}
+#settings .fld,#settings textarea{background:color-mix(in srgb,var(--bg) 70%,var(--panel));border:1px solid color-mix(in srgb,var(--fg) 18%,var(--line));border-radius:10px}
+#settings textarea{font-size:.78rem;padding:.7em .8em;height:7rem}
+#settings #fdv,#settings #vlv{min-width:3.2rem;text-align:right;color:var(--acc);font-weight:600;font-size:.82rem;font-variant-numeric:tabular-nums}
+
+/* sliders: filled track + round thumb */
+#settings input[type=range]{-webkit-appearance:none;appearance:none;width:170px;height:22px;margin:0;background:transparent;cursor:pointer;--f:.5}
+#settings input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:999px;background:linear-gradient(90deg,var(--acc) calc(9px + (100% - 18px) * var(--f)),color-mix(in srgb,var(--fg) 22%,var(--panel)) calc(9px + (100% - 18px) * var(--f)))}
+#settings input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;margin-top:-6px;border-radius:50%;border:0;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.45),0 0 0 3px color-mix(in srgb,var(--acc) 55%,transparent);transition:box-shadow .3s var(--ease)}
+#settings input[type=range]:hover::-webkit-slider-thumb,#settings input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 1px 4px rgba(0,0,0,.45),0 0 0 6px color-mix(in srgb,var(--acc) 35%,transparent)}
+#settings input[type=range]::-moz-range-track{height:6px;border-radius:999px;background:color-mix(in srgb,var(--fg) 22%,var(--panel))}
+#settings input[type=range]::-moz-range-progress{height:6px;border-radius:999px;background:var(--acc)}
+#settings input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.45),0 0 0 3px color-mix(in srgb,var(--acc) 55%,transparent)}
+#settings input[type=range]:focus-visible{outline:none}
+
+/* info dots */
+#settings .inf{width:1.2rem;height:1.2rem;font-size:.68rem;font-weight:600;color:color-mix(in srgb,var(--fg) 65%,var(--panel));border-color:color-mix(in srgb,var(--fg) 38%,var(--line));background:color-mix(in srgb,var(--fg) 5%,transparent);transition:color .25s,border-color .25s,background-color .25s}
+#settings .inf:hover,#settings .inf:focus-visible{color:var(--on);background:var(--acc);border-color:var(--acc)}
+
+/* buttons */
+#settings .row button,#settings .it>button,#settings .btns button,#settings .btnlike,#settings .poolpresets button,#settings .poolfix button{font-size:.82rem;padding:.55em 1em;background-color:color-mix(in srgb,var(--fg) 6%,transparent);border-color:color-mix(in srgb,var(--fg) 20%,var(--line))}
+#settings .row button:hover,#settings .it>button:hover,#settings .btnlike:hover,#settings .poolpresets button:hover,#settings .poolfix button:hover{background-color:color-mix(in srgb,var(--acc) 11%,transparent);border-color:color-mix(in srgb,var(--acc) 65%,var(--line))}
+#settings .poolpresets #pall{background-color:color-mix(in srgb,var(--acc) 12%,transparent);border-color:color-mix(in srgb,var(--acc) 45%,var(--line))}
+#settings .poolmini button{color:color-mix(in srgb,var(--fg) 70%,var(--panel));border-color:color-mix(in srgb,var(--fg) 16%,var(--line))}
+
+/* letter pool */
+#settings .poolcolumn,#settings .poolfix{background:color-mix(in srgb,var(--bg) 55%,var(--panel));border-color:color-mix(in srgb,var(--fg) 14%,var(--line))}
+#settings .poolcount{background:color-mix(in srgb,var(--acc) 10%,transparent);border-color:color-mix(in srgb,var(--acc) 40%,var(--line))}
+#settings .poolcolumn .chips button{background-color:color-mix(in srgb,var(--fg) 6%,transparent);border-color:color-mix(in srgb,var(--fg) 16%,var(--line));color:color-mix(in srgb,var(--fg) 78%,var(--panel))}
+#settings .poolcolumn .chips button:hover{border-color:var(--acc);color:var(--fg)}
+#settings .poolcolumn .chips button.on{background:var(--acc);color:var(--on);border-color:var(--acc);font-weight:600}
+
+/* reset zone */
+#s-reset+.grp{border-color:color-mix(in srgb,#F87171 30%,var(--line))}
+#settings .btns .danger{color:#F87171;border-color:color-mix(in srgb,#F87171 42%,var(--line));background-color:color-mix(in srgb,#F87171 7%,transparent)}
+html[data-lt="1"] #settings .btns .danger{color:var(--r);border-color:color-mix(in srgb,var(--r) 45%,var(--line));background-color:color-mix(in srgb,var(--r) 6%,transparent)}
+#settings .btns .danger:hover{background-color:color-mix(in srgb,#F87171 15%,transparent);border-color:#F87171}
+html #settings .btns .danger.solid{background-color:#DC2626;color:#fff;border-color:#DC2626}
+html #settings .btns .danger.solid:hover{background-color:#EF4444;border-color:#EF4444}
+@media(max-width:520px){#settings .box{padding:0 1rem 2rem}#settings .shead{margin:0 -1rem;padding:1rem 1rem .7rem}.snav{margin:0 -1rem;padding-left:1rem;padding-right:1rem}}
 </style>
 </head>
 <body>
@@ -1425,9 +1521,9 @@ html[data-font]:not([data-font=jb]) :is(.box kbd,.spark .ctx){font-family:var(--
 <div id="tip"></div>
 
 <div class="ov" id="settings"><div class="box" role="dialog" aria-label="Settings">
-<h2>Settings <button data-close>Close</button></h2>
+<header class="shead"><h2>Settings <button data-close>Close</button></h2><nav class="snav" aria-label="Settings sections"><button type="button" data-to="s-practice">Practice</button><button type="button" data-to="s-timer">Timer</button><button type="button" data-to="s-ratings">Ratings</button><button type="button" data-to="s-sound">Sound</button><button type="button" data-to="s-visuals">Visuals</button><button type="button" data-to="s-cloud">Cloud</button><button type="button" data-to="s-safety">Safety</button><button type="button" data-to="s-data">Data</button><button type="button" data-to="s-reset">Reset</button></nav></header>
 
-<div class="sec">Practice &amp; Randomisation</div>
+<div class="sec" id="s-practice">Practice &amp; Randomisation</div>
 <div class="grp">
 <div class="it"><span class="lb">Randomisation mode<i class="inf" tabindex="0" data-tip="Random draws from your whole letter pool. Weak focuses on pairs that are untested, slow or failed.">i</i></span>
 <select data-k="rm"><option value="irl">Random</option><option value="review">Weak</option></select></div>
@@ -1445,7 +1541,7 @@ html[data-font]:not([data-font=jb]) :is(.box kbd,.spark .ctx){font-family:var(--
 </div>
 </div>
 
-<div class="sec">Timer &amp; Pacing</div>
+<div class="sec" id="s-timer">Timer &amp; Pacing</div>
 <div class="grp">
 <label class="it"><span class="lb">Flash mode<i class="inf" tabindex="0" data-tip="Shows the pair briefly, then hides it while the timer keeps running. (See Tutorial for full details)">i</i></span><input type="checkbox" class="tg" data-k="flash"></label>
 <div class="it"><span class="lb">Flash duration</span><span class="ctl"><input type="range" min="0.1" max="1" step="0.05" data-k="fd"><span id="fdv" class="mut"></span></span></div>
@@ -1455,7 +1551,7 @@ html[data-font]:not([data-font=jb]) :is(.box kbd,.spark .ctx){font-family:var(--
 <div class="it"><span class="lb">Goal time</span><span class="ctl"><input type="number" min="0.2" max="20" step="0.1" data-k="goal"><span class="mut">s</span></span></div>
 </div>
 
-<div class="sec">Speed Ratings</div>
+<div class="sec" id="s-ratings">Speed Ratings</div>
 <div class="grp">
 <div class="it"><span class="lb"><span style="color:#4ADE80">Fast (green) under</span><i class="inf" tabindex="0" data-tip="Fast and Medium cut-offs colour your times and the heatmap. Anything slower than Medium is Slow. (See Tutorial for full details)">i</i></span><span class="ctl"><input type="number" min="0.1" max="20" step="0.1" data-k="tf"><span class="mut">s</span></span></div>
 <div class="it"><span class="lb"><span style="color:#FBBF24">Medium (yellow) up to</span></span><span class="ctl"><input type="number" min="0.1" max="20" step="0.1" data-k="tm"><span class="mut">s</span></span></div>
@@ -1463,20 +1559,20 @@ html[data-font]:not([data-font=jb]) :is(.box kbd,.spark .ctx){font-family:var(--
 </div>
 <div class="fn">Multi-pair attempts are never rated or added to the heatmap.</div>
 
-<div class="sec">Sound</div>
+<div class="sec" id="s-sound">Sound</div>
 <div class="grp">
 <label class="it"><span class="lb">Sound Effects<i class="inf" tabindex="0" data-tip="Soft synthesised clicks, a completion pulse and a graduation flourish. Nothing is downloaded.">i</i></span><input type="checkbox" class="tg" data-k="snd"></label>
 <div class="it"><span class="lb">Master volume</span><span class="ctl"><input type="range" min="0" max="1" step="0.01" data-k="vol"><span id="vlv" class="mut"></span></span></div>
 </div>
 
-<div class="sec">Visuals &amp; Themes</div>
+<div class="sec" id="s-visuals">Visuals &amp; Themes</div>
 <div class="grp">
 <div class="it"><span class="lb">Font</span><select data-k="font"><option value="jb">JetBrains Mono</option><option value="plex">IBM Plex Mono</option><option value="space">Space Mono</option><option value="martian">Martian Mono (wide)</option><option value="share">Share Tech Mono</option><option value="courier">Courier Prime (typewriter)</option><option value="vt">VT323 (pixel terminal)</option><option value="grotesk">Space Grotesk (sans)</option><option value="sora">Sora (sans)</option><option value="inter">Inter (sans)</option></select></div>
 <div class="it"><span class="lb">Theme</span><select data-k="bg"><optgroup label="Dark"><option value="oled">OLED pure black</option><option value="solid">Solid dark navy</option><option value="aurora">Dark aurora</option><option value="forest">Deep forest</option><option value="ocean">Midnight ocean</option><option value="ember">Dark ember</option><option value="rose">Midnight rose</option></optgroup><optgroup label="Light"><option value="sunset">Warm sunset</option><option value="sage">Nature and sage</option><option value="meadow">Spring meadow</option><option value="lagoon">Coastal lagoon</option><option value="lavender">Lavender field</option><option value="light">Modern light minimal</option></optgroup></select></div>
 </div>
 <div class="fn">Accent colours follow the theme. All themes except OLED, Solid navy and Modern light have a slow animated background.</div>
 
-<div class="sec">Cloud Backup</div>
+<div class="sec" id="s-cloud">Cloud Backup</div>
 <div class="grp"><div class="pad">
 <div id="cbSetup">
 <div class="lb"><b>Back up online automatically</b><i class="inf" tabindex="0" data-tip="Saves your words, stats and settings to a private GitHub Gist whenever they change. Every old version is kept by GitHub, so mistakes can be undone.">i</i></div>
@@ -1494,7 +1590,16 @@ html[data-font]:not([data-font=jb]) :is(.box kbd,.spark .ctx){font-family:var(--
 </div></div>
 <div class="fn">Backups run about a minute after you change anything, and when you leave the tab. The token stays on this device only.</div>
 
-<div class="sec">Data Management</div>
+<div class="sec" id="s-safety">Data Safety</div>
+<div class="grp"><div class="pad">
+<div class="lb"><b>Safety copies on this device</b><span class="cbdot" id="vDot"></span></div>
+<div class="mut" id="vStat" style="margin:.4rem 0 .2rem"></div>
+<div class="row"><button id="vDl" type="button">Download backup file</button><button id="vSnap" type="button">Save a copy now</button></div>
+<div id="vList"></div>
+</div></div>
+<div class="fn">Everything is saved in the browser and mirrored into a second store, with a snapshot every day and one before anything destructive (clearing, importing, restoring). Browsers can still wipe site data, so keep Cloud Backup on or download a file now and then.</div>
+
+<div class="sec" id="s-data">Data Management</div>
 <div class="grp">
 <div class="it"><span class="lb"><span>Word grid<span class="mut" style="display:block;margin-top:.15rem">Every pair as an editable spreadsheet</span></span></span><button id="bgrid" type="button">Open grid</button></div>
 <div class="pad"><div class="lb"><b>Backup &amp; import</b></div>
@@ -1504,7 +1609,7 @@ html[data-font]:not([data-font=jb]) :is(.box kbd,.spark .ctx){font-family:var(--
 <div class="row"><button id="bex">Export JSON</button><button id="bcsv">Export words CSV</button><button id="bcp">Copy</button><button id="bim">Import</button></div></div>
 <div class="it"><span class="lb">Guides, formats and shortcuts</span><button id="bhelp">Tutorial &amp; Help</button></div>
 </div>
-<div class="sec">Reset</div>
+<div class="sec" id="s-reset">Reset</div>
 <div class="grp"><div class="btns">
 <button class="danger" id="bc1">Clear Session History &amp; Heatmap Stats</button>
 <button class="danger" id="bc2">Clear Mnemonic Word Dictionary</button>
@@ -1726,7 +1831,10 @@ const KEY='bld-pairs-v1';
 const DEF={F:ALL,S:ALL,flash:false,fd:.3,hideT:false,zen:false,thr:2,drill:false,pace:false,goal:1,acc:'#67E8F9',bg:'forest',tf:1,tm:2,rm:'irl',snd:true,vol:.6,sndMode:'soft',tsplit:false,tmemo:false,font:'jb'};
 const ACC=['#67E8F9','#4ADE80','#FBBF24','#A78BFA'],ACCD=['#0E7490','#15803D','#B45309','#6D28D9'];
 let D={set:Object.assign({},DEF),words:{},stats:{},flag:{},streak:{},missed:{},missedStreak:{},review:{},fails:{},hist:[]};
-try{const r=JSON.parse(localStorage.getItem(KEY)||'null');if(r){D=Object.assign(D,r);D.set=Object.assign({},DEF,r.set)}}catch(e){}
+let lsHad=false,lsBad=null;
+try{const raw=localStorage.getItem(KEY);lsHad=!!raw;let r=null;try{r=JSON.parse(raw||'null')}catch(e){lsBad=raw}if(r&&typeof r==='object'){D=Object.assign(D,r);D.set=Object.assign({},DEF,r.set)}}catch(e){}
+/* data that could not be parsed is parked under its own key before the first save can replace it */
+if(lsBad){try{localStorage.setItem(KEY+'-rescue',lsBad)}catch(e){}}
 D.missed||={};D.missedStreak||={};D.review||={};D.fails||={};D.chains||=[];D.set.sndMode='soft';delete D.mn;if(D.set.goal===3)D.set.goal=1;if(!['irl','review'].includes(D.set.rm))D.set.rm='irl';delete D.set.n;delete D.set.noId;delete D.set.gap;
 // One-time migration: start with a neutral timer/pacing setup, then preserve the user's choices.
 if(!D.set.timerDefaultsV){D.set.zen=false;D.set.pace=false;D.set.hideT=false;D.set.flash=false;D.set.timerDefaultsV=1;}
@@ -1735,11 +1843,41 @@ const set=()=>D.set;
    It is always flushed when the tab is hidden or closed. */
 const HIST_CAP=20000;
 let saveT=0,saveDirty=false;
-function flushSave(){clearTimeout(saveT);saveT=0;if(!saveDirty)return;saveDirty=false;try{localStorage.setItem(KEY,JSON.stringify(D))}catch(e){}}
+function flushSave(){clearTimeout(saveT);saveT=0;if(!saveDirty)return;saveDirty=false;
+  let j;try{j=JSON.stringify(D)}catch(e){return}
+  if(otherTab){vaultPutRaw('other-tab',otherTab);otherTab=null}
+  try{localStorage.setItem(KEY,j);lsFail=false}catch(e){if(!lsFail){lsFail=true;toast('Browser storage is full or blocked. Download a backup in Settings.')}}
+  vaultJson=j;vaultDirty=true;vaultSoon()}
 function save(){saveDirty=true;if(!saveT)saveT=setTimeout(flushSave,300);cbMark()}
 addEventListener('pagehide',flushSave);addEventListener('beforeunload',flushSave);
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'){flushSave();cbHide()}});
-try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'){flushSave();vaultFlush();cbHide()}});
+addEventListener('pagehide',vaultFlush);
+/* ---------- data safety: a second copy in IndexedDB, daily + pre-change snapshots ---------- */
+let vdbP=null,vaultJson='',vaultDirty=false,vaultT=0,vaultAt=0,vaultOk=null,vaultAllowEmpty=false,vaultSnapT=0,otherTab=null,otherWarned=false,lsFail=false,persisted=null;
+const rich=o=>Object.keys(o.words||{}).length+(o.hist||[]).length+Object.keys(o.stats||{}).length;
+const vdb=()=>vdbP||(vdbP=new Promise((res,rej)=>{try{const q=indexedDB.open('bld-vault',1);q.onupgradeneeded=()=>q.result.createObjectStore('kv');q.onsuccess=()=>{const db=q.result;db.onversionchange=()=>db.close();res(db)};q.onerror=()=>rej(q.error);q.onblocked=()=>rej(new Error('blocked'))}catch(e){rej(e)}}).catch(e=>{vdbP=null;throw e}));
+const vtx=(mode,fn)=>vdb().then(db=>new Promise((res,rej)=>{const t=db.transaction('kv',mode);const r=fn(t.objectStore('kv'));t.oncomplete=()=>res(r&&r.result);t.onerror=t.onabort=()=>rej(t.error)}));
+const vput=(k,v)=>vtx('readwrite',st=>st.put(v,k)).then(x=>{vaultOk=true;return x},e=>{vaultOk=false;throw e});
+const vget=k=>vtx('readonly',st=>st.get(k)),vdel=k=>vtx('readwrite',st=>st.delete(k)),vkeys=()=>vtx('readonly',st=>st.getAllKeys());
+function vaultPrune(){return vkeys().then(ks=>{const drop=(p,keep)=>{const a=ks.filter(k=>k.startsWith(p)).sort();return a.slice(0,Math.max(0,a.length-keep))};return Promise.all([...drop('snap:',21),...drop('pre:',10),...drop('rescue:',5),...drop('other:',5)].map(vdel))}).catch(()=>{})}
+function vaultSoon(){if(!vaultT)vaultT=setTimeout(vaultFlush,15000)}
+function vaultFlush(){
+  clearTimeout(vaultT);vaultT=0;if(!vaultDirty||!vaultJson)return;vaultDirty=false;
+  const j=vaultJson,n=rich(D),ts=Date.now(),rec={ts,j,n,ls:!lsFail};
+  /* an empty state never replaces a fuller copy unless the user reset on purpose */
+  if(n===0&&!vaultAllowEmpty){vget('latest').then(o=>{if(!o||!o.n)return vput('latest',rec)}).catch(()=>{});return}
+  vaultAllowEmpty=false;
+  vput('latest',rec).then(()=>{vaultAt=ts}).catch(()=>{});
+  if(n>0&&ts-vaultSnapT>6e5){vaultSnapT=ts;vput('snap:'+new Date(ts).toISOString().slice(0,10),{ts,j,n,why:'daily'}).then(vaultPrune).catch(()=>{})}
+}
+function vaultSnap(why){
+  if(rich(D)===0)return Promise.resolve();let j;try{j=JSON.stringify(D)}catch(e){return Promise.resolve()}
+  const ts=Date.now();return vput('pre:'+ts+'-'+why,{ts,j,n:rich(D),why}).then(vaultPrune).catch(()=>{});
+}
+function vaultPutRaw(kind,raw){let n=0;try{n=rich(JSON.parse(raw))}catch(e){}const ts=Date.now();return vput((kind==='other-tab'?'other:':'rescue:')+ts,{ts,j:raw,n,why:kind}).then(vaultPrune).catch(()=>{})}
+/* another tab wrote the data: keep its version as a copy before this tab's next save replaces it */
+addEventListener('storage',e=>{if(e.key===KEY&&e.storageArea===localStorage&&e.newValue){otherTab=e.newValue;if(!otherWarned){otherWarned=true;toast('Another tab changed your data. Keep only one tab open.')}}});
+try{if(navigator.storage&&navigator.storage.persist){navigator.storage.persisted().then(p=>p||navigator.storage.persist()).then(p=>{persisted=!!p;try{vaultRender()}catch(e){}}).catch(()=>{})}}catch(e){}
 /* ---- cloud backup state (GitHub Gist). Kept in its own key so exports and resets never touch the token. ---- */
 const CKEY='bld-cloud-v1',GF='bld-trainer-backup.json';
 var CB={};try{CB=JSON.parse(localStorage.getItem(CKEY)||'null')||{}}catch(e){CB={}}
@@ -1983,7 +2121,7 @@ function syncUI(){
   $$('[data-k]').forEach(i=>{const v=set()[i.dataset.k];if(i.type==='checkbox')i.checked=v;else i.value=v});
   $('#fdv').textContent=set().fd.toFixed(2)+'s';$('#vlv').textContent=Math.round(set().vol*100)+'%';
   const f=set().F.length,s=set().S.length,total=activePool().length;
-  $('#poolcount').textContent=total.toLocaleString()+' pair'+(total===1?'':'s');
+  {const pc=$('#poolcount');numTween(pc,pc._nc==null?total:pc._nc,total,v=>{v=Math.round(v);return v.toLocaleString()+' pair'+(v===1?'':'s')},380,0)}
   const hint=!f||!s?'Select at least one letter in both columns to enable pairs.':(f===L.length&&s===L.length?'All letters enabled · every pair is available.':f+' first-letter'+(f===1?'':'s')+' × '+s+' second-letter'+(s===1?'':'s')+' · '+total+' available pair'+(total===1?'':'s')+'.');
   const ph=$('#poolhint');if(ph.textContent!==hint){ph.textContent=hint;ph.classList.remove('changed');void ph.offsetWidth;ph.classList.add('changed')}
 }
@@ -2017,6 +2155,7 @@ $$('[data-k]').forEach(i=>i.addEventListener('change',()=>{if(i.classList.contai
 $('#bex').onclick=()=>{$('#dj').value=JSON.stringify(D)};
 $('#bcp').onclick=()=>{const t=$('#dj');if(!t.value)t.value=JSON.stringify(D);t.select();try{navigator.clipboard.writeText(t.value).then(()=>toast('Copied'),()=>toast('Press Ctrl+C to copy'))}catch(e){toast('Press Ctrl+C to copy')}};
 $('#bim').onclick=()=>{
+  vaultSnap('import');
   try{
     const raw=$('#dj').value.trim();if(raw[0]!=='{'){importCSV(raw);return}const r=JSON.parse(raw);
     const jl=[];for(const k in (r.words||{})){const w=String(r.words[k]).trim().toLowerCase();if(/^[A-Za-z]{2}$/.test(k)&&w){D.words[k.toUpperCase()]=w;jl.push([k.toUpperCase(),w])}}
@@ -2114,7 +2253,11 @@ $('#bc1').onclick=()=>ask('stats');
 $('#bc2').onclick=()=>ask('words');
 $('#bc3').onclick=()=>ask('all');
 $('#cno').onclick=()=>{syncUI();openM('settings')};
-$('#cyes').onclick=()=>{if(!pend||$('#cyes').disabled)return;ACT[pend].f();pend=null;save();applyAcc();closeM();toast('Done')};
+const SNAPW={stats:'clear-stats',words:'clear-words',all:'factory-reset',cloud:'cloud-restore',vsnap:'restore'};
+$('#cyes').onclick=()=>{if(!pend||$('#cyes').disabled)return;
+  if(SNAPW[pend])vaultSnap(SNAPW[pend]);
+  if(pend==='stats'||pend==='words'||pend==='all')vaultAllowEmpty=true;
+  ACT[pend].f();pend=null;save();applyAcc();closeM();toast('Done')};
 
 /* ---------- cloud backup (private GitHub Gist) ---------- */
 async function gh(path,opt){
@@ -2189,6 +2332,70 @@ function cbApply(x){
 }
 const TH_OK=['oled','solid','aurora','forest','ocean','ember','rose','sunset','sage','meadow','lagoon','lavender','light'];
 async function cbRestoreNow(){const x=await cbFetch();cbApply(x)}
+/* ---------- data safety: restore, panel, recovery on start ---------- */
+function restoreFrom(r){
+  D=Object.assign({set:Object.assign({},DEF),words:{},stats:{},flag:{},streak:{},missed:{},missedStreak:{},review:{},fails:{},hist:[],chains:[]},r);
+  D.set=Object.assign({},DEF,r.set);D.set.sndMode='soft';
+  if(!TH_OK.includes(D.set.bg))D.set.bg='forest';
+  D.missed||={};D.missedStreak||={};D.review||={};D.fails||={};D.chains||=[];
+  save();flushSave();deck=[];deckSig='';prev=null;
+  applyAcc();syncUI();TM.sp=!!set().tsplit;tmModeSync();try{maSync()}catch(_){}
+}
+const VWHY={'clear-stats':'Before clearing stats','clear-words':'Before clearing words','factory-reset':'Before factory reset','cloud-restore':'Before cloud restore','restore':'Before restoring a copy','import':'Before an import','manual':'Saved by you'};
+function vaultLabel(k){
+  const i=k.indexOf(':'),kind=k.slice(0,i),rest=k.slice(i+1);
+  if(kind==='snap')return 'Daily \u00b7 '+new Date(rest+'T12:00:00Z').toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+  const ts=+rest.split('-')[0],ago=cbAgo(ts);
+  if(kind==='pre')return (VWHY[rest.slice(rest.indexOf('-')+1)]||'Safety copy')+' \u00b7 '+ago;
+  if(kind==='rescue')return 'Unreadable data rescued \u00b7 '+ago;
+  return 'Version from another tab \u00b7 '+ago;
+}
+function vaultRender(){
+  const st=$('#vStat'),ls=$('#vList'),dot=$('#vDot');if(!st||!ls)return;
+  const p=persisted===true?'on':persisted===false?'not granted by this browser':'unknown';
+  st.textContent='Second copy: '+(vaultOk===false?'unavailable in this browser':vaultAt?'written '+cbAgo(vaultAt):'waiting for the next change')+' \u00b7 Protected from automatic clearing: '+p+(lsFail?' \u00b7 Browser storage is failing, download a backup now':'');
+  dot.className='cbdot '+((vaultOk===false||lsFail)?'bad':'ok');
+  vkeys().then(ks=>{
+    ks=ks.filter(k=>k!=='latest').sort().reverse().slice(0,12);ls.textContent='';
+    ks.forEach(k=>{
+      const row=document.createElement('div');row.style.cssText='display:flex;justify-content:space-between;align-items:center;gap:.6rem;padding:.4rem 0;border-top:1px solid var(--line)';
+      const t=document.createElement('span');t.className='mut';t.textContent=vaultLabel(k);
+      const b=document.createElement('button');b.type='button';b.textContent='Restore';b.style.cssText='font-size:.72rem;padding:.35rem .6rem';b.onclick=()=>vaultAsk(k);
+      row.append(t,b);ls.append(row);
+    });
+  }).catch(()=>{ls.textContent=''});
+}
+async function vaultAsk(k){
+  let o;try{o=await vget(k)}catch(e){}
+  let r=null;try{r=JSON.parse(o&&o.j)}catch(e){}
+  if(!r||typeof r!=='object'){toast('That copy could not be read');return}
+  ACT.vsnap={t:'Restore this safety copy?',p:'This replaces the words, stats and settings on this device with "'+vaultLabel(k)+'". A copy of what you have now is saved first, so you can undo this.',y:'Yes, restore',f:()=>restoreFrom(r)};
+  ask('vsnap');
+}
+$('#vSnap').onclick=()=>{if(rich(D)===0){toast('Nothing to save yet');return}vaultSnap('manual').then(()=>{toast('Safety copy saved');vaultRender()})};
+$('#vDl').onclick=()=>{
+  try{const u=URL.createObjectURL(new Blob([JSON.stringify(D)],{type:'application/json'})),a=document.createElement('a');
+    a.href=u;a.download='bld-trainer-backup-'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);
+    try{localStorage.setItem(KEY+'-dl',String(Date.now()))}catch(e){}toast('Backup downloaded')}catch(e){toast('Could not create the file')}
+};
+$('#bg').addEventListener('click',()=>vaultRender());
+(function vaultBoot(){
+  const local=rich(D);
+  if(lsBad)vaultPutRaw('rescue',lsBad);
+  vget('latest').then(o=>{
+    if(o&&o.ts)vaultAt=o.ts;
+    let r=null;try{r=o&&JSON.parse(o.j)}catch(e){}
+    if(!r||typeof r!=='object'){if(local>0){vaultJson=JSON.stringify(D);vaultDirty=true;vaultFlush()}return}
+    const n=rich(r);
+    if(n>local&&(!lsHad||lsBad||o.ls===false)){restoreFrom(r);toast('Recovered your data from the safety copy');return}
+    if(n>local*2+50)toast('A fuller safety copy exists. See Settings, Data Safety.');
+    if(local>0&&!(o.ts>Date.now()-864e5)){vaultJson=JSON.stringify(D);vaultDirty=true;vaultFlush()}
+  }).catch(()=>{});
+  /* a gentle nudge, at most weekly, when nothing off this device holds a copy */
+  setTimeout(()=>{try{const g=k=>+localStorage.getItem(KEY+k)||0,now=Date.now();
+    if(!CB.tok&&rich(D)>50&&now-g('-dl')>14*864e5&&now-g('-nudge')>7*864e5){localStorage.setItem(KEY+'-nudge',String(now));toast('Tip: download a backup file in Settings')}}catch(e){}},8000);
+})();
+
 async function cbCheck(){
   if(!CB.tok||!CB.id)return;
   try{
@@ -2327,12 +2534,19 @@ function renderHeat(){
   const g=$('#hm');let h='<div></div>'+L.map(l=>'<div class="hmhl" data-hc="'+l+'" title="Drill all _'+l+' pairs">'+l+'</div>').join('')+'<div class="hmh">avg</div>';
   for(const a of L){h+='<div class="hmhl" data-hr="'+a+'" title="Drill all '+a+'_ pairs">'+a+'</div>';for(const b of L)h+='<div data-p="'+a+b+'"></div>';h+='<div class="hmavg" data-r="'+a+'"></div>'}
   h+='<div class="hmh">avg</div>'+L.map(l=>'<div class="hmavg" data-c="'+l+'"></div>').join('')+'<div class="hmavg" data-all="1"></div>';
-  g.innerHTML=h;hmKids=[...g.children];hmP=[];hmX=[];g.classList.remove('hmx');hmOver=null;
+  g.innerHTML=h;hmKids=[...g.children];hmP=[];hmX=[];g.classList.remove('hmx','hmleave');hmOver=null;
   hmKids.forEach((d,i)=>{d.style.animationDelay=((i%26)+((i/26)|0))*12+'ms'});hmLock(g);
   paintHeat(liveCtx());
+  hmPulse(g);
   $('#hmi').textContent='Hover or tap a cell for details. Click a row or column letter to drill it. Recent attempts count most.';$('#hmdrill').style.display='none';hmSel=null;
   $('#hl').innerHTML='<span style="color:#4ADE80">Fast under '+set().tf+'s</span>, <span style="color:#FBBF24">medium up to '+set().tm+'s</span>, <span style="color:#F87171">slow above that</span>, <span style="color:#FCA5A5;background:#5A0B14;padding:0 .35em;border-radius:3px">× darkest red</span> failed (clears after two clean recalls). The outlined edge cells are row and column averages.';
   tlInit();
+}
+/* soft pulse on the cell of your most recent single-pair attempt, once the grid has finished revealing */
+function hmPulse(g){
+  let k=null;for(let i=D.hist.length-1;i>=0;i--){const h=D.hist[i];if(h&&h.p&&h.p.indexOf(' ')<0){k=h.p;break}}
+  if(!k)return;const c=g.querySelector('[data-p="'+k+'"]');if(!c)return;
+  c.classList.add('hmnew');setTimeout(()=>c.classList.remove('hmnew'),7600);
 }
 function paintHeat(ctx){
   hmCtx=ctx;const hc=['#1E8E4E','#B8941F','#B94646'],rows={},cols={},all=[];
@@ -2459,8 +2673,8 @@ function hmCross(d){
   if(b>=0){add(1+b,'xh');for(let i=0;i<24;i++)add(26*(i+1)+1+b,'xc');add(651+b,'xc')}
   $('#hm').classList.add('hmx');
 }
-$('#hm').addEventListener('mouseover',e=>{hmOver=e.target;hmCross(e.target.dataset)});
-$('#hm').addEventListener('mouseleave',()=>{hmOver=null;hmCrossClear()});
+$('#hm').addEventListener('mouseover',e=>{hmOver=e.target;$('#hm').classList.remove('hmleave');hmCross(e.target.dataset)});
+$('#hm').addEventListener('mouseleave',()=>{hmOver=null;$('#hm').classList.add('hmleave');hmCrossClear()});
 $('#hm').addEventListener('click',e=>hmCross(e.target.dataset));
 
 /* stats */
@@ -2569,12 +2783,31 @@ function stPairs(){
   o+=stBlk(7,'Due for review',due.length?'<button class="primary drillbtn" type="button" data-drill="due" data-lbl="pairs due for review">Drill the '+stDr.due.length+' most overdue</button>'+chips(due.slice(0,24))+(due.length>24?'<div class="mut" style="margin-top:.4rem">and '+(due.length-24)+' more</div>':''):emp('check','Nothing due right now.'));
   return o;
 }
+/* numbers that count up (stats tiles, trend, letter pool) */
+function noMotion(){return matchMedia('(prefers-reduced-motion: reduce)').matches}
+function numTween(el,from,to,fmt,dur,delay){
+  cancelAnimationFrame(el._nt);clearTimeout(el._ntd);
+  if(from===to||noMotion()){el._nc=to;el.textContent=fmt(to);return}
+  el.textContent=fmt(from);el._nc=from;
+  const run=()=>{const t0=performance.now(),step=now=>{const k=Math.min(1,(now-t0)/dur),v=k>=1?to:from+(to-from)*(1-Math.pow(2,-10*k));el._nc=v;el.textContent=fmt(v);if(k<1)el._nt=requestAnimationFrame(step)};el._nt=requestAnimationFrame(step)};
+  if(delay)el._ntd=setTimeout(run,delay);else run();
+}
+function stCount(root){
+  if(noMotion())return;
+  root.querySelectorAll('.tile b,.trend b').forEach(el=>{
+    const m=/^(\d[\d,]*)(\.\d+)?(s|%)?$/.exec(el.textContent.trim());if(!m)return;
+    const to=parseFloat(m[1].replace(/,/g,'')+(m[2]||'')),fr=m[2]?m[2].length-1:0,cm=m[1].indexOf(',')>-1,suf=m[3]||'';
+    if(!to)return;
+    const blk=el.closest('.stblk'),i=blk?(parseFloat(blk.style.getPropertyValue('--i'))||0):0;
+    numTween(el,0,to,v=>(cm?v.toLocaleString(undefined,{minimumFractionDigits:fr,maximumFractionDigits:fr}):v.toFixed(fr))+suf,900,i*45+140);
+  });
+}
 function renderStats(){
   const b=$('#sb');
   if(set().zen){b.innerHTML='<div class="mut">Zen mode is on. Turn it off in settings to see stats.</div>';return}
   stDr={};
   const tabs='<div class="seg">'+Object.keys(STH).map(k=>'<button type="button" data-st="'+k+'"'+(k===stTab?' class="on"':'')+'>'+STH[k]+'</button>').join('')+'</div>';
-  b.innerHTML=tabs+(stTab==='overall'?stOverall():stTab==='pairs'?stPairs():stSession());
+  b.innerHTML=tabs+(stTab==='overall'?stOverall():stTab==='pairs'?stPairs():stSession());stCount(b);
 }
 $('#sb').addEventListener('click',e=>{
   const t=e.target.closest('[data-st]');if(t){stTab=t.dataset.st;renderStats();$('#drawer .box').scrollTop=0;return}
@@ -3984,6 +4217,42 @@ applyAcc();
     },620);
   }
   arm(IDLE_MS);
+})();
+</script>
+<script>
+(function(){
+  var ov=document.getElementById('settings');if(!ov)return;
+  var box=ov.querySelector('.box'),head=ov.querySelector('.shead'),nav=ov.querySelector('.snav');if(!box||!head||!nav)return;
+  var btns=[].slice.call(nav.querySelectorAll('button[data-to]'));
+  var secs=btns.map(function(b){return document.getElementById(b.dataset.to)});
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var cur=-1,tick=false;
+  function topOf(el){return el.getBoundingClientRect().top-box.getBoundingClientRect().top}
+  function spy(){
+    tick=false;
+    var h=head.offsetHeight+28,i=0;
+    for(var k=0;k<secs.length;k++){if(secs[k]&&topOf(secs[k])<=h)i=k}
+    if(box.scrollTop+box.clientHeight>=box.scrollHeight-6)i=secs.length-1;
+    box.classList.toggle('scrolled',box.scrollTop>4);
+    if(i===cur)return;
+    cur=i;
+    btns.forEach(function(b,k){b.classList.toggle('on',k===i)});
+    var b=btns[i];
+    if(b&&nav.scrollTo)nav.scrollTo({left:b.offsetLeft-(nav.clientWidth-b.offsetWidth)/2,behavior:reduce?'auto':'smooth'});
+  }
+  box.addEventListener('scroll',function(){if(!tick){tick=true;requestAnimationFrame(spy)}},{passive:true});
+  btns.forEach(function(b,k){b.addEventListener('click',function(){
+    var s=secs[k];if(!s)return;
+    box.scrollTo({top:topOf(s)+box.scrollTop-head.offsetHeight-12,behavior:reduce?'auto':'smooth'});
+  })});
+  function paint(r){var mn=+r.min||0,mx=+r.max||100,v=(+r.value-mn)/((mx-mn)||1);r.style.setProperty('--f',Math.max(0,Math.min(1,v)))}
+  function paintAll(){[].forEach.call(ov.querySelectorAll('input[type=range]'),paint)}
+  ov.addEventListener('input',function(e){if(e.target&&e.target.type==='range')paint(e.target)});
+  ov.addEventListener('change',function(e){if(e.target&&e.target.type==='range')paint(e.target)});
+  new MutationObserver(function(){
+    if(ov.classList.contains('on')){paintAll();setTimeout(paintAll,80);cur=-1;spy()}
+  }).observe(ov,{attributes:true,attributeFilter:['class']});
+  paintAll();
 })();
 </script>
 </body>

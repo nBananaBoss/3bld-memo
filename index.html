@@ -873,20 +873,10 @@ html[data-lt="1"] #timer.isrun::after{opacity:1}
 html[data-lt="1"] #timer.isrun .tbg{opacity:.85}
 
 /* ---------- round 4 ---------- */
-/* trainer tabs: the two boxes morph into each other */
-#sloc.on .box,#wd.on .box,#chain.on .box{view-transition-name:trainerbox}
-.ov.on.vt{animation:none;-webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3)}
-.ov.on.vt .box{animation:none}
-::view-transition-group(trainerbox){animation-duration:.42s;animation-timing-function:cubic-bezier(.32,.72,0,1)}
-/* trainer tabs swipe the way the tabs are laid out: forward slides left, back slides right, with a light blur */
-html[data-vtd="f"]{--vx:1}
-html[data-vtd="b"]{--vx:-1}
-::view-transition-old(trainerbox),::view-transition-new(trainerbox){mix-blend-mode:normal}
-::view-transition-old(trainerbox){animation:vtbOut .24s cubic-bezier(.4,0,1,1) both}
-::view-transition-new(trainerbox){animation:vtbIn .42s cubic-bezier(.32,.72,0,1) .06s both}
-@keyframes vtbOut{to{opacity:0;transform:translateX(calc(var(--vx,1) * -30px));filter:blur(2px)}}
-@keyframes vtbIn{from{opacity:0;transform:translateX(calc(var(--vx,1) * 30px));filter:blur(2px)}}
-html.vtq::view-transition-old(root),html.vtq::view-transition-new(root){animation-duration:.35s}
+/* trainer tabs: the panel slides sideways in place, same easing as the rest of the site */
+.ov.on.sl{animation:none;-webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3)}
+.ov.on.sl .box{animation:none}
+html.slbusy .ov.on .box{pointer-events:none}
 /* Deep forest: moss halo behind the pair while it runs, fireflies on the idle screen */
 html[data-bg=forest] #pair.run{box-shadow:0 0 0 1px color-mix(in srgb,var(--acc) 35%,transparent),0 0 40px color-mix(in srgb,var(--acc) 18%,transparent),0 0 140px 10px color-mix(in srgb,#14532D 55%,transparent)}
 body:not(:has(#pair.idle)) #idlefx i{animation-play-state:paused}
@@ -1119,11 +1109,11 @@ html[data-lt="1"] #gt th.hl{text-shadow:0 0 .6em color-mix(in srgb,var(--acc) 45
 .tmpills{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-top:.9rem}
 .tmpills .tmmode{margin-top:0}
 .tmemo[hidden]{display:none}
-.tmemo{position:fixed;z-index:3;left:50%;bottom:1rem;transform:translateX(-50%);width:min(900px,92vw);padding:.75rem 1.1rem .85rem;border:1px solid color-mix(in srgb,var(--line) 85%,transparent);border-radius:16px;background:color-mix(in srgb,var(--panel) 52%,transparent);-webkit-backdrop-filter:blur(14px) saturate(1.2);backdrop-filter:blur(14px) saturate(1.2);
-  opacity:0;transform:translate(-50%,18px) scale(.97);pointer-events:none;
-  transition:opacity .35s ease,transform .5s cubic-bezier(.32,.72,0,1)}
+.tmemo{position:fixed;z-index:3;left:50%;bottom:1rem;transform:translateX(-50%);width:min(900px,92vw);padding:.75rem 1.1rem .85rem;min-height:9.5rem;box-sizing:border-box;border:1px solid color-mix(in srgb,var(--line) 85%,transparent);border-radius:16px;background:color-mix(in srgb,var(--panel) 52%,transparent);-webkit-backdrop-filter:blur(14px) saturate(1.2);backdrop-filter:blur(14px) saturate(1.2);
+  opacity:0;transform:translate(-50%,12px);pointer-events:none;
+  transition:opacity .45s ease,transform .6s cubic-bezier(.32,.72,0,1)}
 .tmemo.show{opacity:1;transform:translateX(-50%);pointer-events:auto}
-.tpage.run .tmemo,.tpage.hold .tmemo,.tpage.ready .tmemo{opacity:0;transform:translate(-50%,18px) scale(.97);pointer-events:none}
+.tpage.run .tmemo,.tpage.hold .tmemo,.tpage.ready .tmemo{opacity:0;transform:translate(-50%,12px);pointer-events:none}
 .tmemo-h{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem 1rem;font-size:.7rem;letter-spacing:.08em;color:var(--muted);margin-bottom:.5rem}
 .tmemo-h .k{text-transform:uppercase;font-weight:600}
 .tmemo-lbl{padding:.12rem .7rem;border-radius:999px;border:1px solid color-mix(in srgb,var(--acc) 55%,var(--line));font-size:.74rem;font-weight:700;letter-spacing:.05em;text-transform:none;color:var(--acc);background:color-mix(in srgb,var(--acc) 10%,transparent);transition:color .3s,border-color .3s,background .3s}
@@ -1247,6 +1237,20 @@ html{scroll-behavior:smooth}
 body.solving #top .tlbl{display:none}
 @media (hover:none){#top::before,#top .tind,#top .tlbl{display:none}}
 @media (prefers-reduced-motion:reduce){#top .tind,#top .tlbl,#top.mag button svg{transition:none!important}#top.mag button svg{transform:none!important}}
+
+/* ---------- round 8: timer keep-alive ----------
+   The timer used to be display:none until the first open, so that click had to build styles, layout and layers for the
+   whole page, and a few more layout passes landed 0.8-1.5s later (stars switched on in batches, the page behind paused).
+   Now, once the intro is over, the page is built, laid out and painted once while invisible, then parked
+   (visibility:hidden, animations paused through the animation API so opening restyles nothing, own compositor layers). Opening it is only a fade of layers that already exist. */
+#timer.tk{display:flex;visibility:hidden;opacity:0;pointer-events:none;will-change:opacity}
+#timer.tk .tpage{will-change:transform,opacity}
+#timer.tk.on,#timer.tk.out,#timer.tk.tw{visibility:visible}
+#timer.tk.on{opacity:1;pointer-events:auto}
+#timer.tk.tw{opacity:.004}
+/* perf: pause animations nobody can see (closed timer page, main page behind the open timer) */
+#timer.tk:not(.on):not(.out):not(.tw) *,#timer.tk:not(.on):not(.out):not(.tw) *::before,#timer.tk:not(.on):not(.out):not(.tw) *::after,#timer.tk:not(.on):not(.out):not(.tw)::before,#timer.tk:not(.on):not(.out):not(.tw)::after{animation-play-state:paused!important}
+html.tmopen #bgfx i,html.tmopen #idlefx,html.tmopen #idlefx *,html.tmopen #pair,html.tmopen #pair *,html.tmopen #pair::after{animation-play-state:paused!important}
 </style>
 </head>
 <body>
@@ -1769,14 +1773,30 @@ $$('#top button').forEach(b=>b.addEventListener('mousedown',e=>e.preventDefault(
 
 /* modals */
 var TRN={sloc:1,wd:1,chain:1};
+var slideBusy=false;
 function openM(id){
-  if(modal&&modal!==id&&TRN[modal]&&TRN[id]&&document.startViewTransition&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
-    try{const ord=['sloc','wd','chain'];document.documentElement.dataset.vtd=ord.indexOf(id)>ord.indexOf(modal)?'f':'b';document.documentElement.classList.add('vtq');const t=document.startViewTransition(()=>openM0(id,true));t.finished.finally(()=>document.documentElement.classList.remove('vtq'));return}catch(e){document.documentElement.classList.remove('vtq')}
+  if(slideBusy)return;
+  if(modal&&modal!==id&&TRN[modal]&&TRN[id]&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
+    const ord=['sloc','wd','chain'],dir=ord.indexOf(id)>ord.indexOf(modal)?1:-1;
+    const oldBox=$('#'+modal+' .box');
+    if(oldBox&&oldBox.animate){
+      slideBusy=true;document.documentElement.classList.add('slbusy');
+      const out=oldBox.animate([{opacity:1,transform:'none'},{opacity:0,transform:'translateX('+(-dir*36)+'px)'}],{duration:210,easing:'cubic-bezier(.4,0,1,1)',fill:'forwards'});
+      const go=()=>{
+        slideBusy=false;document.documentElement.classList.remove('slbusy');
+        openM0(id,'sl');out.cancel();
+        const nb=$('#'+id+' .box');
+        if(nb&&nb.animate)nb.animate([{opacity:0,transform:'translateX('+(dir*36)+'px)'},{opacity:1,transform:'none'}],{duration:420,easing:'cubic-bezier(.32,.72,0,1)'});
+      };
+      out.onfinish=go;out.oncancel=()=>{if(slideBusy)go()};
+      return;
+    }
   }
   openM0(id,false);
 }
-function openM0(id,vt){reset();const sw=!!modal;if(id!=='lookup')snd('open');if(modal)$('#'+modal).classList.remove('on','out');modal=id;const o=$('#'+id);o.classList.remove('out');o.classList.toggle('swap',sw&&!vt);o.classList.toggle('vt',!!vt);o.classList.add('on');if(document.activeElement)document.activeElement.blur()}
-function closeM(){if(!modal)return;hmHide();snd('close');tlStop();cancelAnimationFrame(chRaf);if(modal==='timer')tmCancel();const o=$('#'+modal);modal=null;o.classList.remove('on');o.classList.add('out');setTimeout(()=>o.classList.remove('out'),230);if(document.activeElement)document.activeElement.blur()}
+function openM0(id,vt){reset();const sw=!!modal;if(id!=='lookup')snd('open');if(modal)$('#'+modal).classList.remove('on','out');modal=id;const o=$('#'+id);o.classList.remove('out');o.classList.toggle('swap',sw&&!vt);o.classList.toggle('sl',vt==='sl');o.classList.add('on');tmFx(id);if(document.activeElement)document.activeElement.blur()}
+function tmFx(id){clearTimeout(tmFx.t);const h=document.documentElement;h.classList.remove('tmopen');if(id==='timer')tmFx.t=setTimeout(()=>h.classList.add('tmopen'),900)}
+function closeM(){if(!modal)return;hmHide();snd('close');tlStop();cancelAnimationFrame(chRaf);if(modal==='timer')tmCancel();const o=$('#'+modal);modal=null;tmFx();o.classList.remove('on');o.classList.add('out');setTimeout(()=>o.classList.remove('out'),230);if(document.activeElement)document.activeElement.blur()}
 $$('[data-close]').forEach(b=>b.addEventListener('click',closeM));
 $$('.ov').forEach(o=>o.addEventListener('mousedown',e=>{if(e.target===o)closeM()}));
 $('#bg').onclick=()=>{syncUI();openM('settings')};
@@ -2472,7 +2492,7 @@ mfail.onclick=fail;
 mword.onclick=()=>{if(st===2)openWI();else openLookup()};
 mreset.onclick=()=>{if(st!==0)snd('err');reset()};
 let lastSt=-1;
-setInterval(()=>{if(st!==lastSt){lastSt=st;mgo.textContent=st===0?'Start':st===1?'Stop':'Next';mfail.disabled=st!==1}},80);
+const mbMQ=matchMedia('(pointer:coarse),(max-width:700px)');setInterval(()=>{if(!mbMQ.matches)return;if(st!==lastSt){lastSt=st;mgo.textContent=st===0?'Start':st===1?'Stop':'Next';mfail.disabled=st!==1}},80);
 
 /* ---------- 3x3x3 random-state scrambler (Kociemba two-phase, written from scratch) ---------- */
 const SCR_FN=function(){
@@ -2839,22 +2859,31 @@ function maRender(scr){
     +'<div class="mrow"><span class="mk">Edges<em>'+m.en+'</em></span><div class="mps">'+maPairs(m.e,false)+(m.fl.length?'<span class="mc nw fl" title="flip these edges (the buffer flips by default)" style="--i:'+m.e.length+'"><b>'+m.fl.join('')+'</b></span>':'')+'</div></div>';
 }
 let maShown=false,maHideT=0;
+/* the panel only fades in once the answer is rendered, so it never shows up as an empty half-height strip */
+function maLive(){maEl.classList.toggle('show',maShown)}
+/* blurred stand-in shown until the real scramble is ready, so the panel is never empty */
+function maPlaceholder(){
+  if(maBody.firstChild)return;
+  const ph=n=>Array.from({length:n},(_,i)=>'<span class="mc nw"><b>XX</b></span>').join('');
+  maBody.innerHTML='<div class="mrow"><span class="mk">Corners</span><div class="mps">'+ph(4)+'</div></div><div class="mrow"><span class="mk">Edges</span><div class="mps">'+ph(6)+'</div></div>';
+}
 function maVis(on){
   if(on===maShown)return;
   maShown=on;clearTimeout(maHideT);clearTimeout(TM.layT);
   TM.lay=true;tmClass(TM.cls);                      /* the layout and cube size glide while this is set */
   TM.layT=setTimeout(()=>{TM.lay=false;tmClass(TM.cls)},700);
-  if(on){maEl.hidden=false;void maEl.offsetWidth;maEl.classList.add('show')}
+  if(on){maEl.hidden=false;void maEl.offsetWidth;maLive()}
   else{maEl.classList.remove('show');maHideT=setTimeout(()=>{if(!maShown)maEl.hidden=true},560)}
 }
 function maSync(){
   const on=!!set().tmemo;
   maVis(on);maBtn.textContent='Memo answer: '+(on?'on':'off')+'  [M]';maBtn.classList.toggle('on',on);
-  if(!on||!SCR.ready)return;
+  if(!on)return;
+  if(!SCR.ready){maPlaceholder();maLive();return}
   /* right after a solve the next scramble is already up, so the panel shows the answer for the solve you just did;
      V (or a click) switches to the scramble that is on screen now */
   const last=TM.s==='stop'&&!!MS.prev&&!MS.peek,subj=last?MS.prev:TM.scr;
-  if(!subj)return;
+  if(!subj){maPlaceholder();maLive();return}
   const fresh=MS.key!==subj,rev=last||MS.peek;
   if(fresh){MS.key=subj;maRender(subj)}
   /* the pair-by-pair entrance only plays when new content is revealed (a fresh render, or right after a solve);
@@ -2866,6 +2895,7 @@ function maSync(){
   maEl.classList.toggle('rev',rev);
   maLbl.textContent=last?'Last solve':'This scramble';
   maEl.classList.toggle('last',last);
+  maLive();
   maKey.textContent=last?'[V] see this scramble':MS.peek?(TM.s==='stop'&&MS.prev?'[V] back to last solve':'[V] hide'):'[V] peek';
 }
 function maToggle(){
@@ -2952,7 +2982,7 @@ function tmCancel(){
 }
 function tmEsc(){return tmCancel()}
 function openTimer(){
-  TM.s='idle';tmSpReset();tmModeSync();tmClass('');$('#tmt').textContent='0.00';tmHint(TM_HINT);
+  TM.s='idle';tmSpReset();tmModeSync();tmClass('');MS.peek=false;maSync();$('#tmt').textContent='0.00';tmHint(TM_HINT);
   /* the scramble and 3D cube used to be rebuilt in the same frame as the click, which stalled the open animation.
      Now the page opens first; the DOM is only rebuilt (after the first frames) when it is actually out of date. */
   const fresh=!TM.scr||TM.shown!==TM.scr,cu=$('#tcube');
@@ -2982,12 +3012,65 @@ tmEl.addEventListener('pointerdown',e=>{if(e.target.closest('.tclose,.tcube,.tmm
 tmEl.addEventListener('pointerup',e=>{if(e.target.closest('.tclose,.tcube,.tmmode,.tmemo'))return;e.preventDefault();tmUp()});
 tmEl.addEventListener('pointercancel',()=>{if(TM.s==='hold'||TM.s==='ready'){clearTimeout(TM.holdTimer);TM.s=TM.prev;tmClass(TM.prev==='stop'?'stop':'');tmHint(TM_HINT)}});
 $('#bt').onclick=openTimer;
-{const th=document.documentElement;let rt=0,fxT=[];new MutationObserver(()=>{clearTimeout(rt);const on=tmEl.classList.contains('on');th.classList.toggle('tmon',on);
-  /* the 70 twinkling stars and the floating dots start at zero opacity anyway, so they are switched on in small batches once the open animation is done: far fewer layers to create in any one frame */
-  if(on){if(!fxT.length&&!tmEl.classList.contains('fx5'))for(let k=1;k<=5;k++)fxT.push(setTimeout(()=>{if(tmEl.classList.contains('on'))tmEl.classList.add('fx'+k)},650+k*140))}
-  else{fxT.forEach(clearTimeout);fxT=[];setTimeout(()=>{if(!tmEl.classList.contains('on'))tmEl.classList.remove('fx1','fx2','fx3','fx4','fx5')},450)}
-  if(on&&tmEl.classList.contains('fx5'))fxT=[];
-  rt=setTimeout(()=>th.classList.toggle('tmrest',on&&tmEl.classList.contains('on')),on?1500:350)}).observe(tmEl,{attributes:true,attributeFilter:['class']})}
+/* ---- timer keep-alive (see "round 8" in the CSS) ---- */
+{const th=document.documentElement,COV='#main,#idlefx,#wash,#top,#bgfx',cl=tmEl.classList;
+  let warmed=false,fxT=[],held=[],cT=0,pk=[],cv=[],pT=0,gen=0;
+  /* pausing or resuming an animation restyles its element, so big lists are worked through a few at a time over
+     successive frames instead of in one frame (that single pass was a visible hitch); gen cancels a stale run */
+  const slice=(list,fn,g,n,done)=>{let i=0;const step=()=>{if(g!==gen)return;for(let k=0;k<n&&i<list.length;k++)fn(list[i++]);if(i<list.length)requestAnimationFrame(step);else if(done)done()};step()};
+  const pz=a=>{try{a.pause();return 1}catch(e){return 0}},pl=a=>{try{a.play()}catch(e){}};
+  const mine=sel=>{try{return document.getAnimations().filter(a=>'animationName' in a&&a.playState==='running'&&a.effect&&a.effect.target&&a.effect.target.closest&&a.effect.target.closest(sel))}catch(e){return[]}};
+  /* the page underneath is fully hidden once the open fade is done: rest its animations (animation API, no class restyle) */
+  const cover=()=>{
+    if(!cl.contains('on')||held.length)return;
+    const g=gen,list=cv.length?cv:mine(COV).filter(a=>!a.effect.target.closest('#timer'));
+    slice(list,a=>{if(pz(a))held.push(a)},g,24,()=>{if(g===gen)th.classList.add('tmon')});
+  };
+  const uncover=()=>{th.classList.remove('tmon');const h=held;held=[];slice(h,pl,gen,24)};
+  /* parked: the timer's own animations are paused too, so opening it needs no restyle of its ~400 nodes */
+  const park=()=>{if(!warmed||cl.contains('on')||cl.contains('out')||cl.contains('tw')||pk.length)return;
+    /* the page's own list is taken now, while nothing is dirty: asking for animations while the timer is animating forces a restyle */
+    cv=mine(COV).filter(a=>!a.effect.target.closest('#timer'));
+    pk=mine('#timer');pk.forEach(pz)};
+  const unpark=()=>{
+    const h=pk;pk=[];
+    /* the page's own animations at once, the 90 faint stars and dots a few frames later (they start invisible anyway) */
+    const tiny=[],now=[];h.forEach(a=>(a.effect.target.closest('.tstars,.tdots')?tiny:now).push(a));
+    now.forEach(pl);slice(tiny,pl,gen,22);
+  };
+  new MutationObserver(()=>{
+    clearTimeout(cT);clearTimeout(pT);gen++;
+    if(cl.contains('on')){
+      unpark();
+      cT=setTimeout(cover,450);
+      /* only if the page was opened before it had been warmed: switch the stars on in small batches, as before */
+      if(!warmed&&!fxT.length&&!cl.contains('fx5'))for(let k=1;k<=5;k++)fxT.push(setTimeout(()=>{if(cl.contains('on'))cl.add('fx'+k)},650+k*140));
+    }else{fxT.forEach(clearTimeout);fxT=[];uncover();pT=setTimeout(park,300)}
+  }).observe(tmEl,{attributes:true,attributeFilter:['class']});
+  /* build everything once, invisibly, in small steps at idle (never while a modal or a run is active) */
+  const idle=f=>('requestIdleCallback' in window)?requestIdleCallback(f,{timeout:1200}):setTimeout(f,60);
+  const busy=()=>modal||st!==0||document.hidden||!document.body.classList.contains('ready');
+  function warmTimer(){
+    if(warmed)return;
+    if(busy()){setTimeout(warmTimer,800);return}
+    warmed=true;
+    /* 1: keep the page laid out, with its scramble and cube already built */
+    cl.add('tk');
+    try{if(!TM.scr){if(SCR.ready)tmNew(true);else tmWarm()}}catch(e){}
+    /* 2: every star and dot, now that adding them costs nothing visible */
+    setTimeout(()=>idle(()=>{
+      cl.add('fx1','fx2','fx3','fx4','fx5');
+      /* 3: paint it once at 0.4% opacity so its layers and tiles exist before the first open */
+      setTimeout(()=>idle(()=>{
+        if(modal){return}
+        cl.add('tw');
+        requestAnimationFrame(()=>requestAnimationFrame(()=>setTimeout(()=>{cl.remove('tw');setTimeout(park,60)},140)));
+      }),160);
+    }),160);
+  }
+  setTimeout(()=>idle(warmTimer),1800);
+  window._tmWarm=()=>warmed;
+}
 $('#tmmode').addEventListener('click',e=>{e.stopPropagation();tmModeToggle();e.currentTarget.blur()});
 tmModeSync();maSync();
 

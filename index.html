@@ -8,7 +8,7 @@
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<script>try{var _d=JSON.parse(localStorage.getItem('bld-pairs-v1')||'null'),_b=(_d&&_d.set&&_d.set.bg)||'sand',_b=({oled:'black',solid:'navy',aurora:'purple',forest:'green',ocean:'navy',ember:'charcoal',rose:'purple',sunset:'sand',yellow:'sand',sage:'mint',meadow:'mint',lagoon:'blue',lavender:'blue',light:'white'})[_b]||_b,_h=document.documentElement;_h.dataset.bg=_b;_h.dataset.font=(_d&&_d.set&&_d.set.font)||'jb';_h.dataset.lt=['white','grey','sand','blue','mint'].indexOf(_b)>-1?'1':'0';_h.dataset.anim='0'}catch(e){}</script>
+<script>try{var _d=JSON.parse(localStorage.getItem('bld-pairs-v1')||'null'),_b=(_d&&_d.set&&_d.set.bg)||'sand',_b=['black','charcoal','navy','green','purple','white','grey','sand','blue','mint'].indexOf(_b)>-1?_b:'sand',_h=document.documentElement;_h.dataset.bg=_b;_h.dataset.font=(_d&&_d.set&&_d.set.font)||'jb';_h.dataset.lt=['white','grey','sand','blue','mint'].indexOf(_b)>-1?'1':'0';_h.dataset.anim='0'}catch(e){}</script>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Mono:wght@400;700&family=Martian+Mono:wght@400;500;600&family=Share+Tech+Mono&family=Courier+Prime:wght@400;700&family=VT323&family=Space+Grotesk:wght@400;500;600&family=Sora:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 /* =====================================================================================================
@@ -65,7 +65,13 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 #wrap{min-height:2.6rem}
 #wi{display:none;width:min(440px,86vw);background:var(--panel);border:1px solid var(--acc);border-radius:6px;padding:.6em .8em;text-align:center;user-select:text;-webkit-user-select:text}
 #guide{position:fixed;bottom:0;left:0;right:0;text-align:center;padding:.8rem calc(.8rem) calc(.8rem + env(safe-area-inset-bottom,0px));font-size:.75rem;color:var(--muted);transition:opacity 1s;pointer-events:none}
-body.live #guide{opacity:.2}
+#guide{z-index:2;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:.35rem 0;letter-spacing:.02em}
+#guide span{display:inline-flex;align-items:center;gap:.5rem;padding:.3rem .7rem;border-radius:8px;opacity:.5;pointer-events:auto;cursor:default;transition:opacity .5s cubic-bezier(.32,.72,0,1)}
+#guide kbd{font:inherit;font-size:.72em;line-height:1;padding:.32em .6em;border-radius:6px;color:var(--fg);border:1px solid color-mix(in srgb,var(--line) 70%,transparent);background:color-mix(in srgb,var(--fg) 4%,transparent);opacity:.8;letter-spacing:.03em;transition:opacity .5s cubic-bezier(.32,.72,0,1),border-color .5s cubic-bezier(.32,.72,0,1),background-color .5s cubic-bezier(.32,.72,0,1)}
+#guide:has(span:hover) span{opacity:1}
+#guide:has(span:hover) kbd{opacity:1;border-color:color-mix(in srgb,var(--acc) 45%,var(--line));background:color-mix(in srgb,var(--acc) 8%,transparent)}
+body.live #guide span{opacity:.12}
+body.live #guide:has(span:hover) span{opacity:.7}
 .ov{position:fixed;inset:0;display:none;z-index:5;align-items:center;justify-content:center;padding:1rem}
 .ov.on{display:flex}
 .box{border:1px solid var(--line);width:min(640px,100%);overflow:auto;padding:1.2rem}
@@ -342,7 +348,7 @@ body.zenmode #sclk{opacity:0;pointer-events:none}
 @keyframes icburst{from{rotate:0 1 0 -150deg}}
 
 /* ---------- heatmap averages + time-lapse ---------- */
-#hm{grid-template-columns:repeat(26,1fr);width:min(calc(100vw - 4.5rem),calc(100vh - 15rem),860px);width:min(calc(100vw - 4.5rem),calc(100dvh - 15rem),860px)}
+#hm{grid-template-columns:repeat(26,1fr);width:min(calc(100vw - 4.5rem),calc(100vh - 18.5rem),860px);width:min(calc(100vw - 4.5rem),calc(100dvh - 18.5rem),860px)}
 #hm .hmavg{color:#fff;font-weight:600;font-size:clamp(5px,1vmin,9px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.28)}
 #hm .hmavg:hover{filter:brightness(1.2)}
 #hm .hmh{font-size:clamp(5px,1vmin,9px)}
@@ -490,7 +496,8 @@ html[data-lt="1"] .tcshadow{opacity:.85}
 .cf-l{transform:rotateY(-90deg) translateZ(calc(var(--s) / 2))}
 .cf-u{transform:rotateX(90deg) translateZ(calc(var(--s) / 2))}
 .cf-d{transform:rotateX(-90deg) translateZ(calc(var(--s) / 2))}
-.cc{position:absolute;inset:0;background:#2d2d33;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+/* inset keeps the unrounded edges of these inner core faces from poking through the sticker edges */
+.cc{position:absolute;inset:3%;background:#2d2d33;backface-visibility:hidden;-webkit-backface-visibility:hidden}
 .cc-f{transform:translateZ(calc(var(--s) * .455))}
 .cc-b{transform:rotateY(180deg) translateZ(calc(var(--s) * .455))}
 .cc-r{transform:rotateY(90deg) translateZ(calc(var(--s) * .455))}
@@ -1114,7 +1121,8 @@ html[data-lt="1"] #gt th.hl{text-shadow:0 0 .6em color-mix(in srgb,var(--acc) 45
 .tmemo.last{border-color:rgba(255,90,95,.4)}
 .tmemo.last .tmemo-lbl{color:#ff5a5f;border-color:rgba(255,90,95,.7);background:rgba(255,90,95,.14)}
 html[data-lt="1"] .tmemo.last .tmemo-lbl{color:#d92d3a;border-color:rgba(217,45,58,.6);background:rgba(217,45,58,.1)}
-.tmemo-k{position:absolute;right:1.1rem;bottom:.5rem;font-size:.66rem;letter-spacing:.06em;color:var(--muted);opacity:.55;pointer-events:none}
+.tmemo-k{position:absolute;right:1.1rem;bottom:.5rem;font-size:.66rem;letter-spacing:.06em;color:var(--muted);opacity:0;transform:translateY(4px);pointer-events:none;transition:opacity .6s ease,transform .6s cubic-bezier(.32,.72,0,1)}
+.tmemo.kok .tmemo-k{opacity:.55;transform:none}
 .tmemo-hint{position:absolute;left:0;right:0;top:58%;text-align:center;font-size:.78rem;letter-spacing:.06em;color:var(--fg);pointer-events:none;transition:opacity .3s}
 .tmemo.rev .tmemo-hint{opacity:0}
 .tmemo-meth{margin-left:auto;letter-spacing:.02em;opacity:.7;white-space:nowrap}
@@ -1297,7 +1305,7 @@ html[data-font]:not([data-font=jb]) :is(.box kbd,.spark .ctx){font-family:var(--
 #pair.idle{font-size:clamp(1.6rem,3.3vw,2.9rem);letter-spacing:.06em}
 #time{font-size:clamp(1.5rem,4.4vw,2.4rem)}
 #word{font-size:clamp(1.3rem,4vw,2.2rem)}
-#guide{font-size:.9rem}
+#guide{font-size:.82rem}
 #drillchip{font-size:.9rem}
 /* inactivity: results/pair drift out, idle prompt drifts back in */
 #main.dr #pair,#main.dr #time,#main.dr #word{opacity:0!important;filter:blur(6px);transition:opacity .6s cubic-bezier(.32,.72,0,1),filter .6s cubic-bezier(.32,.72,0,1)!important}
@@ -1567,6 +1575,91 @@ html[data-lt="1"] .tbg i:nth-child(2){width:55vmax;height:55vmax;right:-18vmax;l
 html[data-lt="1"] .tbg i:nth-child(3){width:50vmax;height:50vmax;left:18vw;right:auto;bottom:-30vmax;top:auto;animation:tb3 38s ease-in-out infinite alternate;--c:color-mix(in srgb,var(--acc) 34%,var(--bg))}
 html[data-lt="1"] .taur{background:conic-gradient(from 0deg,transparent 0deg,color-mix(in srgb,var(--acc) 45%,var(--bg)) 45deg,transparent 100deg,color-mix(in srgb,var(--acc) 32%,var(--bg)) 175deg,transparent 230deg,color-mix(in srgb,var(--acc) 45%,var(--bg)) 295deg,transparent 345deg);opacity:.22}
 html[data-lt="1"] .tstars b{background:color-mix(in srgb,var(--acc) 70%,var(--bg));box-shadow:0 0 8px color-mix(in srgb,var(--acc) 45%,transparent)}
+
+/* ---------- round 9: calmer heatmap crosshair, angrier "last solve" memo, quieter timer dots ---------- */
+/* heatmap: lit row/column keep their true colours (no white wash); everything else is darkened, not faded into the panel */
+/* dimming is opacity only (runs on the compositor, no per-cell repaint); the extra darkness is ONE backing layer behind the cells that fades in */
+#hm{position:relative;isolation:isolate}
+#hm::before{content:"";position:absolute;z-index:-1;left:calc(100% / 26);top:calc(100% / 26);right:0;bottom:0;border-radius:3px;background:#17130f;opacity:0;pointer-events:none;transition:opacity .46s cubic-bezier(.33,1,.68,1)}
+#hm.hmx::before{opacity:.85;transition-duration:.14s;transition-timing-function:linear}
+#hm.hmx div[data-p]:not(.xr):not(.xc){opacity:.36}
+#hm.hmx .hmavg:not(.xr):not(.xc){opacity:.42}
+#hm div[data-p].xr,#hm div[data-p].xc{box-shadow:inset 0 0 0 1px rgba(255,255,255,.3)}
+#hm .hmavg.xr,#hm .hmavg.xc{box-shadow:inset 0 0 0 1px rgba(255,255,255,.28)}
+#hm div[data-p].xr.xc{box-shadow:0 0 0 2px var(--fg),0 6px 18px rgba(0,0,0,.45)}
+/* light themes (Sand etc): lit cells get a dark hairline, lit letters go dark and bold instead of the accent colour, avg text stays crisp */
+html[data-lt="1"] #hm div[data-p].xr,html[data-lt="1"] #hm div[data-p].xc{box-shadow:inset 0 0 0 1px rgba(0,0,0,.4)}
+html[data-lt="1"] #hm .hmavg.xr,html[data-lt="1"] #hm .hmavg.xc{box-shadow:inset 0 0 0 1px rgba(0,0,0,.4)}
+html[data-lt="1"] #hm .xh{color:var(--fg);text-shadow:none;font-weight:800}
+html[data-lt="1"] #hm.hmx::before{opacity:.8}
+/* memo answer, last solve: unmistakably red in every theme */
+@keyframes tmlast{0%,100%{box-shadow:0 0 0 1px rgba(255,64,72,.6),0 0 10px rgba(255,64,72,.18)}50%{box-shadow:0 0 0 1px rgba(255,64,72,.85),0 0 16px rgba(255,64,72,.3)}}
+@keyframes tmlastl{0%,100%{box-shadow:0 0 8px rgba(255,64,72,.4)}50%{box-shadow:0 0 13px rgba(255,64,72,.65)}}
+.tmemo.last{border-color:rgba(255,64,72,.9);animation:tmlast 2.6s ease-in-out infinite}
+.tmemo.last .tmemo-lbl{color:#fff;background:linear-gradient(180deg,#ff4d55,#e11d2a);border-color:#ff7a80;text-shadow:0 1px 0 rgba(120,0,10,.45);animation:tmlastl 2.6s ease-in-out infinite}
+html[data-lt="1"] .tmemo.last{border-color:#e11d2a}
+html[data-lt="1"] .tmemo.last .tmemo-lbl{color:#fff;background:linear-gradient(180deg,#ef3340,#c4111e);border-color:#c4111e}
+@media (prefers-reduced-motion:reduce){.tmemo.last,.tmemo.last .tmemo-lbl{animation:none}}
+/* timer dots: far fewer, soft, faint and slow (the floating squares are untouched) */
+.tstars b,html[data-lt="1"] .tstars b{border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--acc) 75%,transparent) 0,transparent 70%)!important;box-shadow:none!important;animation-name:ttw!important;animation-duration:18s!important}
+html[data-lt="1"] .tstars b{width:6px!important;height:6px!important}
+
+/* ---------- heatmap dock: the controls under the grid, matched to the settings/stats cards ---------- */
+#heat .hmdock{width:0;min-width:100%;display:flex;flex-direction:column;gap:.55rem;margin-top:.8rem}
+#heat .tl{margin:0;gap:.7rem;padding:.5rem .65rem;border:1px solid color-mix(in srgb,var(--fg) 14%,var(--line));border-radius:14px;background:color-mix(in srgb,var(--fg) 4.5%,var(--panel));box-shadow:0 1px 0 0 color-mix(in srgb,var(--fg) 7%,transparent) inset}
+#heat .tl #tlp{flex:none;width:2.1rem;height:2.1rem;padding:0;border-radius:50%;background:var(--acc);color:var(--on);border-color:var(--acc);box-shadow:0 6px 16px -7px color-mix(in srgb,var(--acc) 75%,transparent)}
+#heat .tl #tlp:hover{background:var(--acc);filter:brightness(1.08)}
+#heat .tl #tlp svg{width:.95rem;height:.95rem}
+#heat .tl input[type=range]{-webkit-appearance:none;appearance:none;flex:1;min-width:0;height:1.4rem;margin:0;padding:0;background:transparent;border:0;cursor:pointer;--p:100%}
+#heat .tl input[type=range]:focus-visible{outline:none}
+#heat .tl input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:999px;background:linear-gradient(90deg,var(--acc) var(--p),color-mix(in srgb,var(--fg) 16%,var(--panel)) var(--p))}
+#heat .tl input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;box-sizing:border-box;width:16px;height:16px;margin-top:-5px;border-radius:50%;background:var(--acc);border:3px solid var(--panel);box-shadow:0 0 0 1px var(--acc),0 3px 10px -2px color-mix(in srgb,var(--acc) 70%,transparent);transition:transform .25s var(--ease)}
+#heat .tl input[type=range]:hover::-webkit-slider-thumb,#heat .tl input[type=range]:focus-visible::-webkit-slider-thumb{transform:scale(1.18)}
+#heat .tl input[type=range]::-moz-range-track{height:6px;border-radius:999px;background:color-mix(in srgb,var(--fg) 16%,var(--panel))}
+#heat .tl input[type=range]::-moz-range-progress{height:6px;border-radius:999px;background:var(--acc)}
+#heat .tl input[type=range]::-moz-range-thumb{box-sizing:border-box;width:16px;height:16px;border-radius:50%;background:var(--acc);border:3px solid var(--panel);box-shadow:0 0 0 1px var(--acc)}
+#heat #tld{min-width:6.6em;text-align:center;font-size:.76rem;font-variant-numeric:tabular-nums;color:var(--fg);padding:.38em .8em;border-radius:999px;border:1px solid color-mix(in srgb,var(--fg) 14%,var(--line));background:color-mix(in srgb,var(--fg) 6%,transparent)}
+#heat .tl #tll{display:inline-flex;align-items:center;gap:.45em;font-size:.76rem;font-weight:500;letter-spacing:.02em;padding:.4em 1em;border-radius:999px;color:var(--muted);border-color:color-mix(in srgb,var(--fg) 20%,var(--line));background-color:color-mix(in srgb,var(--fg) 5%,transparent)}
+#heat .tl #tll::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.5;transition:background-color .3s,box-shadow .3s,opacity .3s}
+#heat .tl #tll:hover{color:var(--fg);border-color:var(--acc);background-color:color-mix(in srgb,var(--acc) 10%,transparent)}
+#heat .tl.islive #tll{color:var(--fg);border-color:color-mix(in srgb,var(--acc) 45%,var(--line))}
+#heat .tl.islive #tll::before{background:var(--acc);opacity:1;box-shadow:0 0 8px color-mix(in srgb,var(--acc) 80%,transparent)}
+
+#heat #hmi{position:relative;min-height:2.6rem;display:flex;align-items:center;padding:.6rem .9rem .6rem 1.1rem;border:1px solid color-mix(in srgb,var(--fg) 14%,var(--line));border-radius:14px;background:color-mix(in srgb,var(--fg) 4.5%,var(--panel));box-shadow:0 1px 0 0 color-mix(in srgb,var(--fg) 7%,transparent) inset;font-size:.84rem;line-height:1.45;color:color-mix(in srgb,var(--muted) 40%,var(--fg));white-space:pre-wrap;overflow:hidden}
+#heat #hmi::before{content:"";position:absolute;left:0;top:.55rem;bottom:.55rem;width:3px;border-radius:3px;background:var(--acc)}
+
+#heat #hmdrill{width:100%;align-items:center;justify-content:center;gap:.5rem;margin:0;padding:.7em;font-size:.92rem;border-radius:14px;box-shadow:0 6px 18px -8px color-mix(in srgb,var(--acc) 70%,transparent)}
+#heat #hmdrill::after{content:"\2192";transition:transform .3s var(--ease)}
+#heat #hmdrill:hover::after{transform:translateX(4px)}
+#heat #hmdrill.pop{animation:sin .4s var(--ease)}
+
+#heat .hmleg{display:flex;flex-direction:column;gap:.45rem;padding:.15rem .25rem 0}
+#heat #hl{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center}
+#heat .hlc{display:inline-flex;align-items:center;gap:.45em;font-size:.74rem;color:var(--fg);padding:.28em .75em .28em .6em;border-radius:999px;border:1px solid color-mix(in srgb,var(--fg) 14%,var(--line));background:color-mix(in srgb,var(--fg) 5%,transparent)}
+#heat .hlc::before{content:"";width:.6em;height:.6em;border-radius:50%;background:var(--c);box-shadow:0 0 0 1px color-mix(in srgb,var(--fg) 18%,transparent)}
+#heat .hlc.hlf::before{border-radius:2px;box-shadow:0 0 0 1px #F87171}
+#heat .hmnote{flex-basis:100%;font-size:.74rem;line-height:1.5;color:var(--muted)}
+#heat #hl .hmnote{margin-top:.1rem}
+
+/* compact pass: the dock must fit under the grid on one screen */
+#heat .hmdock{gap:.4rem;margin-top:.55rem}
+#heat .tl{padding:.3rem .5rem;gap:.55rem;border-radius:12px}
+#heat .tl #tlp{width:1.8rem;height:1.8rem}
+#heat .tl #tlp svg{width:.8rem;height:.8rem}
+#heat .tl input[type=range]{height:1.2rem}
+#heat #tld{padding:.3em .7em;font-size:.72rem;min-width:6em}
+#heat .tl #tll{padding:.32em .85em;font-size:.72rem}
+#heat .hmrow{display:flex;gap:.4rem;align-items:stretch}
+#heat #hmi{flex:1;min-width:0;min-height:2.1rem;padding:.4rem .75rem .4rem .95rem;border-radius:12px;font-size:.78rem;line-height:1.35}
+#heat #hmi::before{top:.4rem;bottom:.4rem}
+#heat #hmdrill{width:auto;flex:none;white-space:nowrap;padding:.4em 1em;font-size:.8rem;border-radius:12px}
+#heat .hmleg{padding:0 .2rem;gap:.3rem}
+#heat #hl{gap:.3rem}
+#heat .hlc{font-size:.68rem;padding:.2em .6em .2em .5em}
+#heat .hmnote{font-size:.68rem;line-height:1.4}
+
+/* primary buttons keep their accent fill on hover (the generic button:hover tint was washing them out, leaving white text on a near-white fill) */
+button.primary:hover,#heat #hmdrill:hover{background-color:var(--acc);color:var(--on);border-color:var(--acc);filter:brightness(1.08)}
 </style>
 </head>
 <body>
@@ -1599,7 +1692,7 @@ html[data-lt="1"] .tstars b{background:color-mix(in srgb,var(--acc) 70%,var(--bg
 <div id="wrap"><input id="wi" type="text" autocomplete="off" spellcheck="false"></div>
 </div>
 <div id="mbar"><button id="mreset" type="button">Reset</button><button id="mfail" type="button">Fail</button><button id="mword" type="button">Word</button><button id="mgo" type="button">Start</button></div>
-<div id="guide">[Space] Next &nbsp;|&nbsp; [Esc] Reset &nbsp;|&nbsp; [Tab] Word &nbsp;|&nbsp; [D] Lookup &nbsp;|&nbsp; [Right-side keys] Fail</div>
+<div id="guide"><span><kbd>Space</kbd>Next</span><span><kbd>Esc</kbd>Reset</span><span><kbd>Tab</kbd>Word</span><span><kbd>D</kbd>Lookup</span><span><kbd>Right-side keys</kbd>Fail</span></div>
 <div id="toast"></div>
 <div id="tip"></div>
 
@@ -1703,10 +1796,11 @@ html[data-lt="1"] .tstars b{background:color-mix(in srgb,var(--acc) 70%,var(--bg
 <div class="ov" id="heat"><div class="box" role="dialog" aria-label="Heatmap">
 <h2>Recall heatmap <button data-close>Close</button></h2>
 <div id="hm"></div>
-<div class="tl" id="tl"><button id="tlp" type="button" aria-label="Play time-lapse"><svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M7 4.5v15l12-7.5z"/></svg></button><input type="range" id="tlr" min="0" max="0" value="0" aria-label="Time-lapse day"><span id="tld" class="mut"></span><button id="tll" type="button">Live</button></div>
-<div class="mut" id="hmi" style="margin-top:.6rem;min-height:1.3em">Hover or tap a cell for details.</div>
-<button id="hmdrill" type="button" class="primary" style="display:none;margin-top:.5rem"></button>
-<div class="mut"><span id="hl"></span> Dark cells are untested.</div>
+<div class="hmdock">
+<div class="tl" id="tl"><button id="tlp" type="button" aria-label="Play time-lapse"><svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M7 4.5v15l12-7.5z"/></svg></button><input type="range" id="tlr" min="0" max="0" value="0" aria-label="Time-lapse day"><span id="tld"></span><button id="tll" type="button">Live</button></div>
+<div class="hmrow"><div id="hmi">Hover or tap a cell for details.</div><button id="hmdrill" type="button" class="primary" style="display:none"></button></div>
+<div class="hmleg"><div id="hl"></div></div>
+</div>
 </div></div>
 
 <div class="ov" id="help"><div class="box" role="dialog" aria-label="Tutorial and help">
@@ -1830,7 +1924,7 @@ B,bat,bubble</pre>
 <div class="tpage" id="tpage">
 <div id="tmsc" class="tmsc"></div>
 <div class="tmmain"><div class="tmcol"><div id="tmt" class="tmt">0.00</div><div class="tmline"><i id="tmbar"></i><i id="tmbar2"></i></div><div class="tmspw"><div class="tmsp" id="tmsp"><div class="tms tmm" id="tmmc"><span class="k">Memo</span><b id="tmm">&ndash;</b><em id="tmmp"></em></div><div class="tms tme" id="tmec"><span class="k">Exec</span><b id="tme">&ndash;</b><em id="tmep"></em></div></div></div><div id="tmh" class="tmh"></div><div class="tmpills"><button type="button" class="tmmode" id="tmmode" tabindex="-1"></button><button type="button" class="tmmode" id="tmmemo" tabindex="-1"></button></div></div><div class="tcube" id="tcube" title="Drag to rotate, double-click to reset" aria-label="3D view of the scramble, drag to rotate"><div class="tcshadow"></div><div class="tcfloat"><div class="tc3d" id="tc3d"></div></div></div></div>
-<div class="tmemo" id="tmemo" hidden aria-live="polite"><div class="tmemo-h"><span class="k">Memo answer</span><span class="tmemo-lbl" id="tmemol"></span><span class="mx" id="tmemox"></span><span class="tmemo-hint">click or press V to peek</span><span class="tmemo-meth">M2 buffer U &nbsp;·&nbsp; Orozco C, helper B</span></div><div class="tmemo-b" id="tmemob"></div><span class="tmemo-k" id="tmemok"></span></div>
+<div class="tmemo" id="tmemo" hidden aria-live="polite"><div class="tmemo-h"><span class="k">Memo answer</span><span class="tmemo-lbl" id="tmemol"></span><span class="mx" id="tmemox"></span><span class="tmemo-hint">click or press V to peek</span><span class="tmemo-meth">M2 / Orozco</span></div><div class="tmemo-b" id="tmemob"></div><span class="tmemo-k" id="tmemok"></span></div>
 </div>
 </div>
 
@@ -1913,8 +2007,7 @@ B,bat,bubble</pre>
 (function(){
 const L='ABCDEFGHIJKLMNOPQRSTUVWX'.split(''),ALL=L.join('');
 const KEY='bld-pairs-v1';
-const DEF={F:ALL,S:ALL,flash:false,fd:.3,hideT:false,zen:false,thr:2,drill:false,pace:false,goal:1,acc:'#67E8F9',bg:'sand',tf:1,tm:2,rm:'irl',snd:true,vol:.6,sndMode:'soft',tsplit:false,tmemo:false,font:'jb'};
-const ACC=['#67E8F9','#4ADE80','#FBBF24','#A78BFA'],ACCD=['#0E7490','#15803D','#B45309','#6D28D9'];
+const DEF={F:ALL,S:ALL,flash:false,fd:.3,hideT:false,zen:false,thr:2,pace:false,goal:1,bg:'sand',tf:1,tm:2,rm:'irl',snd:true,vol:.6,sndMode:'soft',tsplit:false,tmemo:false,font:'jb'};
 let D={set:Object.assign({},DEF),words:{},stats:{},flag:{},streak:{},missed:{},missedStreak:{},review:{},fails:{},hist:[]};
 let lsHad=false,lsBad=null;
 try{const raw=localStorage.getItem(KEY);lsHad=!!raw;let r=null;try{r=JSON.parse(raw||'null')}catch(e){lsBad=raw}if(r&&typeof r==='object'){D=Object.assign(D,r);D.set=Object.assign({},DEF,r.set)}}catch(e){}
@@ -1996,38 +2089,18 @@ function applyAcc0(){
   document.body.classList.toggle('zenmode',!!set().zen);
 }
 
-let deck=[],deckSig='',warned=false,pickFail=0;
+let warned=false,pickFail=0;
 function rnd(a){return a[Math.random()*a.length|0]}
 function activePool(){const s=set(),out=[];for(const a of s.F)for(const b of s.S)out.push(a+b);return out}
 function avgT(k){const t=D.stats[k];return t?(typeof t.ema==='number'?t.ema:t.s/t.n):0}
-function weakSet(base){
-  const f=base.filter(k=>D.flag[k]);if(f.length)return f;
-  const t=base.filter(k=>D.stats[k]).sort((a,b)=>avgT(b)-avgT(a));
-  if(t.length)return t.slice(0,Math.max(8,Math.ceil(base.length*.05)));
-  return base;
-}
 function missedSet(base){return base.filter(k=>D.missed[k])}
 function reviewSet(base){return base.filter(k=>!D.stats[k]||rate(avgT(k))>0||D.missed[k])}
-function spacedSet(base){
-  const now=Date.now(),fresh=base.filter(k=>!D.review[k]);
-  if(fresh.length)return fresh;
-  const due=base.filter(k=>(D.review[k].due||0)<=now);
-  if(due.length)return due;
-  return base.slice().sort((a,b)=>(D.review[a].due||0)-(D.review[b].due||0)).slice(0,Math.max(8,Math.ceil(base.length*.08)));
-}
 function choose(src,base,out,avoid,strict){
   let c=src.filter(k=>!out.includes(k)&&k!==avoid);
   if(!c.length&&strict)c=src.filter(k=>!out.includes(k));
   if(!c.length)c=base.filter(k=>!out.includes(k)&&k!==avoid);
   if(!c.length)c=base.filter(k=>!out.includes(k));
   return rnd(c.length?c:base);
-}
-function fromDeck(base,out,avoid){
-  const sig=base.join('');if(sig!==deckSig){deckSig=sig;deck=[]}
-  if(!deck.length){deck=base.slice();for(let i=deck.length-1;i>0;i--){const j=Math.random()*(i+1)|0;const x=deck[i];deck[i]=deck[j];deck[j]=x}}
-  let ix=deck.length-1;
-  for(let j=deck.length-1;j>=0;j--){if(deck[j]!==avoid&&!out.includes(deck[j])){ix=j;break}}
-  return deck.splice(ix,1)[0];
 }
 function pick(){
   if(drill)return drillPick();
@@ -2084,7 +2157,7 @@ function stop(){
   {
     const s=D.stats[k]||(D.stats[k]={n:0,s:0});const previous=typeof s.ema==='number'?s.ema:(s.n?s.s/s.n:per);s.n++;s.s+=per;s.ema=previous+.28*(per-previous);
     if(per/1000>set().thr){D.flag[k]=1;D.streak[k]=0}
-    else if(D.flag[k]&&(set().rm==='drill'||set().rm==='hybrid')){const c=(D.streak[k]||0)+1;if(c>=3){delete D.flag[k];delete D.streak[k];snd('grad',.3);toast(k+' graduated and left your weak pairs')}else D.streak[k]=c}
+    else if(D.flag[k]){if(rate(per)===0){const c=(D.streak[k]||0)+1;if(c>=2){delete D.flag[k];delete D.streak[k];snd('grad',.3);toast(k+' is no longer a weak pair')}else D.streak[k]=c}else D.streak[k]=0}
     const now=Date.now(),level=rate(per),baseDelay=[60*60e3,20*60e3,6*60e3][level];
     D.review[k]={last:now,due:now+baseDelay,interval:baseDelay};
     if(set().rm==='review'&&level===0){delete D.missed[k];delete D.missedStreak[k]}
@@ -2104,7 +2177,7 @@ function fail(){
   if(drill)drill.fails[cur[0]]=(drill.fails[cur[0]]||0)+1;
   document.body.classList.remove('solving');postStop=false;st=2;cancelAnimationFrame(raf);clearTimeout(ft);
   P.classList.remove('hid','pulse','run');
-  const now=Date.now();sess.f=(sess.f||0)+1;D.fails[cur[0]]=(D.fails[cur[0]]||0)+1;cur.forEach(k=>{D.missed[k]=1;D.missedStreak[k]=0;D.review[k]={last:now,due:now,interval:0}});save();
+  const now=Date.now();sess.f=(sess.f||0)+1;D.fails[cur[0]]=(D.fails[cur[0]]||0)+1;if(D.flag[cur[0]])D.streak[cur[0]]=0;cur.forEach(k=>{D.missed[k]=1;D.missedStreak[k]=0;D.review[k]={last:now,due:now,interval:0}});save();
   T.textContent='Failed';T.className='failed';washFx(2);pairFx(RC[2]);
   PB.style.visibility='hidden';
   setWord(savedWords());
@@ -2198,7 +2271,7 @@ $$('[data-close]').forEach(b=>b.addEventListener('click',closeM));
 $$('.ov').forEach(o=>o.addEventListener('mousedown',e=>{if(e.target===o)closeM()}));
 $('#bg').onclick=()=>{syncUI();openM('settings')};
 $('#bh').onclick=()=>{renderHeat();openM('heat')};
-$('#bs').onclick=()=>{renderStats();openM('drawer')};
+$('#bs').onclick=()=>{stSeen.clear();renderStats();openM('drawer')};
 
 /* settings */
 function chips(id,key){
@@ -2315,15 +2388,6 @@ $('#bfile').onchange=e=>{
   rd.onerror=()=>toast('That file could not be read');
   rd.readAsText(f);
 };
-function importCSVOld(raw){
-  let c=0;
-  raw.split(/\r?\n/).forEach(ln=>{
-    const m=ln.match(/^\s*"?([A-Za-z]{2})"?\s*[,\t;]\s*(.+?)\s*$/);if(!m)return;
-    const k=m[1].toUpperCase();if(!/^[A-X]{2}$/.test(k))return;
-    D.words[k]=m[2].replace(/^"|"$/g,'').replace(/""/g,'"').trim();c++;
-  });
-  save();toast(c?'Imported '+c+' words':'No valid pair,word rows found');
-}
 $('#bcsv').onclick=()=>{$('#dj').value='pair,word\n'+Object.keys(D.words).sort().map(k=>k+',"'+D.words[k].replace(/"/g,'""')+'"').join('\n')};
 $('#bhelp').onclick=()=>openM('help');
 $('#help').addEventListener('click',e=>{const b=e.target.closest('.ach');if(!b)return;const a=b.parentElement,o=!a.classList.contains('open');a.classList.toggle('open',o);b.setAttribute('aria-expanded',o)});
@@ -2417,11 +2481,11 @@ function cbApply(x){
   D.set=Object.assign({},DEF,r.set);D.set.sndMode='soft';
   D.set.bg=thFix(D.set.bg);
   CB.rev=x.rev||CB.rev;CB.dirty=false;CB.at=Date.now();cbHold=false;cbQuiet=Date.now()+2500;cbSave();
-  saveDirty=true;flushSave();deck=[];deckSig='';prev=null;
+  saveDirty=true;flushSave();prev=null;
   applyAcc();syncUI();TM.sp=!!set().tsplit;tmModeSync();try{maSync()}catch(_){}cbRender();
 }
 const TH_OK=['black','charcoal','navy','green','purple','white','grey','sand','blue','mint'];
-function thFix(b){b=({oled:'black',solid:'navy',aurora:'purple',forest:'green',ocean:'navy',ember:'charcoal',rose:'purple',sunset:'sand',yellow:'sand',sage:'mint',meadow:'mint',lagoon:'blue',lavender:'blue',light:'white'})[b]||b;return TH_OK.includes(b)?b:'sand'}
+function thFix(b){return TH_OK.includes(b)?b:'sand'}
 async function cbRestoreNow(){const x=await cbFetch();cbApply(x)}
 /* ---------- data safety: restore, panel, recovery on start ---------- */
 function restoreFrom(r){
@@ -2429,7 +2493,7 @@ function restoreFrom(r){
   D.set=Object.assign({},DEF,r.set);D.set.sndMode='soft';
   D.set.bg=thFix(D.set.bg);
   D.missed||={};D.missedStreak||={};D.review||={};D.fails||={};D.chains||=[];
-  save();flushSave();deck=[];deckSig='';prev=null;
+  save();flushSave();prev=null;
   applyAcc();syncUI();TM.sp=!!set().tsplit;tmModeSync();try{maSync()}catch(_){}
 }
 const VWHY={'clear-stats':'Before clearing stats','clear-words':'Before clearing words','factory-reset':'Before factory reset','cloud-restore':'Before cloud restore','restore':'Before restoring a copy','import':'Before an import','manual':'Saved by you'};
@@ -2557,14 +2621,6 @@ function tn(f,t,d,type,v,f2){
   g.gain.setValueAtTime(0.0001,t);g.gain.linearRampToValueAtTime(v,t+.003);g.gain.exponentialRampToValueAtTime(0.0001,t+d);
   o.connect(g);g.connect(TD||MG);o.start(t);o.stop(t+d+.02);
 }
-let NB=null;
-function nz(t,d,f,q,v,type){
-  if(!NB){NB=AC.createBuffer(1,AC.sampleRate*.3|0,AC.sampleRate);const b=NB.getChannelData(0);for(let i=0;i<b.length;i++)b[i]=Math.random()*2-1}
-  const s=AC.createBufferSource(),fl=AC.createBiquadFilter(),g=AC.createGain();
-  s.buffer=NB;fl.type=type||'bandpass';fl.frequency.value=f;fl.Q.value=q||1;
-  g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);
-  s.connect(fl);fl.connect(g);g.connect(TD||MG);s.start(t);s.stop(t+d+.02);
-}
 /* ---------- sound styles: every interface event is voiced per style; the intro score is the same in all of them ---------- */
 const VOICES={
   soft:(n,t)=>{switch(n){
@@ -2630,7 +2686,7 @@ function renderHeat(){
   paintHeat(liveCtx());
   hmPulse(g);
   $('#hmi').textContent='Hover or tap a cell for details. Click a row or column letter to drill it. Recent attempts count most.';$('#hmdrill').style.display='none';hmSel=null;
-  $('#hl').innerHTML='<span style="color:#4ADE80">Fast under '+set().tf+'s</span>, <span style="color:#FBBF24">medium up to '+set().tm+'s</span>, <span style="color:#F87171">slow above that</span>, <span style="color:#FCA5A5;background:#5A0B14;padding:0 .35em;border-radius:3px">× darkest red</span> failed (clears after two clean recalls). The outlined edge cells are row and column averages.';
+  $('#hl').innerHTML='<span class="hlc" style="--c:#4ADE80">Fast under '+set().tf+'s</span><span class="hlc" style="--c:#FBBF24">Medium up to '+set().tm+'s</span><span class="hlc" style="--c:#F87171">Slower</span><span class="hlc hlf" style="--c:#5A0B14">\u00d7 Failed</span><div class="hmnote">Failed clears after two clean recalls. The outlined edge cells are row and column averages. Dark cells are untested.</div>';
   tlInit();
 }
 /* soft pulse on the cell of your most recent single-pair attempt, once the grid has finished revealing */
@@ -2663,7 +2719,7 @@ function hmInfo(e){
   if(e.type==='click'&&(d.p||d.r||d.c||d.all))snd('select');
   const c=hmCtx||liveCtx(),info=$('#hmi'),bt=$('#hmdrill');
   const sk=(d.hr||d.r)?['first',d.hr||d.r]:(d.hc||d.c)?['second',d.hc||d.c]:null;
-  if(sk){hmSel=sk;bt.textContent='Drill '+(sk[0]==='first'?sk[1]+'_':'_'+sk[1])+' pairs';bt.style.display='inline-block'}
+  if(sk){hmSel=sk;bt.textContent='Drill '+(sk[0]==='first'?sk[1]+'_':'_'+sk[1])+' pairs';bt.style.display='flex';bt.classList.remove('pop');void bt.offsetWidth;bt.classList.add('pop')}
   else if(d.p||d.all){hmSel=null;bt.style.display='none'}
   if(d.hr||d.hc){info.textContent='Click to drill every '+(d.hr?d.hr+'_':'_'+d.hc)+' pair.';return}
   if(d.p){
@@ -2704,6 +2760,7 @@ function tlCtx(i){
 }
 function tlSync(){
   const r=$('#tlr'),i=+r.value,max=+r.max;
+  r.style.setProperty('--p',(max>0?i/max*100:100)+'%');$('#tl').classList.toggle('islive',i>=max);
   if(i>=max){paintHeat(liveCtx());$('#tld').textContent='Today (live)'}
   else{paintHeat(tlCtx(i));const d=new Date(tlFirst);d.setDate(d.getDate()+i);$('#tld').textContent=d.toLocaleDateString('en-GB',{day:'numeric',month:'short'})}
 }
@@ -2775,7 +2832,7 @@ function slowest(){
   D.hist.forEach(h=>{if(h.d>=cut&&h.p.indexOf(' ')<0){const o=m[h.p]||(m[h.p]={n:0,s:0});o.n++;o.s+=h.t}});
   return Object.keys(m).map(k=>({k:k,n:m[k].n,a:m[k].s/m[k].n})).sort((x,y)=>y.a-x.a).slice(0,10);
 }
-let stTab='session',stDr={};
+let stTab='session',stDr={};const stSeen=new Set();
 const STH={session:'Session',overall:'Overall',pairs:'Pairs'};
 const stDur=ms=>{const t=Math.round(ms/1000);return t<60?t+'s':Math.floor(t/60)+'m '+String(t%60).padStart(2,'0')+'s'};
 const stN=h=>h.p.split(' ').length;
@@ -2882,7 +2939,7 @@ function stPairs(){
   o+=stBlk(2,'Slowest of all time',slowAll.length?'<button class="primary drillbtn" type="button" data-drill="slowAll" data-lbl="slowest pairs, all time">Drill these '+slowAll.length+'</button>'+hd+rows(slowAll)+'<div class="mut" style="margin-top:.4rem">Pairs with at least 3 attempts.</div>':emp('clock','Needs a few attempts per pair first.'));
   o+=stBlk(3,'Fastest of all time',fastAll.length?hd+rows(fastAll):emp('clock','Needs a few attempts per pair first.'));
   o+=stBlk(4,'Most failed',failed.length?'<div class="lr hd"><span>#</span><span>Pair</span><span>Word</span><span>Fails</span></div>'+rows(failed,r=>[r.c,'var(--r)']):emp('check','No failed pairs recorded.'));
-  o+=stBlk(5,'Weak pairs',wk.length?chips(wk.sort().map(k=>k+(D.streak[k]?' <small>'+D.streak[k]+'/3</small>':''))):emp('check','No weak pairs flagged. Nice.'));
+  o+=stBlk(5,'Weak pairs',wk.length?chips(wk.sort().map(k=>k+(D.streak[k]?' <small>'+D.streak[k]+'/2</small>':''))):emp('check','No weak pairs flagged. Nice.'));
   o+=stBlk(6,'Missed-word pairs',missed.length?chips(missed.sort()):emp('check','Nothing waiting for review.'));
   o+=stBlk(7,'Due for review',due.length?'<button class="primary drillbtn" type="button" data-drill="due" data-lbl="pairs due for review">Drill the '+stDr.due.length+' most overdue</button>'+chips(due.slice(0,24))+(due.length>24?'<div class="mut" style="margin-top:.4rem">and '+(due.length-24)+' more</div>':''):emp('check','Nothing due right now.'));
   return o;
@@ -2911,7 +2968,9 @@ function renderStats(){
   if(set().zen){b.innerHTML='<div class="mut">Zen mode is on. Turn it off in settings to see stats.</div>';return}
   stDr={};
   const tabs='<div class="seg">'+Object.keys(STH).map(k=>'<button type="button" data-st="'+k+'"'+(k===stTab?' class="on"':'')+'>'+STH[k]+'</button>').join('')+'</div>';
-  b.innerHTML=tabs+(stTab==='overall'?stOverall():stTab==='pairs'?stPairs():stSession());stCount(b);
+  b.innerHTML=tabs+(stTab==='overall'?stOverall():stTab==='pairs'?stPairs():stSession());
+  /* the count-up only plays the first time each tab is shown since the stats panel was opened */
+  if(!stSeen.has(stTab)){stSeen.add(stTab);stCount(b)}
 }
 $('#sb').addEventListener('click',e=>{
   const t=e.target.closest('[data-st]');if(t){stTab=t.dataset.st;renderStats();$('#drawer .box').scrollTop=0;return}
@@ -3415,6 +3474,7 @@ function maSync(){
   maLbl.textContent=last?'Last solve':'This scramble';
   maEl.classList.toggle('last',last);
   maLive();
+  if(rev&&!maEl.classList.contains('kok'))setTimeout(()=>maEl.classList.add('kok'),350);   /* the key hint only appears once the answer has been revealed for the first time */
   maKey.textContent=last?'[V] see this scramble':MS.peek?(TM.s==='stop'&&MS.prev?'[V] back to last solve':'[V] hide'):'[V] peek';
 }
 function maToggle(){
@@ -3844,9 +3904,9 @@ tcEl.addEventListener('dblclick',()=>{
     box.appendChild(b);
   }
   const st=$('.tstars');
-  for(let i=0;i<70;i++){
-    const d=document.createElement('b'),sz=1+Math.random()*1.8;
-    d.style.cssText='left:'+(Math.random()*100).toFixed(1)+'%;top:'+(Math.random()*78).toFixed(1)+'%;width:'+sz.toFixed(1)+'px;height:'+sz.toFixed(1)+'px;--o:'+(.25+Math.random()*.6).toFixed(2)+';animation-duration:'+(3+Math.random()*6).toFixed(1)+'s;animation-delay:-'+(Math.random()*9).toFixed(1)+'s';
+  for(let i=0;i<15;i++){
+    const d=document.createElement('b'),sz=3+Math.random()*3;
+    d.style.cssText='left:'+(Math.random()*100).toFixed(1)+'%;top:'+(Math.random()*78).toFixed(1)+'%;width:'+sz.toFixed(1)+'px;height:'+sz.toFixed(1)+'px;--o:'+(.07+Math.random()*.13).toFixed(2)+';animation-duration:'+(14+Math.random()*10).toFixed(1)+'s;animation-delay:-'+(Math.random()*20).toFixed(1)+'s';
     st.appendChild(d);
   }
 })();

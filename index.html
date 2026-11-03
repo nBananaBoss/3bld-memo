@@ -8,7 +8,7 @@
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<script>try{var _d=JSON.parse(localStorage.getItem('bld-pairs-v1')||'null'),_b=(_d&&_d.set&&_d.set.bg)||'forest',_h=document.documentElement;_h.dataset.bg=_b;_h.dataset.font=(_d&&_d.set&&_d.set.font)||'jb';_h.dataset.lt=['sunset','sage','meadow','lagoon','lavender','light'].indexOf(_b)>-1?'1':'0';_h.dataset.anim=['oled','solid','light'].indexOf(_b)>-1?'0':'1'}catch(e){}</script>
+<script>try{var _d=JSON.parse(localStorage.getItem('bld-pairs-v1')||'null'),_b=(_d&&_d.set&&_d.set.bg)||'sand',_b=({oled:'black',solid:'navy',aurora:'purple',forest:'green',ocean:'navy',ember:'charcoal',rose:'purple',sunset:'sand',yellow:'sand',sage:'mint',meadow:'mint',lagoon:'blue',lavender:'blue',light:'white'})[_b]||_b,_h=document.documentElement;_h.dataset.bg=_b;_h.dataset.font=(_d&&_d.set&&_d.set.font)||'jb';_h.dataset.lt=['white','grey','sand','blue','mint'].indexOf(_b)>-1?'1':'0';_h.dataset.anim='0'}catch(e){}</script>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Mono:wght@400;700&family=Martian+Mono:wght@400;500;600&family=Share+Tech+Mono&family=Courier+Prime:wght@400;700&family=VT323&family=Space+Grotesk:wght@400;500;600&family=Sora:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 /* =====================================================================================================
@@ -92,20 +92,19 @@ textarea{width:100%;height:7rem;font-size:.75rem;user-select:text;-webkit-user-s
 .ov.out{display:flex;pointer-events:none}
 #word.pop{animation:wp .24s cubic-bezier(.2,.7,.25,1)}
 @keyframes wp{from{opacity:0;transform:translateY(9px);filter:blur(3px)}}
-html[data-bg=oled]{--bg:#000;--panel:#0A0A0A;--line:#1F1F1F}
 :root{--g:#4ADE80;--y:#FBBF24;--r:#F87171}
 html[data-lt="1"]{color-scheme:light;--fg:#1C1B1A;--muted:#6B6560;--g:#15803D;--y:#B45309;--r:#B91C1C}
-html[data-bg=aurora]{--bg:#07080F;--panel:#0F1220;--line:#1E2340;--acc:#B79CFF;--on:#140A33;--b1:#4C2A9E;--b2:#12307A;--b3:#2E1A66;--bo:.55}
-html[data-bg=forest]{--bg:#06140E;--panel:#0C2018;--line:#1A3B2D;--fg:#E3F1E8;--muted:#8FB3A0;--acc:#7DE8A3;--on:#052416;--b1:#14532D;--b2:#0F766E;--b3:#365314;--bo:.55}
-html[data-bg=ocean]{--bg:#061219;--panel:#0B1F2B;--line:#173547;--fg:#DDEBF2;--muted:#86A8BA;--acc:#4FD1E8;--on:#04222B;--b1:#0E7490;--b2:#1E3A8A;--b3:#115E59;--bo:.5}
-html[data-bg=ember]{--bg:#140A07;--panel:#201210;--line:#3A2019;--fg:#F3E3DC;--muted:#B39588;--acc:#FF9F6B;--on:#2B1105;--b1:#9A3412;--b2:#7F1D1D;--b3:#78350F;--bo:.5}
-html[data-bg=rose]{--bg:#130A12;--panel:#1F1220;--line:#3A2140;--fg:#F2E3F0;--muted:#B392B0;--acc:#F9A8D4;--on:#2A0B20;--b1:#9D174D;--b2:#6B21A8;--b3:#831843;--bo:.5}
-html[data-bg=sunset]{--bg:#FFF1E2;--panel:#FFFAF4;--line:#EFD6BF;--fg:#2A1810;--muted:#7A5F4F;--acc:#C2410C;--on:#fff;--g:#166534;--y:#92400E;--r:#B91C1C;--b1:#F58A5B;--b2:#FFC9A3;--b3:#FFDDB8;--bo:.6}
-html[data-bg=sage]{--bg:#F1EEDC;--panel:#FBF9EE;--line:#D5D2B6;--fg:#14231A;--muted:#566A5C;--acc:#166534;--on:#fff;--g:#14532D;--y:#854D0E;--r:#991B1B;--b1:#A9C49A;--b2:#86AE92;--b3:#E8DDBD;--bo:.45}
-html[data-bg=meadow]{--bg:#F6FBEA;--panel:#FFFFFF;--line:#DCE8C4;--fg:#18230F;--muted:#5C6B49;--acc:#4D7C0F;--on:#fff;--g:#3F6212;--y:#854D0E;--r:#B91C1C;--b1:#BEF264;--b2:#86EFAC;--b3:#FDE68A;--bo:.5}
-html[data-bg=lagoon]{--bg:#EEF9FA;--panel:#FFFFFF;--line:#CBE6EA;--fg:#0E2A33;--muted:#4F6F7A;--acc:#0E7490;--on:#fff;--g:#0F766E;--y:#92400E;--r:#B91C1C;--b1:#7DD3FC;--b2:#5EEAD4;--b3:#BAE6FD;--bo:.5}
-html[data-bg=lavender]{--bg:#F6F1FC;--panel:#FFFFFF;--line:#E2D6F3;--fg:#241838;--muted:#6B5A86;--acc:#6D28D9;--on:#fff;--g:#166534;--y:#92400E;--r:#BE123C;--b1:#C4B5FD;--b2:#F9A8D4;--b3:#DDD6FE;--bo:.5}
-html[data-bg=light]{--bg:#FAFAF8;--panel:#FFFFFF;--line:#E3E3DE;--acc:#0E7490;--on:#fff}
+/* THEMES: two main colours each (base + accent). Dark: black charcoal navy green purple. Light: sand white grey blue mint. */
+html[data-bg=black]{--bg:#000;--panel:#0A0A0A;--line:#222;--fg:#E8E8E8;--muted:#9C9C9C;--acc:#67E8F9;--on:#00252C;--b1:#0E7490;--b2:#155E75;--b3:#0891B2}
+html[data-bg=charcoal]{--bg:#1A1A1D;--panel:#222226;--line:#34343A;--fg:#EAEAEC;--muted:#A2A2AA;--acc:#FBBF24;--on:#2A1C00;--b1:#B45309;--b2:#92400E;--b3:#CA8A04}
+html[data-bg=navy]{--bg:#0A1224;--panel:#111C33;--line:#223356;--fg:#E4EAF5;--muted:#92A3C2;--acc:#60A5FA;--on:#06182E;--b1:#1D4ED8;--b2:#1E40AF;--b3:#2563EB}
+html[data-bg=green]{--bg:#0A1410;--panel:#111F18;--line:#1F3829;--fg:#E5F1EA;--muted:#92B09E;--acc:#4ADE80;--on:#052514;--b1:#15803D;--b2:#166534;--b3:#16A34A}
+html[data-bg=purple]{--bg:#120E1E;--panel:#1A1529;--line:#2E2547;--fg:#EEEAF7;--muted:#A69BC5;--acc:#C4B5FD;--on:#1B0F40;--b1:#6D28D9;--b2:#5B21B6;--b3:#7C3AED}
+html[data-bg=white]{--bg:#FAFAF8;--panel:#FFFFFF;--line:#E3E3DE;--acc:#0E7490;--on:#fff}
+html[data-bg=grey]{--bg:#EBEBEB;--panel:#F6F6F6;--line:#D2D2D2;--fg:#1D1D1F;--muted:#5C5C63;--acc:#C2410C;--on:#fff}
+html[data-bg=sand]{--bg:#FBF3CF;--panel:#FFFBE6;--line:#E6D9A3;--fg:#2A2410;--muted:#665B33;--acc:#B45309;--on:#fff;--y:#854D0E}
+html[data-bg=blue]{--bg:#E9F1FB;--panel:#F7FAFE;--line:#C9DAF0;--fg:#10243D;--muted:#48607F;--acc:#1D4ED8;--on:#fff}
+html[data-bg=mint]{--bg:#E8F6EE;--panel:#F6FCF8;--line:#C4E3D1;--fg:#0F2A1C;--muted:#46664F;--acc:#15803D;--on:#fff}
 [style*="#4ADE80"]{color:var(--g)!important}[style*="#FBBF24"]{color:var(--y)!important}[style*="#F87171"]{color:var(--r)!important}
 #time.r0{color:var(--g)}#time.r1{color:var(--y)}#time.r2{color:var(--r)}
 
@@ -452,8 +451,14 @@ body.ready #top button:nth-child(6){animation-delay:.4s}
 .tcfloat{perspective:1200px;animation:tcbob 7s ease-in-out infinite}
 @keyframes tcbob{50%{transform:translateY(-6px)}}
 .tc3d{position:relative;width:var(--cs);height:var(--cs);transform-style:preserve-3d;will-change:transform}
-.tcshadow{position:absolute;left:50%;bottom:3%;width:62%;height:11%;margin-left:-31%;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.45),transparent);}
-.tf{position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:calc(var(--cs) * .007);padding:calc(var(--cs) * .004);background:#2d2d33;border-radius:calc(var(--cs) * .06);backface-visibility:hidden;-webkit-backface-visibility:hidden}
+/* contact shadow: the cube's real footprint (a soft rounded square) laid flat on the floor.
+   It turns with the cube (--sy is set from tcApply) and breathes with the idle bob. */
+.tcshadow{--sy:38deg;position:absolute;left:50%;top:calc(var(--cs) * 1.43 - var(--cs) * .45);width:calc(var(--cs) * .9);height:calc(var(--cs) * .9);margin-left:calc(var(--cs) * -.45);border-radius:14%;background:rgba(0,0,0,.28);pointer-events:none;
+  box-shadow:0 0 calc(var(--cs) * .12) calc(var(--cs) * .02) rgba(0,0,0,.2),0 0 calc(var(--cs) * .28) calc(var(--cs) * .07) rgba(0,0,0,.11);
+  transform:perspective(calc(var(--cs) * 5)) rotateX(76deg) rotateZ(var(--sy)) scale(var(--ss,1));will-change:transform,scale,opacity;animation:tcsh 7s ease-in-out infinite}
+@keyframes tcsh{50%{scale:.93;opacity:.78}}
+html[data-lt="1"] .tcshadow{opacity:.85}
+.tf{position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:calc(var(--cs) * .007);padding:calc(var(--cs) * .004);background:#2d2d33;border-radius:calc(var(--cs) * .034);backface-visibility:hidden;-webkit-backface-visibility:hidden}
 .tf::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(65% 65% at var(--gx,30%) var(--gy,20%),rgba(255,255,255,var(--gi,.06)),transparent 75%),linear-gradient(rgba(0,0,0,var(--gd,.1)),rgba(0,0,0,var(--gd,.1)))}
 .tcore{position:absolute;inset:0;transform-style:preserve-3d;pointer-events:none}
 .tcore b{position:absolute;inset:0;background:#2d2d33;backface-visibility:hidden;-webkit-backface-visibility:hidden;--z:calc(var(--cs) * .485)}
@@ -478,28 +483,28 @@ body.ready #top button:nth-child(6){animation-delay:.4s}
 /* scramble playback cube: 26 real cubies so layers can actually turn */
 .tcb{--s:calc(var(--cs) / 3);position:absolute;inset:0;transform-style:preserve-3d;pointer-events:none}
 .cb{will-change:transform;position:absolute;left:50%;top:50%;width:var(--s);height:var(--s);margin:calc(var(--s) / -2) 0 0 calc(var(--s) / -2);transform-style:preserve-3d}
-.cf{position:absolute;inset:0;border-radius:calc(var(--s) * .18);background:#2d2d33;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.cf{position:absolute;inset:0;border-radius:calc(var(--s) * .1);background:#2d2d33;backface-visibility:hidden;-webkit-backface-visibility:hidden}
 .cf-f{transform:translateZ(calc(var(--s) / 2))}
 .cf-b{transform:rotateY(180deg) translateZ(calc(var(--s) / 2))}
 .cf-r{transform:rotateY(90deg) translateZ(calc(var(--s) / 2))}
 .cf-l{transform:rotateY(-90deg) translateZ(calc(var(--s) / 2))}
 .cf-u{transform:rotateX(90deg) translateZ(calc(var(--s) / 2))}
 .cf-d{transform:rotateX(-90deg) translateZ(calc(var(--s) / 2))}
-.cc{position:absolute;inset:6%;background:#2d2d33;backface-visibility:hidden;-webkit-backface-visibility:hidden}
-.cc-f{transform:translateZ(calc(var(--s) * .44))}
-.cc-b{transform:rotateY(180deg) translateZ(calc(var(--s) * .44))}
-.cc-r{transform:rotateY(90deg) translateZ(calc(var(--s) * .44))}
-.cc-l{transform:rotateY(-90deg) translateZ(calc(var(--s) * .44))}
-.cc-u{transform:rotateX(90deg) translateZ(calc(var(--s) * .44))}
-.cc-d{transform:rotateX(-90deg) translateZ(calc(var(--s) * .44))}
-.cf .st{position:absolute;inset:1.6%;border-radius:calc(var(--cs) * .03);background:radial-gradient(195% 195% at var(--gx,30%) var(--gy,20%),rgba(255,255,255,var(--gi,.06)),transparent 75%),linear-gradient(rgba(0,0,0,var(--gd,.1)),rgba(0,0,0,var(--gd,.1))),radial-gradient(120% 90% at 26% 8%,rgba(255,255,255,.2),rgba(255,255,255,0) 55%),linear-gradient(155deg,rgba(255,255,255,.13),rgba(255,255,255,0) 45%,rgba(0,0,0,.1)),var(--c);box-shadow:inset 0 0 0 .5px rgba(0,0,0,.2),inset 0 calc(var(--cs) * .004) calc(var(--cs) * .006) rgba(255,255,255,.3),inset 0 calc(var(--cs) * -.01) calc(var(--cs) * .02) rgba(0,0,0,.12)}
+.cc{position:absolute;inset:0;background:#2d2d33;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.cc-f{transform:translateZ(calc(var(--s) * .455))}
+.cc-b{transform:rotateY(180deg) translateZ(calc(var(--s) * .455))}
+.cc-r{transform:rotateY(90deg) translateZ(calc(var(--s) * .455))}
+.cc-l{transform:rotateY(-90deg) translateZ(calc(var(--s) * .455))}
+.cc-u{transform:rotateX(90deg) translateZ(calc(var(--s) * .455))}
+.cc-d{transform:rotateX(-90deg) translateZ(calc(var(--s) * .455))}
+.cf .st{position:absolute;inset:1.6%;border-radius:calc(var(--s) * .09);background:radial-gradient(195% 195% at var(--gx,30%) var(--gy,20%),rgba(255,255,255,var(--gi,.06)),transparent 75%),linear-gradient(rgba(0,0,0,var(--gd,.1)),rgba(0,0,0,var(--gd,.1))),radial-gradient(120% 90% at 26% 8%,rgba(255,255,255,.2),rgba(255,255,255,0) 55%),linear-gradient(155deg,rgba(255,255,255,.13),rgba(255,255,255,0) 45%,rgba(0,0,0,.1)),var(--c);box-shadow:inset 0 0 0 .5px rgba(0,0,0,.2),inset 0 calc(var(--cs) * .004) calc(var(--cs) * .006) rgba(255,255,255,.3),inset 0 calc(var(--cs) * -.01) calc(var(--cs) * .02) rgba(0,0,0,.12)}
 .cf .st.gan::after{content:"";position:absolute;inset:0;background:var(--cap-logo) center/64% no-repeat}
 @media (min-width:900px){
   .tmmain{flex-direction:row;gap:clamp(2rem,6vw,6rem)}
   .tcube{--cs:clamp(190px,21vw,280px);margin-top:0}
 }
 @media (max-height:640px){.tcube{display:none}}
-@media (prefers-reduced-motion:reduce){.tcfloat{animation:none!important}.tf i{animation:none!important}}
+@media (prefers-reduced-motion:reduce){.tcfloat,.tcshadow{animation:none!important}.tf i{animation:none!important}}
 /* ---------- blindfold refinement: padded woven fabric that wraps cleanly around cube corners ---------- */
 .ibelt{
   left:-5px;
@@ -592,7 +597,7 @@ html[data-lt="1"] .tbg i{mix-blend-mode:normal;}
 @media (prefers-reduced-motion:reduce){.taur,.tbg::before,.tstars b{animation:none!important}.tstars b{opacity:.4}}
 
 /* =====================================================================
-   LIGHT THEMES (sage, meadow, sunset, lagoon, lavender, light):
+   LIGHT THEMES (sand, white, grey, blue, mint):
    much more visible, built for pale backgrounds
    ===================================================================== */
 html[data-lt="1"] .taur{mix-blend-mode:normal;
@@ -766,7 +771,6 @@ html[data-lt="1"] .tgrid::before{background-image:linear-gradient(color-mix(in s
    (On light themes it was white noise multiplied onto the page, which does nothing visible.) */
 .tgrain{mix-blend-mode:normal!important;opacity:.045}
 html[data-lt="1"] .tgrain{display:none}
-.tcshadow{filter:none}
 /* the main page's background sits fully hidden under the timer, so it rests while the timer is open */
 html.tmon #bgfx{visibility:hidden}
 html.tmon #bgfx i{animation-play-state:paused}
@@ -852,7 +856,7 @@ body:not(:has(#pair.idle)) #idlefx b{animation-play-state:paused}
 /* film grain on the main page too */
 #grain{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.045;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
 html[data-lt="1"] #grain{opacity:.035;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
-html[data-bg=oled] #grain{display:none}
+html[data-bg=black] #grain{display:none}
 /* scrollbars warm up on hover */
 .box:hover{scrollbar-color:color-mix(in srgb,var(--acc) 50%,var(--line)) transparent}
 /* empty states */
@@ -881,8 +885,7 @@ html[data-lt="1"] #timer.isrun .tbg{opacity:.85}
 .ov.on.sl{animation:none;-webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3)}
 .ov.on.sl .box{animation:none}
 html.slbusy .ov.on .box{pointer-events:none}
-/* Deep forest: moss halo behind the pair while it runs, fireflies on the idle screen */
-html[data-bg=forest] #pair.run{box-shadow:0 0 0 1px color-mix(in srgb,var(--acc) 35%,transparent),0 0 40px color-mix(in srgb,var(--acc) 18%,transparent),0 0 140px 10px color-mix(in srgb,#14532D 55%,transparent)}
+/* themes: see the html[data-bg=...] block near the top */
 body:not(:has(#pair.idle)) #idlefx i{animation-play-state:paused}
 @keyframes ffly{0%{opacity:0;transform:translate(0,0)}20%{opacity:var(--o,.5)}50%{opacity:calc(var(--o,.5) * .35);transform:translate(var(--dx,30px),var(--dy,-20px))}80%{opacity:var(--o,.5)}100%{opacity:0;transform:translate(calc(var(--dx,30px) * 1.6),calc(var(--dy,-20px) * .4))}}
 /* result wash: a soft edge tint after each pair (green / amber / red) */
@@ -892,10 +895,6 @@ body:not(:has(#pair.idle)) #idlefx i{animation-play-state:paused}
 @keyframes washa{0%{opacity:0}18%{opacity:1}100%{opacity:0}}
 @media (prefers-reduced-motion:reduce){#wash{display:none}}
 /* light themes: each one leads with a single dominant colour */
-html[data-bg=sunset] #bgfx i,html[data-bg=meadow] #bgfx i,html[data-bg=lavender] #bgfx i,html[data-bg=sage] #bgfx i,html[data-bg=lagoon] #bgfx i{opacity:calc(var(--bo,.5) * .65)}
-html[data-bg=sunset] #bgfx i:nth-child(1),html[data-bg=meadow] #bgfx i:nth-child(1),html[data-bg=lavender] #bgfx i:nth-child(1),html[data-bg=sage] #bgfx i:nth-child(2),html[data-bg=lagoon] #bgfx i:nth-child(2){opacity:min(.9,calc(var(--bo,.5) * 1.4))}
-html[data-bg=sunset] .tbg i,html[data-bg=meadow] .tbg i,html[data-bg=lavender] .tbg i,html[data-bg=sage] .tbg i,html[data-bg=lagoon] .tbg i{opacity:.34}
-html[data-bg=sunset] .tbg i:nth-child(1),html[data-bg=meadow] .tbg i:nth-child(1),html[data-bg=lavender] .tbg i:nth-child(1),html[data-bg=sage] .tbg i:nth-child(2),html[data-bg=lagoon] .tbg i:nth-child(2){opacity:.8}
 
 /* ---------- round 5 ---------- */
 #pair .hint{display:inline-block;transition:opacity .32s ease,transform .32s ease}
@@ -903,14 +902,6 @@ html[data-bg=sunset] .tbg i:nth-child(1),html[data-bg=meadow] .tbg i:nth-child(1
 #pair .hint.pre{opacity:0;transform:translateY(8px)}
 /* idle particles, one faint kind per theme */
 #idlefx i{display:none;position:absolute;opacity:0;width:calc(3px + var(--k,.5) * 2px);height:calc(3px + var(--k,.5) * 2px);border-radius:50%;animation:ffly var(--t,12s) ease-in-out var(--d,0s) infinite}
-html[data-bg=forest] #idlefx i{display:block;background:radial-gradient(circle,#fff 0,color-mix(in srgb,var(--acc) 80%,#fff) 40%,transparent 72%);box-shadow:0 0 10px 3px color-mix(in srgb,var(--acc) 50%,transparent)}
-html[data-bg=aurora] #idlefx i,html[data-bg=lavender] #idlefx i,html[data-bg=oled] #idlefx i{display:block;background:color-mix(in srgb,var(--acc) 40%,#fff);animation-name:twinkle}
-html[data-bg=aurora] #idlefx i,html[data-bg=oled] #idlefx i{box-shadow:0 0 6px 1px color-mix(in srgb,var(--acc) 45%,transparent)}
-html[data-bg=ocean] #idlefx i,html[data-bg=lagoon] #idlefx i{display:block;width:calc(6px + var(--k,.5) * 10px);height:calc(6px + var(--k,.5) * 10px);background:radial-gradient(circle at 32% 30%,color-mix(in srgb,#fff 55%,transparent),transparent 45%);border:1.2px solid color-mix(in srgb,var(--acc) 55%,transparent);animation-name:rise;animation-duration:calc(var(--t,12s) * 1.1)}
-html[data-bg=ember] #idlefx i{display:block;width:3px;height:3px;background:color-mix(in srgb,var(--acc) 85%,#fff);box-shadow:0 0 7px 2px color-mix(in srgb,var(--acc) 55%,transparent);animation-name:rise;animation-duration:calc(var(--t,12s) * .6)}
-html[data-bg=rose] #idlefx i,html[data-bg=sage] #idlefx i{display:block;width:calc(6px + var(--k,.5) * 4px);height:calc(4px + var(--k,.5) * 3px);border-radius:70% 0 70% 0;background:color-mix(in srgb,var(--acc) 55%,transparent);animation-name:fall}
-html[data-bg=sunset] #idlefx i{display:block;background:color-mix(in srgb,var(--acc) 70%,transparent);filter:blur(1px);animation-name:rise;animation-duration:calc(var(--t,12s) * 1.4)}
-html[data-bg=meadow] #idlefx i,html[data-bg=light] #idlefx i{display:block;background:color-mix(in srgb,var(--acc) 60%,transparent)}
 @keyframes rise{0%{opacity:0;transform:translate(0,24px) scale(.8)}15%{opacity:var(--o,.5)}85%{opacity:var(--o,.5)}100%{opacity:0;transform:translate(var(--dx,20px),-110px) scale(1.05)}}
 @keyframes fall{0%{opacity:0;transform:translate(0,-30px) rotate(0deg)}15%{opacity:var(--o,.5)}85%{opacity:var(--o,.5)}100%{opacity:0;transform:translate(var(--dx,30px),120px) rotate(200deg)}}
 @keyframes twinkle{0%,100%{opacity:0;transform:scale(.6)}50%{opacity:var(--o,.6);transform:scale(1.15)}}
@@ -1484,6 +1475,98 @@ html[data-lt="1"] #settings .btns .danger{color:var(--r);border-color:color-mix(
 html #settings .btns .danger.solid{background-color:#DC2626;color:#fff;border-color:#DC2626}
 html #settings .btns .danger.solid:hover{background-color:#EF4444;border-color:#EF4444}
 @media(max-width:520px){#settings .box{padding:0 1rem 2rem}#settings .shead{margin:0 -1rem;padding:1rem 1rem .7rem}.snav{margin:0 -1rem;padding-left:1rem;padding-right:1rem}}
+
+/* ---------- all pages: one header, one Close pill, one card language (settings, timer and main page are handled elsewhere) ---------- */
+.ov:not(#timer) .box>h2,.ov:not(#timer) .box>h2 .row{align-items:center}
+.ov:not(#timer):not(#settings) .box>h2{font-size:1.45rem;font-weight:700;letter-spacing:-.01em}
+.ov:not(#timer) .box>h2 button{font-size:.76rem;font-weight:500;letter-spacing:.02em;padding:.4em 1em;border-radius:999px;color:var(--muted);border-color:color-mix(in srgb,var(--fg) 20%,var(--line));background-color:color-mix(in srgb,var(--fg) 5%,transparent)}
+.ov:not(#timer) .box>h2 button:hover{color:var(--fg);border-color:var(--acc);background-color:color-mix(in srgb,var(--acc) 10%,transparent)}
+/* long pages keep their title and Close in reach while you scroll */
+#drawer .box,#help .box,#chain .box,#sloc .box,#wd .box{--bx:1.2rem;--bt:1.2rem}
+#help .box{--bx:1.3rem;--bt:1.4rem}
+#drawer .box,#help .box,#chain .box,#sloc .box,#wd .box{padding-top:0}
+#drawer .box>h2,#help .box>h2,#chain .box>h2,#sloc .box>h2,#wd .box>h2{position:sticky;top:0;z-index:6;margin:0 calc(var(--bx) * -1) .9rem;padding:var(--bt) var(--bx) .75rem;background:color-mix(in srgb,var(--panel) 97%,transparent);-webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4);border-bottom:1px solid color-mix(in srgb,var(--fg) 9%,transparent)}
+
+/* shared card + form controls */
+.card{background:color-mix(in srgb,var(--fg) 4.5%,var(--panel));border:1px solid color-mix(in srgb,var(--fg) 14%,var(--line));border-radius:16px;overflow:hidden;margin:.9rem 0;box-shadow:0 1px 0 0 color-mix(in srgb,var(--fg) 7%,transparent) inset,0 10px 28px -18px rgba(0,0,0,.55)}
+.card .slrow{padding:.8rem 1.1rem;border-bottom:1px solid color-mix(in srgb,var(--fg) 9%,transparent);min-height:3.4rem;flex-wrap:nowrap;transition:background-color .2s}
+.card .slrow:last-child{border-bottom:0}
+.card .slrow:hover{background:color-mix(in srgb,var(--acc) 5%,transparent)}
+.slrow .seg{display:inline-flex;flex:none;margin:0;padding:.2rem}
+.slrow .seg button{flex:none;white-space:nowrap;padding:.4em .85em}
+.ov:not(#timer):not(#settings) .fld{background:color-mix(in srgb,var(--bg) 70%,var(--panel));border:1px solid color-mix(in srgb,var(--fg) 18%,var(--line));border-radius:12px}
+.ov:not(#timer):not(#settings) select{-webkit-appearance:none;appearance:none;cursor:pointer;font-size:.88rem;padding:.5em 2.3em .5em .85em;background-color:color-mix(in srgb,var(--fg) 7%,var(--panel));border:1px solid color-mix(in srgb,var(--fg) 20%,var(--line));background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 1.15em) 52%,calc(100% - .8em) 52%;background-size:.38em .38em,.38em .38em;background-repeat:no-repeat}
+.ov:not(#timer):not(#settings) select option{background:var(--panel);color:var(--fg)}
+.ov .tg{background:color-mix(in srgb,var(--fg) 24%,var(--panel));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--fg) 22%,transparent);transition:background-color .3s var(--ease),box-shadow .3s var(--ease)}
+.ov .tg:checked{background:var(--acc);box-shadow:0 0 0 1px var(--acc),0 0 16px -2px color-mix(in srgb,var(--acc) 55%,transparent)}
+.ov .tg::after{transition:transform .3s cubic-bezier(.32,.72,0,1),width .18s ease,background-color .3s var(--ease)}
+.ov .tg:checked::after{background:var(--on)}
+.ov:not(#timer) .row>button:not(.primary):not(.danger){background-color:color-mix(in srgb,var(--fg) 6%,transparent);border-color:color-mix(in srgb,var(--fg) 20%,var(--line))}
+.ov:not(#timer) .row>button.primary,#drawer .drillbtn,.ov .slhud+*+* .primary{box-shadow:0 6px 18px -8px color-mix(in srgb,var(--acc) 70%,transparent)}
+#sloc #slsetup>.row,#wd #wdsetup>.row,#chain #chsetup>.row{margin-top:1.1rem}
+#sloc #slsetup>.row .primary,#wd #wdsetup>.row .primary,#chain #chsetup>.row .primary{width:100%;padding:.8em;font-size:.95rem}
+.slhud{padding:.55rem .8rem;border:1px solid color-mix(in srgb,var(--fg) 14%,var(--line));border-radius:12px;background:color-mix(in srgb,var(--fg) 4%,var(--panel));margin-bottom:.4rem}
+.slhud button{border-radius:999px}
+
+/* dialogs */
+#confirm .box,#imp .box{padding:1.5rem 1.4rem 1.3rem;border-radius:22px}
+#confirm .box>h2,#imp .box>h2{margin-bottom:.5rem}
+#confirm .row,#imp .row{justify-content:flex-end;margin-top:1rem}
+#confirm #cyes{border-color:color-mix(in srgb,#F87171 55%,var(--line));background-color:color-mix(in srgb,#F87171 9%,transparent)}
+#confirm #cyes:hover{background-color:color-mix(in srgb,#F87171 18%,transparent);border-color:#F87171}
+html[data-lt="1"] #confirm #cyes{color:var(--r)!important;border-color:color-mix(in srgb,var(--r) 55%,var(--line))!important}
+#lookup #lq{background:color-mix(in srgb,var(--acc) 6%,var(--panel));border-color:color-mix(in srgb,var(--acc) 40%,var(--line))}
+#lookup .row .primary{box-shadow:none}
+
+/* stats: practice calendar */
+.cal{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,1fr);gap:3px}
+.cal i,.calkey i{display:block;aspect-ratio:1;border-radius:3px;background:color-mix(in srgb,var(--fg) 7%,transparent);transition:transform .2s var(--ease)}
+.cal i:hover{transform:scale(1.35);position:relative;z-index:2}
+.cal i.fu{opacity:0}
+.cal i.now{box-shadow:0 0 0 1.5px var(--fg)}
+.cl1{background:color-mix(in srgb,var(--acc) 28%,transparent)!important}.cl2{background:color-mix(in srgb,var(--acc) 50%,transparent)!important}.cl3{background:color-mix(in srgb,var(--acc) 75%,transparent)!important}.cl4{background:var(--acc)!important}
+.calkey{display:flex;align-items:center;justify-content:flex-end;gap:3px;margin-top:.5rem;font-size:.68rem;color:var(--muted)}
+.calkey i{width:11px;aspect-ratio:1}
+.calkey span{margin:0 .3rem}
+.stblk h3{font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;gap:.6rem}
+.stblk h3::before{content:"";flex:none;width:3px;height:1em;border-radius:3px;background:var(--acc)}
+.tile{background:color-mix(in srgb,var(--fg) 4.5%,var(--panel));border-color:color-mix(in srgb,var(--fg) 14%,var(--line))}
+.trend,.pchip{border-color:color-mix(in srgb,var(--fg) 14%,var(--line))}
+
+/* ---------- smoother trainer tab switching ---------- */
+/* the animated background blobs sit under the blurred overlay, so every frame re-blurred them; they pause while any page is open (imperceptible behind the scrim) */
+html:has(.ov.on) :is(#bgfx,#idlefx,#wash,#main,#top,#sclk,#guide),html:has(.ov.on) :is(#bgfx,#idlefx,#wash,#main,#top,#sclk,#guide) *,html:has(.ov.on) :is(#bgfx,#idlefx,#wash,#main,#top,#sclk,#guide) *::before,html:has(.ov.on) :is(#bgfx,#idlefx,#wash,#main,#top,#sclk,#guide) *::after{animation-play-state:paused!important}
+/* the three trainer panels slide as flat layers: no live backdrop blur on the panel itself (it is 97% opaque anyway) */
+#sloc .box,#wd .box,#chain .box{-webkit-backdrop-filter:none;backdrop-filter:none;background-color:color-mix(in srgb,var(--panel) 97%,transparent)}
+/* sticky headers no longer blur a second layer on top of the first */
+#drawer .box>h2,#help .box>h2,#chain .box>h2,#sloc .box>h2,#wd .box>h2,#settings .shead{-webkit-backdrop-filter:none;backdrop-filter:none;background:color-mix(in srgb,var(--panel) 98%,transparent)}
+
+/* the screen blur lives on its own layer under the trainer panel, so the sliding panel never forces it to re-render */
+#sloc.on,#wd.on,#chain.on{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+#sloc.on::before,#wd.on::before,#chain.on::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;-webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3)}
+
+/* failed attempts in the stats */
+.dbar.rf{background:color-mix(in srgb,var(--r) 55%,#000);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--r) 70%,transparent)}
+.hcol.hfail{margin-left:5px;padding-left:5px;border-left:1px dashed color-mix(in srgb,var(--fg) 28%,transparent)}
+.tiles.t2{grid-template-columns:repeat(2,1fr)}
+
+/* ---------- themes v2: flat main screen (no glow), clearer idle prompt, same timer glow ---------- */
+@keyframes idleGlow{0%,100%{text-shadow:none}50%{text-shadow:none}}
+@keyframes breathe{0%,100%{opacity:.82}50%{opacity:1}}
+#pair.idle{color:color-mix(in srgb,var(--fg) 74%,var(--bg))}
+html[data-lt="0"] #pair.run{text-shadow:none;box-shadow:0 0 0 1px color-mix(in srgb,var(--acc) 26%,transparent),0 16px 44px -16px color-mix(in srgb,var(--acc) 40%,transparent)}
+html[data-lt="0"] #pair.run::after{background:radial-gradient(closest-side,color-mix(in srgb,var(--acc) 11%,transparent),transparent)}
+
+/* ---------- themes v3: light timer background = base + accent only (no white sheen, no gold), laid out like the dark themes ---------- */
+html[data-lt="1"] .tbg{background:radial-gradient(130% 90% at 50% 115%,color-mix(in srgb,var(--acc) 14%,var(--bg)),var(--bg) 62%)}
+html[data-lt="1"] .tbg::before{background:radial-gradient(38% 75% at 50% -8%,color-mix(in srgb,var(--acc) 10%,transparent),transparent 72%),radial-gradient(60% 30% at 50% 100%,color-mix(in srgb,var(--acc) 10%,transparent),transparent 80%)}
+html[data-lt="1"] .tbg::after{background:radial-gradient(72% 62% at 50% 46%,transparent 40%,color-mix(in srgb,var(--bg) 70%,transparent) 100%)}
+html[data-lt="1"] .tbg i{filter:none;opacity:.42}
+html[data-lt="1"] .tbg i:nth-child(1){width:60vmax;height:60vmax;left:-15vmax;right:auto;top:-22vmax;bottom:auto;animation:tb1 26s ease-in-out infinite alternate;--c:color-mix(in srgb,var(--acc) 38%,var(--bg))}
+html[data-lt="1"] .tbg i:nth-child(2){width:55vmax;height:55vmax;right:-18vmax;left:auto;top:8vh;bottom:auto;animation:tb2 32s ease-in-out infinite alternate;--c:color-mix(in srgb,var(--acc) 30%,var(--bg))}
+html[data-lt="1"] .tbg i:nth-child(3){width:50vmax;height:50vmax;left:18vw;right:auto;bottom:-30vmax;top:auto;animation:tb3 38s ease-in-out infinite alternate;--c:color-mix(in srgb,var(--acc) 34%,var(--bg))}
+html[data-lt="1"] .taur{background:conic-gradient(from 0deg,transparent 0deg,color-mix(in srgb,var(--acc) 45%,var(--bg)) 45deg,transparent 100deg,color-mix(in srgb,var(--acc) 32%,var(--bg)) 175deg,transparent 230deg,color-mix(in srgb,var(--acc) 45%,var(--bg)) 295deg,transparent 345deg);opacity:.22}
+html[data-lt="1"] .tstars b{background:color-mix(in srgb,var(--acc) 70%,var(--bg));box-shadow:0 0 8px color-mix(in srgb,var(--acc) 45%,transparent)}
 </style>
 </head>
 <body>
@@ -1525,8 +1608,8 @@ html #settings .btns .danger.solid:hover{background-color:#EF4444;border-color:#
 
 <div class="sec" id="s-practice">Practice &amp; Randomisation</div>
 <div class="grp">
-<div class="it"><span class="lb">Randomisation mode<i class="inf" tabindex="0" data-tip="Random draws from your whole letter pool. Weak focuses on pairs that are untested, slow or failed.">i</i></span>
-<select data-k="rm"><option value="irl">Random</option><option value="review">Weak</option></select></div>
+<div class="it"><span class="lb">Randomisation mode<i class="inf" tabindex="0" data-tip="Random draws from your whole letter pool. Weak focuses on pairs that are untested, slow or failed. Failed pairs serves only the pairs you have failed and not yet recalled cleanly twice.">i</i></span>
+<select data-k="rm"><option value="irl">Random</option><option value="review">Weak</option><option value="failed">Failed pairs</option></select></div>
 </div>
 <div class="grp poolgrp">
 <div class="pad poolpad">
@@ -1568,9 +1651,9 @@ html #settings .btns .danger.solid:hover{background-color:#EF4444;border-color:#
 <div class="sec" id="s-visuals">Visuals &amp; Themes</div>
 <div class="grp">
 <div class="it"><span class="lb">Font</span><select data-k="font"><option value="jb">JetBrains Mono</option><option value="plex">IBM Plex Mono</option><option value="space">Space Mono</option><option value="martian">Martian Mono (wide)</option><option value="share">Share Tech Mono</option><option value="courier">Courier Prime (typewriter)</option><option value="vt">VT323 (pixel terminal)</option><option value="grotesk">Space Grotesk (sans)</option><option value="sora">Sora (sans)</option><option value="inter">Inter (sans)</option></select></div>
-<div class="it"><span class="lb">Theme</span><select data-k="bg"><optgroup label="Dark"><option value="oled">OLED pure black</option><option value="solid">Solid dark navy</option><option value="aurora">Dark aurora</option><option value="forest">Deep forest</option><option value="ocean">Midnight ocean</option><option value="ember">Dark ember</option><option value="rose">Midnight rose</option></optgroup><optgroup label="Light"><option value="sunset">Warm sunset</option><option value="sage">Nature and sage</option><option value="meadow">Spring meadow</option><option value="lagoon">Coastal lagoon</option><option value="lavender">Lavender field</option><option value="light">Modern light minimal</option></optgroup></select></div>
+<div class="it"><span class="lb">Theme</span><select data-k="bg"><optgroup label="Dark"><option value="black">Black</option><option value="charcoal">Charcoal</option><option value="navy">Navy</option><option value="green">Green</option><option value="purple">Purple</option></optgroup><optgroup label="Light"><option value="sand">Sand</option><option value="white">White</option><option value="grey">Grey</option><option value="blue">Blue</option><option value="mint">Mint</option></optgroup></select></div>
 </div>
-<div class="fn">Accent colours follow the theme. All themes except OLED, Solid navy and Modern light have a slow animated background.</div>
+<div class="fn">Each theme is one base colour and one accent. The timer keeps its soft glow in every theme.</div>
 
 <div class="sec" id="s-cloud">Cloud Backup</div>
 <div class="grp"><div class="pad">
@@ -1667,6 +1750,7 @@ html #settings .btns .danger.solid:hover{background-color:#EF4444;border-color:#
 <ul>
 <li><b>Random</b> draws from your letter pool. The same pair never comes up twice in a row.</li>
 <li><b>Weak</b> only serves pairs you haven&rsquo;t tested yet, pairs that average yellow or red, and pairs you&rsquo;ve failed. A green time removes a pair from Weak.</li>
+<li><b>Failed pairs</b> only serves pairs you&rsquo;ve failed that are still marked as missed (the dark red heatmap cells). Two clean recalls in a row clear a pair from it, and any time counts as clean, fast or slow.</li>
 <li><b>Flash mode</b> shows the pair for a moment, then hides it while the clock keeps running. <span class="th-fl" aria-hidden="true"><b>BX</b><em></em></span></li>
 <li><b>Fast and Medium cut-offs</b> set the green and yellow on your times and the heatmap. Anything slower is red.</li>
 <li><b>Hide timer</b> shows only the final time. <b>Zen</b> hides every time and stat.</li>
@@ -1772,11 +1856,12 @@ B,bat,bubble</pre>
 <div id="slplay2" style="display:none"><div id="slfb" class="slfb"></div><div id="slkeys" class="slkeys"></div></div>
 <div id="slsetup">
 <p class="mut">Learn where every Speffz letter lives. <b>Find it</b> shows a letter and you tap its sticker. <b>Name it</b> highlights a sticker and you type or tap its letter. Corners and edges are tracked separately and never touch your pair stats.</p>
-<div class="slrow"><span>Pieces</span><div class="seg" data-seg="t"><button data-v="c">Corners</button><button data-v="e">Edges</button><button data-v="b">Both</button></div></div>
+<div class="card"><div class="slrow"><span>Pieces</span><div class="seg" data-seg="t"><button data-v="c">Corners</button><button data-v="e">Edges</button><button data-v="b">Both</button></div></div>
 <div class="slrow"><span>Mode</span><div class="seg" data-seg="dir"><button data-v="find">Find it</button><button data-v="name">Name it</button><button data-v="mix">Mixed</button></div></div>
 <div class="slrow"><span>Questions</span><select id="sllen" aria-label="Questions per round"><option value="12">12</option><option value="24">24</option><option value="48">48</option><option value="0">Endless</option></select></div>
-<label class="slrow"><span>Face colours</span><input type="checkbox" id="slcol" style="accent-color:var(--acc)"></label>
+<label class="slrow"><span>Face colours</span><input type="checkbox" class="tg" id="slcol"></label>
 <div class="slrow"><span>Preview &amp; your letters <span class="mut" id="slmt"></span></span><div class="seg" data-seg="pv"><button data-v="c">Corners</button><button data-v="e">Edges</button></div></div>
+</div>
 <div id="slmast" class="slm"></div>
 <div class="row" style="margin-top:1rem"><button id="slgo" class="primary" type="button">Start [Enter]</button></div>
 </div>
@@ -1788,7 +1873,7 @@ B,bat,bubble</pre>
 <div class="seg tabs"><button type="button" data-go="sloc">Stickers</button><button type="button" data-go="wd" class="on">Words</button><button type="button" data-go="chain">Chain</button></div>
 <div id="wdsetup">
 <p class="mut">A pair appears and you type the word you saved for it. The clock keeps running until you get it right. Pairs come from your letter pool and need a saved word. Slow and missed pairs return more often. Stats are separate from your heatmap, since typing time would skew it.</p>
-<div class="slrow"><span>Questions</span><select id="wdlen" aria-label="Questions per round"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="0">Endless</option></select></div>
+<div class="card"><div class="slrow"><span>Questions</span><select id="wdlen" aria-label="Questions per round"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="0">Endless</option></select></div></div>
 <div id="wdinfo" style="margin-top:.6rem"></div>
 <div class="row" style="margin-top:1rem"><button id="wdgo" class="primary" type="button">Start [Enter]</button></div>
 </div>
@@ -1828,14 +1913,14 @@ B,bat,bubble</pre>
 (function(){
 const L='ABCDEFGHIJKLMNOPQRSTUVWX'.split(''),ALL=L.join('');
 const KEY='bld-pairs-v1';
-const DEF={F:ALL,S:ALL,flash:false,fd:.3,hideT:false,zen:false,thr:2,drill:false,pace:false,goal:1,acc:'#67E8F9',bg:'forest',tf:1,tm:2,rm:'irl',snd:true,vol:.6,sndMode:'soft',tsplit:false,tmemo:false,font:'jb'};
+const DEF={F:ALL,S:ALL,flash:false,fd:.3,hideT:false,zen:false,thr:2,drill:false,pace:false,goal:1,acc:'#67E8F9',bg:'sand',tf:1,tm:2,rm:'irl',snd:true,vol:.6,sndMode:'soft',tsplit:false,tmemo:false,font:'jb'};
 const ACC=['#67E8F9','#4ADE80','#FBBF24','#A78BFA'],ACCD=['#0E7490','#15803D','#B45309','#6D28D9'];
 let D={set:Object.assign({},DEF),words:{},stats:{},flag:{},streak:{},missed:{},missedStreak:{},review:{},fails:{},hist:[]};
 let lsHad=false,lsBad=null;
 try{const raw=localStorage.getItem(KEY);lsHad=!!raw;let r=null;try{r=JSON.parse(raw||'null')}catch(e){lsBad=raw}if(r&&typeof r==='object'){D=Object.assign(D,r);D.set=Object.assign({},DEF,r.set)}}catch(e){}
 /* data that could not be parsed is parked under its own key before the first save can replace it */
 if(lsBad){try{localStorage.setItem(KEY+'-rescue',lsBad)}catch(e){}}
-D.missed||={};D.missedStreak||={};D.review||={};D.fails||={};D.chains||=[];D.set.sndMode='soft';delete D.mn;if(D.set.goal===3)D.set.goal=1;if(!['irl','review'].includes(D.set.rm))D.set.rm='irl';delete D.set.n;delete D.set.noId;delete D.set.gap;
+D.missed||={};D.missedStreak||={};D.review||={};D.fails||={};D.chains||=[];D.set.sndMode='soft';delete D.mn;if(D.set.goal===3)D.set.goal=1;if(!['irl','review','failed'].includes(D.set.rm))D.set.rm='irl';delete D.set.n;delete D.set.noId;delete D.set.gap;
 // One-time migration: start with a neutral timer/pacing setup, then preserve the user's choices.
 if(!D.set.timerDefaultsV){D.set.zen=false;D.set.pace=false;D.set.hideT=false;D.set.flash=false;D.set.timerDefaultsV=1;}
 const set=()=>D.set;
@@ -1904,10 +1989,10 @@ function applyAcc(){
   applyAcc0();
 }
 function applyAcc0(){
-  const TH=['oled','solid','aurora','forest','ocean','ember','rose','sunset','sage','meadow','lagoon','lavender','light'],LTH=['sunset','sage','meadow','lagoon','lavender','light'],NOANIM=['oled','solid','light'];if(!TH.includes(set().bg))set().bg='forest';
+  const TH=TH_OK,LTH=['white','grey','sand','blue','mint'];set().bg=thFix(set().bg);
   const b=set().bg,lt=LTH.includes(b),r=document.documentElement;
   r.style.removeProperty('--acc');
-  if(!['jb','plex','space','martian','share','courier','vt','grotesk','sora','inter'].includes(set().font))set().font='jb';r.dataset.font=set().font;r.dataset.bg=b;if(window._idleP)window._idleP(b);r.dataset.lt=lt?'1':'0';r.dataset.anim=NOANIM.includes(b)?'0':'1';
+  if(!['jb','plex','space','martian','share','courier','vt','grotesk','sora','inter'].includes(set().font))set().font='jb';r.dataset.font=set().font;r.dataset.bg=b;if(window._idleP)window._idleP(b);r.dataset.lt=lt?'1':'0';r.dataset.anim='0';
   document.body.classList.toggle('zenmode',!!set().zen);
 }
 
@@ -1951,6 +2036,11 @@ function pick(){
     const weak=reviewSet(base);
     if(!weak.length){toast('Every pair is green. Switch to Random.');pickFail=1;return null}
     return [choose(weak,base,[],prev,true)];
+  }
+  if(set().rm==='failed'){
+    const f=missedSet(base);
+    if(!f.length){toast('No failed pairs right now. Switch to Random.');pickFail=1;return null}
+    return [choose(f,base,[],prev,true)];
   }
   return [choose(base,base,[],prev,false)];
 }
@@ -2014,7 +2104,7 @@ function fail(){
   if(drill)drill.fails[cur[0]]=(drill.fails[cur[0]]||0)+1;
   document.body.classList.remove('solving');postStop=false;st=2;cancelAnimationFrame(raf);clearTimeout(ft);
   P.classList.remove('hid','pulse','run');
-  const now=Date.now();D.fails[cur[0]]=(D.fails[cur[0]]||0)+1;cur.forEach(k=>{D.missed[k]=1;D.missedStreak[k]=0;D.review[k]={last:now,due:now,interval:0}});save();
+  const now=Date.now();sess.f=(sess.f||0)+1;D.fails[cur[0]]=(D.fails[cur[0]]||0)+1;cur.forEach(k=>{D.missed[k]=1;D.missedStreak[k]=0;D.review[k]={last:now,due:now,interval:0}});save();
   T.textContent='Failed';T.className='failed';washFx(2);pairFx(RC[2]);
   PB.style.visibility='hidden';
   setWord(savedWords());
@@ -2061,7 +2151,7 @@ addEventListener('keydown',e=>{
     e.preventDefault();
     unsnap(attemptD);D.hist=attemptHist.slice();
     Object.keys(sess).forEach(k=>delete sess[k]);Object.assign(sess,JSON.parse(JSON.stringify(attemptSess)));
-    const now=Date.now();D.fails[cur[0]]=(D.fails[cur[0]]||0)+1;cur.forEach(k=>{D.missed[k]=1;D.missedStreak[k]=0;D.review[k]={last:now,due:now,interval:0}});
+    const now=Date.now();sess.f=(sess.f||0)+1;D.fails[cur[0]]=(D.fails[cur[0]]||0)+1;cur.forEach(k=>{D.missed[k]=1;D.missedStreak[k]=0;D.review[k]={last:now,due:now,interval:0}});
     postStop=false;save();T.textContent='Failed';T.className='failed';washFx(2);pairFx(RC[2]);setWord(savedWords());snd('fail');toast('Time undone — marked as failed');return;
   }
   if(st===1&&FAIL_KEYS.has(e.key.toLowerCase())){e.preventDefault();fail();return}
@@ -2325,18 +2415,19 @@ function cbApply(x){
   const r=x.data;
   D=Object.assign({set:Object.assign({},DEF),words:{},stats:{},flag:{},streak:{},missed:{},missedStreak:{},review:{},fails:{},hist:[],chains:[]},r);
   D.set=Object.assign({},DEF,r.set);D.set.sndMode='soft';
-  if(!TH_OK.includes(D.set.bg))D.set.bg='forest';
+  D.set.bg=thFix(D.set.bg);
   CB.rev=x.rev||CB.rev;CB.dirty=false;CB.at=Date.now();cbHold=false;cbQuiet=Date.now()+2500;cbSave();
   saveDirty=true;flushSave();deck=[];deckSig='';prev=null;
   applyAcc();syncUI();TM.sp=!!set().tsplit;tmModeSync();try{maSync()}catch(_){}cbRender();
 }
-const TH_OK=['oled','solid','aurora','forest','ocean','ember','rose','sunset','sage','meadow','lagoon','lavender','light'];
+const TH_OK=['black','charcoal','navy','green','purple','white','grey','sand','blue','mint'];
+function thFix(b){b=({oled:'black',solid:'navy',aurora:'purple',forest:'green',ocean:'navy',ember:'charcoal',rose:'purple',sunset:'sand',yellow:'sand',sage:'mint',meadow:'mint',lagoon:'blue',lavender:'blue',light:'white'})[b]||b;return TH_OK.includes(b)?b:'sand'}
 async function cbRestoreNow(){const x=await cbFetch();cbApply(x)}
 /* ---------- data safety: restore, panel, recovery on start ---------- */
 function restoreFrom(r){
   D=Object.assign({set:Object.assign({},DEF),words:{},stats:{},flag:{},streak:{},missed:{},missedStreak:{},review:{},fails:{},hist:[],chains:[]},r);
   D.set=Object.assign({},DEF,r.set);D.set.sndMode='soft';
-  if(!TH_OK.includes(D.set.bg))D.set.bg='forest';
+  D.set.bg=thFix(D.set.bg);
   D.missed||={};D.missedStreak||={};D.review||={};D.fails||={};D.chains||=[];
   save();flushSave();deck=[];deckSig='';prev=null;
   applyAcc();syncUI();TM.sp=!!set().tsplit;tmModeSync();try{maSync()}catch(_){}
@@ -2710,12 +2801,13 @@ function stSpark(vals,labels){
 function stSession(){
   const n=sess.n,avg=n?sess.sum/n:0;
   let c=0,t=0;D.hist.forEach(h=>{c+=stN(h);t+=h.t});
-  const all=c?t/c:null,rt=sess.r[0]+sess.r[1]+sess.r[2];
+  const all=c?t/c:null,rt=sess.r[0]+sess.r[1]+sess.r[2],f=sess.f||0,FC='color-mix(in srgb,var(--r) 55%,#000)';
   let sub=null;if(n&&all!=null){const d=avg-all;sub='<span style="color:'+(d<=0?'var(--g)':'var(--r)')+'">'+(d<=0?'\u2212':'+')+(Math.abs(d)/1000).toFixed(2)+'s</span> vs all-time'}
   let h=stBlk(0,'',
-    '<div class="tiles">'+stTile('Pairs',n)+stTile('Average',n?fmt(avg):'\u2013',sub,n?RC[rate(avg)]:null)+stTile('Best',sess.best!==null?fmt(sess.best):'\u2013',null,sess.best!==null?RC[rate(sess.best)]:null)+stTile('Fast rate',rt?Math.round(sess.r[0]/rt*100)+'%':'\u2013',n?stDur(sess.sum)+' solving':null)+'</div>');
-  if(!n)return h+stBlk(1,'',emp('clock','No attempts yet. Press Space to start.'));
-  if(rt)h+=stBlk(1,'Ratings this session',stBar([{n:sess.r[0],col:'var(--g)',label:'fast'},{n:sess.r[1],col:'var(--y)',label:'medium'},{n:sess.r[2],col:'var(--r)',label:'slow'}]));
+    '<div class="tiles">'+stTile('Pairs',n,f?f+' failed':null)+stTile('Average',n?fmt(avg):'\u2013',sub,n?RC[rate(avg)]:null)+stTile('Best',sess.best!==null?fmt(sess.best):'\u2013',null,sess.best!==null?RC[rate(sess.best)]:null)+stTile('Fast rate',(rt+f)?Math.round(sess.r[0]/(rt+f)*100)+'%':'\u2013',n?stDur(sess.sum)+' solving':null)+'</div>');
+  if(!n&&!f)return h+stBlk(1,'',emp('clock','No attempts yet. Press Space to start.'));
+  if(rt||f)h+=stBlk(1,'Ratings this session',stBar([{n:sess.r[0],col:'var(--g)',label:'fast'},{n:sess.r[1],col:'var(--y)',label:'medium'},{n:sess.r[2],col:'var(--r)',label:'slow'},{n:f,col:FC,label:'failed'}]));
+  if(!n)return h;
   const rec=sess.rec.slice().reverse();
   h+=stBlk(2,'Times, oldest to newest',stSpark(rec.map(r=>r.t/stN(r)),rec.map(r=>r.p)));
   h+=stBlk(3,'Recent',sess.rec.slice(0,20).map(r=>{const m=r.p.indexOf(' ')<0;return '<div class="stat"><span>'+r.p+(m&&D.words[r.p]?' <span class="mut">\u00b7 '+stWord(r.p)+'</span>':'')+'</span><span style="color:'+(m?RC[rate(r.t)]:'var(--acc)')+'">'+fmt(r.t)+'</span></div>'}).join(''));
@@ -2741,12 +2833,24 @@ function stOverall(){
     o+=stBlk(1,'Trend',
       '<div class="trend"><div><span>Previous '+w+'</span><b>'+stSec(a0)+'</b></div><div class="arr" style="color:'+(d<=0?'var(--g)':'var(--r)')+'">'+(d<=0?'\u2193':'\u2191')+' '+(Math.abs(d)/1000).toFixed(2)+'s</div><div><span>Latest '+w+'</span><b style="color:'+RC[rate(a1)]+'">'+stSec(a1)+'</b></div></div>');
   }
+  {
+    const ks=Array.from(dset).map(k=>{const q=k.split('-');return new Date(+q[0],+q[1],+q[2]).getTime()}).sort((x,y)=>x-y);
+    let lg=0,run=0;ks.forEach((t,i)=>{run=(i&&Math.round((t-ks[i-1])/864e5)===1)?run+1:1;if(run>lg)lg=run});
+    const byDay={};H.forEach(h=>{const k=stDay(h.d);byDay[k]=(byDay[k]||0)+stN(h)});
+    let bd=0,bk='';Object.keys(byDay).forEach(k=>{if(byDay[k]>bd){bd=byDay[k];bk=k}});
+    const bq=bk.split('-'),bdl=bk?new Date(+bq[0],+bq[1],+bq[2]).toLocaleDateString(undefined,{day:'numeric',month:'short'}):'';
+    const Fa=Object.keys(D.fails).reduce((a,k)=>a+(D.fails[k]||0),0);
+    o+=stBlk(0.6,'Records','<div class="tiles t2">'+stTile('Longest streak',lg,lg===1?'day':'days')+stTile('Best day',bd,bdl+' \u00b7 pairs')+stTile('Time practising',stDur(tot))+stTile('Fail rate',(pairs+Fa)?(Fa/(pairs+Fa)*100).toFixed(1)+'%':'\u2013',Fa+' failed of '+(pairs+Fa).toLocaleString())+'</div>');
+    const WK=16,wd0=new Date(td);wd0.setDate(wd0.getDate()-wd0.getDay()-(WK-1)*7);
+    const cells=[];let mxd=1;for(let i=0;i<WK*7;i++){const d=new Date(wd0);d.setDate(d.getDate()+i);const n=byDay[stDay(d.getTime())]||0;if(n>mxd)mxd=n;cells.push({d:d,n:n})}
+    o+=stBlk(2.5,'Practice calendar, last '+WK+' weeks','<div class="cal">'+cells.map(c=>{const fut=c.d>td,lv=c.n?Math.ceil(c.n/mxd*4):0;return '<i class="cl'+lv+(fut?' fu':'')+(c.d.getTime()===td.getTime()?' now':'')+'" title="'+c.d.toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short'})+': '+c.n+' pairs"></i>'}).join('')+'</div><div class="calkey"><span>Less</span><i class="cl0"></i><i class="cl1"></i><i class="cl2"></i><i class="cl3"></i><i class="cl4"></i><span>More</span></div>');
+  }
   o+=stBlk(2,'Pairs per day, last 14 days','<div class="dcols">'+days.map((d,i)=>'<div class="dcol'+(i===13?' now':'')+'" title="'+d.full+': '+d.n+' pairs'+(d.n?', avg '+stSec(d.s/d.n):'')+'"><em>'+(d.n||'')+'</em><div class="dtrack"><div class="dbar" style="height:'+(d.n/mxN*100)+'%;--d:'+i+'"></div></div><i>'+d.lab+'</i></div>').join('')+'</div>');
   o+=stBlk(3,'Daily average',stSpark(days.map(d=>d.n?d.s/d.n:null),days.map(d=>d.full)));
   const edges=[.6,.8,1,1.3,1.7,2.2,3,4],rep=[.45,.7,.9,1.15,1.5,1.95,2.6,3.5,4.5],lab=['<.6','.6','.8','1','1.3','1.7','2.2','3','4+'],bk=new Array(9).fill(0);
   per.forEach(p=>{const s=p/1000;let i=0;while(i<edges.length&&s>=edges[i])i++;bk[i]++});
-  const mb=Math.max(1,...bk);
-  o+=stBlk(4,'How your times are spread (seconds per pair)','<div class="hist">'+bk.map((c,i)=>'<div class="hcol" title="'+c+' attempts"><em>'+(c||'')+'</em><div class="dtrack"><div class="dbar r'+rate(rep[i]*1000)+'" style="height:'+(c/mb*100)+'%;--d:'+i+'"></div></div><i>'+lab[i]+'</i></div>').join('')+'</div>');
+  const F=Object.keys(D.fails).reduce((a,k)=>a+(D.fails[k]||0),0),mb=Math.max(1,F,...bk);
+  o+=stBlk(4,'How your times are spread (seconds per pair)','<div class="hist">'+bk.map((c,i)=>'<div class="hcol" title="'+c+' attempts"><em>'+(c||'')+'</em><div class="dtrack"><div class="dbar r'+rate(rep[i]*1000)+'" style="height:'+(c/mb*100)+'%;--d:'+i+'"></div></div><i>'+lab[i]+'</i></div>').join('')+'<div class="hcol hfail" title="'+F+' failed attempts (no time recorded)"><em>'+(F||'')+'</em><div class="dtrack"><div class="dbar rf" style="height:'+(F/mb*100)+'%;--d:9"></div></div><i>fail</i></div></div>');
   const pool=stPool(),seen=pool.filter(k=>D.stats[k]&&D.stats[k].n),cnt=[0,0,0];seen.forEach(k=>cnt[rate(avgT(k))]++);
   const withW=pool.filter(k=>D.words[k]).length;
   o+=stBlk(5,'Coverage of your pairs ('+pool.length+')',stBar([{n:cnt[0],col:'var(--g)',label:'fast'},{n:cnt[1],col:'var(--y)',label:'medium'},{n:cnt[2],col:'var(--r)',label:'slow'},{n:pool.length-seen.length,col:'var(--line)',label:'not seen'}])+'<div class="mut" style="margin-top:.55rem">'+withW+' of '+pool.length+' have a word saved</div>');
@@ -3544,8 +3648,14 @@ function tcRot(v){
   const x=v[0]*Math.cos(a)+v[2]*Math.sin(a),z=-v[0]*Math.sin(a)+v[2]*Math.cos(a);
   return [x,v[1]*Math.cos(b)-z*Math.sin(b),v[1]*Math.sin(b)+z*Math.cos(b)];
 }
+function tcShadow(){
+  /* shadow follows the cube's total yaw (drag + scramble sweep) and the scramble's grow-in scale */
+  const sh=TC.sh||(TC.sh=document.querySelector('.tcshadow'));if(!sh)return;
+  sh.style.setProperty('--sy',(-(TC.ry+(TC.sw||0)))+'deg');sh.style.setProperty('--ss',TC.ss||1);
+}
 function tcApply(){
   const el=$('#tc3d');el.style.transform='rotateX('+TC.rx+'deg) rotateY('+TC.ry+'deg)';
+  tcShadow();
   if(TC.gl){TC.gl();return}
   /* Cache face nodes after each scramble render; querying the subtree on every drag frame
      forces extra main-thread work and can make rotation feel sticky. */
@@ -3593,7 +3703,7 @@ function tcBase(c,px){
   if(px)return 'matrix3d('+R[0][0]+','+R[1][0]+','+R[2][0]+',0,'+R[0][1]+','+R[1][1]+','+R[2][1]+',0,'+R[0][2]+','+R[1][2]+','+R[2][2]+',0,0,0,0,1) translate3d('+(px*p[0])+'px,'+(px*p[1])+'px,'+(px*p[2])+'px)';
   return 'matrix3d('+R[0][0]+','+R[1][0]+','+R[2][0]+',0,'+R[0][1]+','+R[1][1]+','+R[2][1]+',0,'+R[0][2]+','+R[1][2]+','+R[2][2]+',0,0,0,0,1) translate3d(calc(var(--s) * '+p[0]+'),calc(var(--s) * '+p[1]+'),calc(var(--s) * '+p[2]+'))';
 }
-function tcStop(){TC.anim=(TC.anim||0)+1;cancelAnimationFrame(TC.animRaf);TC.gl=null;TC.gs=null}
+function tcStop(){TC.anim=(TC.anim||0)+1;cancelAnimationFrame(TC.animRaf);TC.gl=null;TC.gs=null;TC.sw=0;TC.ss=1;tcShadow()}
 /* live gloss for the playback cube: lighting is worked out from each sticker's real, current
    orientation and position (including the turn in progress and the swing-in), so it never steps or lags */
 function tcGlossAnim(){
@@ -3668,7 +3778,9 @@ function tcAnimate(scr){
     /* gentle sweep: the whole cube swings in while it scrambles and settles on your view angle */
     const g=Math.min(1,el/(total+60)),sw=1-g,ent=Math.min(1,el/220);
     const swd=-70*sw*sw*sw;TC.gs.sw=swd;
-    tcb.style.transform='rotateY('+swd.toFixed(2)+'deg) scale('+(.9+.1*(1-Math.pow(1-ent,3))).toFixed(4)+')';
+    const sc=.9+.1*(1-Math.pow(1-ent,3));
+    tcb.style.transform='rotateY('+swd.toFixed(2)+'deg) scale('+sc.toFixed(4)+')';
+    TC.sw=swd;TC.ss=sc;tcShadow();
     while(cur<mv.length&&el>=mv[cur].s+mv[cur].d){
       if(!layer)layer=pick(mv[cur]);
       bake(mv[cur]);cur++;
@@ -3676,7 +3788,7 @@ function tcAnimate(scr){
     if(cur>=mv.length){
       /* finish in place: keep the same cube (and the same per-sticker lighting) instead of swapping to a
          differently-lit flat cube, which is what caused the visible jump in lighting */
-      tcb.style.transform='rotateY(0deg) scale(1)';
+      tcb.style.transform='rotateY(0deg) scale(1)';TC.sw=0;TC.ss=1;tcShadow();
       cubies.forEach(c=>{c.el.style.transform=tcBase(c)});
       TC.gs.sw=0;TC.gs.M=null;TC.gs.set=null;tcGlossAnim();
       $('#tc3d').classList.add('done');
@@ -3721,8 +3833,8 @@ tcEl.addEventListener('pointerup',tcEnd);tcEl.addEventListener('pointercancel',t
 tcEl.addEventListener('dblclick',()=>{
   cancelAnimationFrame(TC.raf);cancelAnimationFrame(TC.applyRaf);TC.applyRaf=0;
   TC.ry=((TC.ry%360)+540)%360-180;TC.ry+=((-38-TC.ry+540)%360)-180;TC.rx=-26;
-  const el=$('#tc3d');el.style.transition='transform .6s cubic-bezier(.32,.72,0,1)';tcApply();
-  setTimeout(()=>{el.style.transition=''},650);
+  const el=$('#tc3d'),sh=document.querySelector('.tcshadow'),tr='transform .6s cubic-bezier(.32,.72,0,1)';el.style.transition=tr;if(sh)sh.style.transition=tr;tcApply();
+  setTimeout(()=>{el.style.transition='';if(sh)sh.style.transition=''},650);
 });
 (function(){
   const pal=['#F5F5F0','#F5C518','#D63A3A','#F08A24','#2F6FDB','#2FA84F'],box=$('.tdots');
@@ -4111,13 +4223,13 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')hideTip()},true);
   const fx=$('#idlefx');if(!fx)return;const AZ='ABCDEFGHIJKLMNOPQRSTUVWX';
   const spot=(el,first)=>{let x,y,n=0;do{x=4+Math.random()*88;y=6+Math.random()*80;n++}while(Math.abs(x-50)<24&&Math.abs(y-50)<18&&n<40);
     el.textContent=AZ[Math.random()*24|0]+AZ[Math.random()*24|0];
-    el.style.left=x.toFixed(1)+'%';el.style.top=y.toFixed(1)+'%';el.style.setProperty('--s',(.9+Math.random()*1.4).toFixed(2)+'rem');el.style.setProperty('--o',(.08+Math.random()*.14).toFixed(2));if(first)el.style.setProperty('--t',(9+Math.random()*7).toFixed(1)+'s');
+    el.style.left=x.toFixed(1)+'%';el.style.top=y.toFixed(1)+'%';el.style.setProperty('--s',(.9+Math.random()*1.4).toFixed(2)+'rem');el.style.setProperty('--o',(.05+Math.random()*.08).toFixed(2));if(first)el.style.setProperty('--t',(9+Math.random()*7).toFixed(1)+'s');
     if(first)el.style.setProperty('--d',(-Math.random()*12).toFixed(1)+'s')};
   for(let i=0;i<16;i++){const b=document.createElement('b');spot(b,true);b.addEventListener('animationiteration',()=>spot(b,false));fx.appendChild(b)}
   /* particles: one faint kind per theme, styled in CSS */
   const ff=(el,first)=>{el.style.left=(5+Math.random()*90).toFixed(1)+'%';el.style.top=(8+Math.random()*80).toFixed(1)+'%';el.style.setProperty('--dx',((Math.random()-.5)*90).toFixed(0)+'px');el.style.setProperty('--dy',((Math.random()-.5)*70).toFixed(0)+'px');el.style.setProperty('--o',(.3+Math.random()*.3).toFixed(2));el.style.setProperty('--k',Math.random().toFixed(2));if(first)el.style.setProperty('--t',(8+Math.random()*8).toFixed(1)+'s');if(first)el.style.setProperty('--d',(-Math.random()*10).toFixed(1)+'s')};
   const mk=()=>{for(let i=0;i<14;i++){const f=document.createElement('i');ff(f,true);f.addEventListener('animationiteration',()=>ff(f,false));fx.appendChild(f)}};
-  window._idleP=bg=>{const has=fx.querySelector('i'),off=bg==='solid'||matchMedia('(prefers-reduced-motion: reduce)').matches;if(off){if(has)fx.querySelectorAll('i').forEach(n=>n.remove())}else if(!has)mk()};
+  window._idleP=bg=>{const has=fx.querySelector('i'),off=true;if(off){if(has)fx.querySelectorAll('i').forEach(n=>n.remove())}else if(!has)mk()};
   window._idleP(document.documentElement.dataset.bg);
 })();
 
@@ -4228,9 +4340,10 @@ applyAcc();
   var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches;
   var cur=-1,tick=false;
   function topOf(el){return el.getBoundingClientRect().top-box.getBoundingClientRect().top}
+  function land(){return head.offsetHeight+Math.round((box.clientHeight-head.offsetHeight)*0.3)}
   function spy(){
     tick=false;
-    var h=head.offsetHeight+28,i=0;
+    var h=land()+8,i=0;
     for(var k=0;k<secs.length;k++){if(secs[k]&&topOf(secs[k])<=h)i=k}
     if(box.scrollTop+box.clientHeight>=box.scrollHeight-6)i=secs.length-1;
     box.classList.toggle('scrolled',box.scrollTop>4);
@@ -4243,7 +4356,7 @@ applyAcc();
   box.addEventListener('scroll',function(){if(!tick){tick=true;requestAnimationFrame(spy)}},{passive:true});
   btns.forEach(function(b,k){b.addEventListener('click',function(){
     var s=secs[k];if(!s)return;
-    box.scrollTo({top:topOf(s)+box.scrollTop-head.offsetHeight-12,behavior:reduce?'auto':'smooth'});
+    box.scrollTo({top:topOf(s)+box.scrollTop-land(),behavior:reduce?'auto':'smooth'});
   })});
   function paint(r){var mn=+r.min||0,mx=+r.max||100,v=(+r.value-mn)/((mx-mn)||1);r.style.setProperty('--f',Math.max(0,Math.min(1,v)))}
   function paintAll(){[].forEach.call(ov.querySelectorAll('input[type=range]'),paint)}

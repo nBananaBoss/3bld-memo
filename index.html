@@ -1653,7 +1653,6 @@ button.primary:hover,#heat #hmdrill:hover{background-color:var(--acc);color:var(
    (440x956 / 956x440). Lives last in the stylesheet so it wins over the earlier desktop rules.
    ===================================================================================================== */
 #dock{display:none}
-#tmdnf{display:none}
 :root{--dock-sa:env(safe-area-inset-bottom,0px);--dock-gap:.7rem;--dock-h:6.9rem}
 body.typing{--dock-sa:0px}
 @keyframes dockIn{from{opacity:0;transform:translate3d(-50%,18px,0)}}
@@ -1690,10 +1689,7 @@ body.typing{--dock-sa:0px}
   #top button{width:2.75rem;height:2.75rem}
   #top .tind{width:2.75rem;height:2.75rem}
   #sclk{height:calc(2.75rem + .6rem + 2px);font-size:.9rem}
-  [data-close],.tclose{min-height:2.75rem}
-  .tclose{padding:.5em 1.3em;font-size:.9rem}
-  .tmmode{min-height:2.75rem;padding:.6em 1.2em;font-size:.78rem}
-  .tpage.stop #tmdnf{display:inline-flex;align-items:center}
+  [data-close]{min-height:2.75rem}
 }
 @media (max-width:700px){.ov{padding:.6rem}}
 
@@ -1708,7 +1704,6 @@ body.typing{--dock-sa:0px}
   #pair.idle{font-size:clamp(1.3rem,3.4vw,2rem)}
   #time{font-size:clamp(1.4rem,3.6vw,2.2rem)}
   #word{font-size:clamp(1.3rem,3.4vw,2.2rem)}
-  .tmmode{font-size:.85rem}
 }
 
 /* short screens (phone landscape): compact dock, icons only, text kept inside the height */
@@ -1782,6 +1777,33 @@ body.ready:not(.live) #pair.idle{animation:pin .8s cubic-bezier(.32,.72,0,1) .2s
 
 /* tap anywhere on the main screen: no iOS callout or tap flash */
 @media (pointer:coarse),(max-width:700px){#main{-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}}
+
+/* touch scramble + solution page: plain, static, no animation or blur (the PC timer page is unchanged) */
+#scp,#scp.on,#scp.on .box,#scp.out .box{animation:none!important}
+#scp{padding:0;align-items:stretch;justify-content:center;background:var(--bg)}
+#scp.out{display:none}
+#scp .box{width:100%;max-width:820px;height:100%;max-height:none;border:0;border-radius:0;background:var(--bg);box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;display:flex;flex-direction:column;overflow:hidden;padding:0 1rem}
+.scp-body{flex:1 1 auto;overflow:auto;-webkit-overflow-scrolling:touch;padding:1rem 0 1.2rem}
+.scp-k{margin:1.2rem 0 .6rem;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.scp-k:first-child{margin-top:.2rem}
+.scp-par{margin-left:.6rem;letter-spacing:.04em;text-transform:none}
+.scp-par.hot{color:var(--acc);font-weight:700}
+.scp-scr{display:flex;flex-wrap:wrap;gap:.5rem .9rem;font-size:clamp(1.5rem,6.2vw,2.5rem);font-weight:700;line-height:1.15;letter-spacing:.02em}
+.scp-scr small{font-size:.6em;margin-left:.04em;color:var(--acc)}
+.scp-scr small.pr{font-size:1em;font-weight:700;margin-left:.02em}
+.scp-row{margin:0 0 1.1rem}
+.scp-rk{display:block;margin-bottom:.45rem;font-size:.82rem;color:var(--muted)}
+.scp-ps{display:flex;flex-wrap:wrap;gap:.5rem}
+.sp{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:3.6rem;padding:.55rem .7rem;border:1px solid var(--line);border-radius:12px;background:color-mix(in srgb,var(--panel) 70%,transparent)}
+.sp b{font-size:1.45rem;letter-spacing:.14em;margin-right:-.14em}
+.sp i{margin-top:.2rem;font-style:normal;font-size:.72rem;color:var(--muted)}
+.sp .na{opacity:.4}
+.sp.q{border-style:dashed}
+.sp.fl{border-color:var(--acc)}
+.scp-none{color:var(--muted)}
+.scp-bar{flex:none;padding:.7rem 0 calc(.9rem + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line)}
+#scpNew{width:100%;min-height:3.4rem;border-radius:16px;font-size:1.05rem}
+@media (min-width:700px){.sp b{font-size:1.7rem}.sp{padding:.7rem .9rem;min-width:4.4rem}.sp i{font-size:.8rem}}
 </style>
 </head>
 <body>
@@ -2049,10 +2071,20 @@ B,bat,bubble</pre>
 <button class="tclose" data-close type="button" aria-label="Close timer">Close</button>
 <div class="tpage" id="tpage">
 <div id="tmsc" class="tmsc"></div>
-<div class="tmmain"><div class="tmcol"><div id="tmt" class="tmt">0.00</div><div class="tmline"><i id="tmbar"></i><i id="tmbar2"></i></div><div class="tmspw"><div class="tmsp" id="tmsp"><div class="tms tmm" id="tmmc"><span class="k">Memo</span><b id="tmm">&ndash;</b><em id="tmmp"></em></div><div class="tms tme" id="tmec"><span class="k">Exec</span><b id="tme">&ndash;</b><em id="tmep"></em></div></div></div><div id="tmh" class="tmh"></div><div class="tmpills"><button type="button" class="tmmode" id="tmmode" tabindex="-1"></button><button type="button" class="tmmode" id="tmmemo" tabindex="-1"></button><button type="button" class="tmmode" id="tmdnf" tabindex="-1">DNF</button></div></div><div class="tcube" id="tcube" title="Drag to rotate, double-click to reset" aria-label="3D view of the scramble, drag to rotate"><div class="tcshadow"></div><div class="tcfloat"><div class="tc3d" id="tc3d"></div></div></div></div>
+<div class="tmmain"><div class="tmcol"><div id="tmt" class="tmt">0.00</div><div class="tmline"><i id="tmbar"></i><i id="tmbar2"></i></div><div class="tmspw"><div class="tmsp" id="tmsp"><div class="tms tmm" id="tmmc"><span class="k">Memo</span><b id="tmm">&ndash;</b><em id="tmmp"></em></div><div class="tms tme" id="tmec"><span class="k">Exec</span><b id="tme">&ndash;</b><em id="tmep"></em></div></div></div><div id="tmh" class="tmh"></div><div class="tmpills"><button type="button" class="tmmode" id="tmmode" tabindex="-1"></button><button type="button" class="tmmode" id="tmmemo" tabindex="-1"></button></div></div><div class="tcube" id="tcube" title="Drag to rotate, double-click to reset" aria-label="3D view of the scramble, drag to rotate"><div class="tcshadow"></div><div class="tcfloat"><div class="tc3d" id="tc3d"></div></div></div></div>
 <div class="tmemo" id="tmemo" hidden aria-live="polite"><div class="tmemo-h"><span class="k">Memo answer</span><span class="tmemo-lbl" id="tmemol"></span><span class="mx" id="tmemox"></span><span class="tmemo-hint">click or press V to peek</span><span class="tmemo-meth">M2 / Orozco</span></div><div class="tmemo-b" id="tmemob"></div><span class="tmemo-k" id="tmemok"></span></div>
 </div>
 </div>
+
+<div class="ov" id="scp"><div class="box" role="dialog" aria-label="Scramble and solution">
+<header class="hmt-h"><h2>Scramble <button data-close type="button">Close</button></h2></header>
+<div class="scp-body">
+<div class="scp-k">Scramble</div><div id="scpScr" class="scp-scr"></div>
+<div class="scp-k">Solution <span id="scpPar" class="scp-par"></span></div>
+<div id="scpSol"></div>
+</div>
+<div class="scp-bar"><button id="scpNew" class="primary" type="button">New scramble</button></div>
+</div></div>
 
 <div class="ov" id="hmt"><div class="box" role="dialog" aria-label="Heatmap">
 <header class="hmt-h"><h2>Heatmap <button data-close type="button">Close</button></h2><div class="hmt-sum" id="hmtSum"></div></header>
@@ -2371,7 +2403,7 @@ addEventListener('keydown',e=>{
   if((e.key==='c'||e.key==='C')&&!IS_TOUCH&&!e.ctrlKey&&!e.metaKey&&!e.altKey){e.preventDefault();openChain();return}
   if((e.key==='l'||e.key==='L')&&!IS_TOUCH&&!e.ctrlKey&&!e.metaKey&&!e.altKey){e.preventDefault();openLoc();return}
   if((e.key==='w'||e.key==='W')&&!IS_TOUCH&&!e.ctrlKey&&!e.metaKey&&!e.altKey){e.preventDefault();openWd();return}
-  if((e.key==='t'||e.key==='T')&&!e.ctrlKey&&!e.metaKey&&!e.altKey){e.preventDefault();openTimer();return}
+  if((e.key==='t'||e.key==='T')&&!e.ctrlKey&&!e.metaKey&&!e.altKey){e.preventDefault();if(IS_TOUCH)openScp();else openTimer();return}
   if(e.key==='Escape'||e.key==='r'||e.key==='R'){e.preventDefault();if(st!==0)snd('err');reset();return}
   if(e.key==='Tab'){e.preventDefault();if(st===2)openWI();}
 });
@@ -3488,7 +3520,7 @@ function tmSpReset(){
   tmCards.forEach(c=>c.classList.remove('fin','pop'));
 }
 function tmModeSync(){
-  const b=$('#tmmode');b.textContent='Memo / exec split: '+(TM.sp?'on':'off')+(IS_TOUCH?'':'  [S]');b.classList.toggle('on',TM.sp);tmClass(TM.cls);
+  const b=$('#tmmode');b.textContent='Memo / exec split: '+(TM.sp?'on':'off')+'  [S]';b.classList.toggle('on',TM.sp);tmClass(TM.cls);
 }
 function tmModeToggle(){
   if(TM.s!=='idle'&&TM.s!=='stop')return;
@@ -3682,7 +3714,7 @@ function maVis(on){
 }
 function maSync(){
   const on=!!set().tmemo;
-  maVis(on);maBtn.textContent='Memo answer: '+(on?'on':'off')+(IS_TOUCH?'':'  [M]');maBtn.classList.toggle('on',on);
+  maVis(on);maBtn.textContent='Memo answer: '+(on?'on':'off')+'  [M]';maBtn.classList.toggle('on',on);
   if(!on)return;
   if(!SCR.ready){maPlaceholder();maLive();return}
   /* right after a solve the next scramble is already up, so the panel shows the answer for the solve you just did;
@@ -3817,7 +3849,40 @@ const tmEl=$('#timer');
 tmEl.addEventListener('pointerdown',e=>{if(e.target.closest('.tclose,.tcube,.tmmode,.tmemo'))return;e.preventDefault();tmDown()});
 tmEl.addEventListener('pointerup',e=>{if(e.target.closest('.tclose,.tcube,.tmmode,.tmemo'))return;e.preventDefault();tmUp()});
 tmEl.addEventListener('pointercancel',()=>{if(TM.s==='hold'||TM.s==='ready'){clearTimeout(TM.holdTimer);TM.s=TM.prev;tmClass(TM.prev==='stop'?'stop':'');tmHint(TM_HINT)}});
-$('#bt').onclick=openTimer;
+$('#bt').onclick=IS_TOUCH?openScp:openTimer;
+/* touch scramble + solution page. Reuses the same scrambler and memo solver as the PC timer, with no timing. */
+let scpCur='';
+function scpPairs(a,words){
+  if(!a.length)return'<span class="scp-none">Already solved</span>';
+  return a.map(q=>{
+    const w=words?D.words[q.t]:'';
+    const t=q.t.split('').map((l,i)=>'<span'+((q.na[i]||(!q.q&&i===1&&q.dp))?' class="na"':'')+'>'+l+'</span>').join('');
+    return'<span class="sp'+(q.q?' q':'')+'"><b>'+t+'</b>'+(w?'<i>'+esc(w)+'</i>':'')+'</span>';
+  }).join('');
+}
+function scpRender(){
+  const el=$('#scpScr');
+  el.innerHTML=scpCur.split(' ').map(m=>'<span>'+m[0]+(m.length>1?(m[1]==="'"?'<small class="pr">\u2032</small>':'<small>'+m.slice(1)+'</small>'):'')+'</span>').join('');
+  const m=MA.memo(scpCur);
+  $('#scpPar').textContent=m.par?'Parity':'No parity';$('#scpPar').classList.toggle('hot',!!m.par);
+  $('#scpSol').innerHTML='<div class="scp-row"><span class="scp-rk">Corners ('+m.cn+')</span><div class="scp-ps">'+scpPairs(m.c,true)+'</div></div>'
+    +'<div class="scp-row"><span class="scp-rk">Edges ('+m.en+')</span><div class="scp-ps">'+scpPairs(m.e,false)+(m.fl.length?'<span class="sp fl"><b>'+m.fl.join('')+'</b><i>flip</i></span>':'')+'</div></div>';
+}
+function scpNew(){
+  if(!SCR.ready){
+    $('#scpScr').textContent='Preparing scramble\u2026';$('#scpSol').innerHTML='';$('#scpPar').textContent='';
+    tmWarm();setTimeout(()=>{if(modal==='scp')scpNew()},200);return;
+  }
+  scpCur=SCR.scramble();scpRender();
+  const b=$('#scp .scp-body');if(b)b.scrollTop=0;
+}
+function openScp(){openM('scp');if(!scpCur||!$('#scpScr').firstChild)scpNew();else tmWarm()}
+$('#scpNew').onclick=()=>{snd('tab');scpNew()};
+if(IS_TOUCH){
+  $('#bt').innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>';
+  $('#bt').setAttribute('aria-label','Scramble and solution');
+}
+
 /* ---- timer keep-alive (see "round 8" in the CSS) ---- */
 {const th=document.documentElement,COV='#main,#idlefx,#wash,#top,#bgfx',cl=tmEl.classList;
   let warmed=false,fxT=[],held=[],cT=0,pk=[],cv=[],pT=0,gen=0;
@@ -3878,8 +3943,6 @@ $('#bt').onclick=openTimer;
   window._tmWarm=()=>warmed;
 }
 $('#tmmode').addEventListener('click',e=>{e.stopPropagation();tmModeToggle();e.currentTarget.blur()});
-$('#tmdnf').addEventListener('click',e=>{e.stopPropagation();e.currentTarget.blur();if(TM.s!=='stop')return;const t=$('#tmt');if(t.classList.contains('dnf'))return;t.textContent='DNF';t.classList.add('dnf');snd('fail')});
-if(IS_TOUCH){const h=document.querySelector('.tmemo-hint');if(h)h.textContent='tap to peek'}
 tmModeSync();maSync();
 
 /* ---------- top icon bar: a spotlight that glides between icons, a gentle dock swell, a soft glow under the cursor, a label ---------- */

@@ -370,24 +370,11 @@ body.zenmode #sclk{opacity:0;pointer-events:none}
 .chr.ok .chg{color:var(--g)}
 .chr.bad .chg{color:var(--r)}
 #chmemo.on,#chrecall.on,#chres.on{animation:sin .35s cubic-bezier(.32,.72,0,1)}
-/* ---------- mobile ---------- */
-#mbar{position:fixed;left:0;right:0;bottom:0;display:none;gap:.55rem;padding:.7rem .8rem calc(.7rem + env(safe-area-inset-bottom,0px));z-index:3}
-#mbar button{flex:1;padding:.9em .3em;border-radius:14px;font-size:.88rem;touch-action:manipulation;background:color-mix(in srgb,var(--panel) 82%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
-#mbar #mgo{flex:2.2;background:var(--acc);color:var(--on);border-color:var(--acc);font-weight:600;font-size:1rem}
-#mbar button:disabled{opacity:.35}
+/* ---------- touch basics (the dock and touch sizing live at the end of this stylesheet) ---------- */
 button{touch-action:manipulation}
 body{overscroll-behavior:none;-webkit-text-size-adjust:100%}
 .box{max-height:calc(100vh - 2rem);max-height:calc(100dvh - 2rem)}
 #heat .box{max-height:none}
-@media (pointer:coarse),(max-width:700px){
-  #mbar{display:flex}
-  #guide{display:none}
-  #main{padding-bottom:5.5rem}
-  #top{gap:.1rem;padding:.6rem .5rem}
-  #top button{padding:.3em .42em}
-  .ov{padding:.6rem}
-  #settings .box{padding:1.3rem 1rem 2rem}
-}
 @media (pointer:coarse){input,select,textarea{font-size:16px}}
 @media (hover:none){button:hover{transform:none}#top button:hover{transform:none;background:none;color:var(--muted)}#bg:hover,#bh:hover,#bs:hover{transform:none}}
 body.ready #top button:nth-child(5){animation-delay:.33s}
@@ -1660,6 +1647,92 @@ html[data-lt="1"] .tstars b{width:6px!important;height:6px!important}
 
 /* primary buttons keep their accent fill on hover (the generic button:hover tint was washing them out, leaving white text on a near-white fill) */
 button.primary:hover,#heat #hmdrill:hover{background-color:var(--acc);color:var(--on);border-color:var(--acc);filter:brightness(1.08)}
+
+/* =====================================================================================================
+   TOUCH: bottom dock + touch sizing. Tuned for iPad (A16, 820x1180 / 1180x820) first, then iPhone 17 Pro Max
+   (440x956 / 956x440). Lives last in the stylesheet so it wins over the earlier desktop rules.
+   ===================================================================================================== */
+#dock{display:none}
+#tmdnf{display:none}
+:root{--dock-sa:env(safe-area-inset-bottom,0px);--dock-gap:.7rem;--dock-h:6.9rem}
+body.typing{--dock-sa:0px}
+@keyframes dockIn{from{opacity:0;transform:translate3d(-50%,18px,0)}}
+@keyframes dockLbl{from{opacity:0;transform:translateY(6px)}}
+@keyframes dockRing{0%{opacity:.5;transform:scale(1)}100%{opacity:0;transform:scale(1.06,1.2)}}
+
+@media (pointer:coarse),(max-width:700px){
+  html{touch-action:manipulation}
+  #guide{display:none}
+  #main{padding:4.2rem 1rem calc(var(--dock-h) + env(safe-area-inset-bottom,0px))}
+  #toast{bottom:calc(var(--dock-h) + env(safe-area-inset-bottom,0px) + .3rem)}
+
+  #dock{position:fixed;left:50%;bottom:calc(var(--dock-sa) + var(--dock-gap));z-index:3;display:flex;align-items:stretch;gap:.35rem;padding:.4rem;width:min(calc(100% - 1.4rem),600px);border-radius:30px;
+    background:color-mix(in srgb,var(--panel) 62%,transparent);border:1px solid color-mix(in srgb,var(--line) 75%,transparent);
+    -webkit-backdrop-filter:blur(18px) saturate(1.35);backdrop-filter:blur(18px) saturate(1.35);box-shadow:0 20px 50px -22px rgba(0,0,0,.6);
+    transform:translate3d(-50%,calc(var(--kb,0px) * -1),0);transition:transform .32s cubic-bezier(.32,.72,0,1),opacity .3s ease,bottom .3s cubic-bezier(.32,.72,0,1)}
+  html[data-lt="1"] #dock{box-shadow:0 16px 40px -22px rgba(20,30,50,.35)}
+  body.ready #dock{animation:dockIn .8s cubic-bezier(.32,.72,0,1) .35s backwards}
+  html:has(.ov.on) #dock{opacity:0;pointer-events:none}
+
+  #dock button{margin:0;border:0;border-radius:22px;background:none;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.32rem;min-width:0;min-height:4.1rem;padding:.4rem .2rem;
+    font-size:.68rem;letter-spacing:.06em;line-height:1;white-space:nowrap;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;touch-action:manipulation;
+    transition:transform .28s cubic-bezier(.32,.72,0,1),background-color .25s ease,color .25s ease,opacity .3s ease,filter .2s ease}
+  #dock button:hover{border-color:transparent}
+  #dock svg{width:1.5rem;height:1.5rem;display:block;flex:none;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+  #dock svg .fs{fill:currentColor}
+  #dock .dsec{flex:1 1 0}
+  #dock .dsec:active{transform:scale(.93);background:color-mix(in srgb,var(--acc) 14%,transparent);color:var(--acc)}
+  #dock button:disabled{opacity:.3;pointer-events:none}
+
+  #dock .dgo{position:relative;flex:2.3 1 0;flex-direction:row;gap:.7rem;background:var(--acc);color:var(--on);font-size:1.05rem;font-weight:600;letter-spacing:.05em;
+    box-shadow:0 10px 26px -12px color-mix(in srgb,var(--acc) 80%,transparent),inset 0 1px 0 rgba(255,255,255,.22)}
+  #dock .dgo:active{transform:scale(.965);filter:brightness(.93);background:var(--acc);color:var(--on)}
+  #dock .dgo svg{display:none;width:1.45rem;height:1.45rem;stroke-width:2.1}
+  #dock .dgo[data-s="0"] .i0,#dock .dgo[data-s="1"] .i1,#dock .dgo[data-s="2"] .i2{display:block}
+  #dock .dgo span.sw{animation:dockLbl .35s cubic-bezier(.32,.72,0,1) backwards}
+  #dock .dgo::after{content:"";position:absolute;inset:0;border-radius:inherit;border:2px solid var(--acc);opacity:0;pointer-events:none}
+  #dock .dgo[data-s="1"]::after{animation:dockRing 1.6s cubic-bezier(.32,.72,0,1) infinite}
+  #dword .iw{display:none}
+  #dword[data-m="word"] .il{display:none}
+  #dword[data-m="word"] .iw{display:block}
+
+  /* touch-sized targets everywhere else (44pt minimum) */
+  #top button{width:2.75rem;height:2.75rem}
+  #top .tind{width:2.75rem;height:2.75rem}
+  #sclk{height:calc(2.75rem + .6rem + 2px);font-size:.9rem}
+  [data-close],.tclose{min-height:2.75rem}
+  .tclose{padding:.5em 1.3em;font-size:.9rem}
+  .tmmode{min-height:2.75rem;padding:.6em 1.2em;font-size:.78rem}
+  .tpage.stop #tmdnf{display:inline-flex;align-items:center}
+}
+@media (max-width:700px){.ov{padding:.6rem}}
+
+/* iPad: roomy dock, bigger type on the main screen */
+@media (pointer:coarse) and (min-width:700px){
+  :root{--dock-gap:1.1rem;--dock-h:8.4rem}
+  #dock{width:min(calc(100% - 3rem),640px);padding:.5rem;gap:.45rem;border-radius:36px}
+  #dock button{min-height:4.9rem;border-radius:27px;font-size:.76rem}
+  #dock svg{width:1.7rem;height:1.7rem}
+  #dock .dgo{font-size:1.2rem;gap:.8rem}
+  #dock .dgo svg{width:1.6rem;height:1.6rem}
+  #main{padding-top:4.6rem}
+  #pair{font-size:clamp(2rem,calc((92vw - (var(--n) - 1) * var(--gap,1.75rem)) / (var(--n) * 1.6)),14rem)}
+  #pair.idle{font-size:clamp(1.3rem,3.4vw,2rem)}
+  #time{font-size:clamp(1.4rem,3.6vw,2.2rem)}
+  #word{font-size:clamp(1.3rem,3.4vw,2.2rem)}
+  .tmmode{font-size:.85rem}
+}
+
+/* short screens (phone landscape): compact dock, icons only, text kept inside the height */
+@media (pointer:coarse) and (max-height:520px){
+  :root{--dock-gap:.5rem;--dock-h:5.4rem}
+  #dock{padding:.3rem;border-radius:26px}
+  #dock button{min-height:3.4rem;border-radius:20px}
+  #dock .dsec span{display:none}
+  #main{padding-top:3.6rem;gap:.7rem}
+  #pair{font-size:clamp(1.8rem,min(calc((92vw - (var(--n) - 1) * var(--gap,1.75rem)) / (var(--n) * 1.6)),30vh),11rem)}
+}
+@media (prefers-reduced-motion:reduce){#dock,#dock button{transition-duration:.01s!important}#dock .dgo::after,#dock .dgo span.sw,body.ready #dock{animation:none!important}}
 </style>
 </head>
 <body>
@@ -1691,7 +1764,12 @@ button.primary:hover,#heat #hmdrill:hover{background-color:var(--acc);color:var(
 <button id="drillchip" type="button" style="display:none">Drilling <b id="dn">0</b> <span id="dl">slowest pairs</span> <span aria-hidden="true">✕</span></button>
 <div id="wrap"><input id="wi" type="text" autocomplete="off" spellcheck="false"></div>
 </div>
-<div id="mbar"><button id="mreset" type="button">Reset</button><button id="mfail" type="button">Fail</button><button id="mword" type="button">Word</button><button id="mgo" type="button">Start</button></div>
+<div id="dock" role="toolbar" aria-label="Controls">
+<button id="dreset" type="button" class="dsec" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg><span>Reset</span></button>
+<button id="dfail" type="button" class="dsec" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/></svg><span>Fail</span></button>
+<button id="dword" type="button" class="dsec" data-m="look"><svg class="il" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/></svg><svg class="iw" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.4 3.6a2.1 2.1 0 0 1 3 3L7.4 18.6a2 2 0 0 1-.9.5l-2.9.8a.5.5 0 0 1-.6-.6l.8-2.9a2 2 0 0 1 .5-.9z"/></svg><span>Lookup</span></button>
+<button id="dgo" type="button" class="dgo" data-s="0"><svg class="i0" viewBox="0 0 24 24" aria-hidden="true"><path class="fs" d="M7.5 5.5v13l11-6.5z"/></svg><svg class="i1" viewBox="0 0 24 24" aria-hidden="true"><rect class="fs" x="6.5" y="6.5" width="11" height="11" rx="2.5"/></svg><svg class="i2" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span>Start</span></button>
+</div>
 <div id="guide"><span><kbd>Space</kbd>Next</span><span><kbd>Esc</kbd>Reset</span><span><kbd>Tab</kbd>Word</span><span><kbd>D</kbd>Lookup</span><span><kbd>Right-side keys</kbd>Fail</span></div>
 <div id="toast"></div>
 <div id="tip"></div>
@@ -1923,7 +2001,7 @@ B,bat,bubble</pre>
 <button class="tclose" data-close type="button" aria-label="Close timer">Close</button>
 <div class="tpage" id="tpage">
 <div id="tmsc" class="tmsc"></div>
-<div class="tmmain"><div class="tmcol"><div id="tmt" class="tmt">0.00</div><div class="tmline"><i id="tmbar"></i><i id="tmbar2"></i></div><div class="tmspw"><div class="tmsp" id="tmsp"><div class="tms tmm" id="tmmc"><span class="k">Memo</span><b id="tmm">&ndash;</b><em id="tmmp"></em></div><div class="tms tme" id="tmec"><span class="k">Exec</span><b id="tme">&ndash;</b><em id="tmep"></em></div></div></div><div id="tmh" class="tmh"></div><div class="tmpills"><button type="button" class="tmmode" id="tmmode" tabindex="-1"></button><button type="button" class="tmmode" id="tmmemo" tabindex="-1"></button></div></div><div class="tcube" id="tcube" title="Drag to rotate, double-click to reset" aria-label="3D view of the scramble, drag to rotate"><div class="tcshadow"></div><div class="tcfloat"><div class="tc3d" id="tc3d"></div></div></div></div>
+<div class="tmmain"><div class="tmcol"><div id="tmt" class="tmt">0.00</div><div class="tmline"><i id="tmbar"></i><i id="tmbar2"></i></div><div class="tmspw"><div class="tmsp" id="tmsp"><div class="tms tmm" id="tmmc"><span class="k">Memo</span><b id="tmm">&ndash;</b><em id="tmmp"></em></div><div class="tms tme" id="tmec"><span class="k">Exec</span><b id="tme">&ndash;</b><em id="tmep"></em></div></div></div><div id="tmh" class="tmh"></div><div class="tmpills"><button type="button" class="tmmode" id="tmmode" tabindex="-1"></button><button type="button" class="tmmode" id="tmmemo" tabindex="-1"></button><button type="button" class="tmmode" id="tmdnf" tabindex="-1">DNF</button></div></div><div class="tcube" id="tcube" title="Drag to rotate, double-click to reset" aria-label="3D view of the scramble, drag to rotate"><div class="tcshadow"></div><div class="tcfloat"><div class="tc3d" id="tc3d"></div></div></div></div>
 <div class="tmemo" id="tmemo" hidden aria-live="polite"><div class="tmemo-h"><span class="k">Memo answer</span><span class="tmemo-lbl" id="tmemol"></span><span class="mx" id="tmemox"></span><span class="tmemo-hint">click or press V to peek</span><span class="tmemo-meth">M2 / Orozco</span></div><div class="tmemo-b" id="tmemob"></div><span class="tmemo-k" id="tmemok"></span></div>
 </div>
 </div>
@@ -2070,6 +2148,7 @@ function cbHide(){if(CB.tok&&CB.dirty&&!cbHold)cbPush()}
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const P=$('#pair'),T=$('#time'),W=$('#word'),WI=$('#wi'),PB=$('#pace'),PBI=PB.firstElementChild;
 let st=0,cur=[],prev=null,t0=0,el=0,raf=0,ft=0,modal=null,postStop=false,attemptD=null,attemptHist=[],attemptSess=null,sess={n:0,sum:0,best:null,rec:[],r:[0,0,0]};
+const IS_TOUCH=matchMedia('(pointer:coarse)').matches,IDLE_TXT=IS_TOUCH?'Tap Start to begin':'Press Spacebar to Start';
 const FAIL_KEYS=new Set(['y','u','i','o','p','j','h','k','l','n','m','b',',','.',';','[',"'",'8','9','0','/',']','=','-']);
 const fmt=ms=>(ms/1000).toFixed(2)+'s';
 const RC=['var(--g)','var(--y)','var(--r)'];
@@ -2148,7 +2227,7 @@ function start(){
   document.body.classList.add('live','solving');
   st=1;t0=performance.now();clearTimeout(ft);snd('start');
   if(set().flash)ft=setTimeout(()=>{if(st===1)P.classList.add('hid')},Math.max(0,set().fd*1000-60));
-  raf=requestAnimationFrame(tick);
+  raf=requestAnimationFrame(tick);dockSync();
 }
 function stop(){
   document.body.classList.remove('solving');el=performance.now()-t0;st=2;postStop=true;sndLv=set().zen?1:rate(el);snd('stop');buzz(sndLv===2?[14]:[8]);cancelAnimationFrame(raf);clearTimeout(ft);
@@ -2170,7 +2249,7 @@ function stop(){
   save();
   if(!set().zen){T.textContent=fmt(el);T.className='r'+rate(per);washFx(rate(per));pairFx(RC[rate(per)])}else T.textContent='';
   PB.style.visibility='hidden';
-  setWord(savedWords());
+  setWord(savedWords());dockSync();
 }
 function fail(){
   if(st!==1)return;
@@ -2182,12 +2261,12 @@ function fail(){
   PB.style.visibility='hidden';
   setWord(savedWords());
   snd('fail');buzz([10,45,10]);
-  toast(savedWords()?'Word revealed — not logged':'Failed — no saved word for this pair');
+  toast(savedWords()?'Word revealed — not logged':'Failed — no saved word for this pair');dockSync();
 }
 function reset(){
   document.body.classList.remove('solving');cancelAnimationFrame(raf);clearTimeout(ft);st=0;cur=[];postStop=false;hideWI();
-  P.className='idle';P.textContent='Press Spacebar to Start';
-  T.textContent='';T.className='';W.textContent='';PB.style.visibility='hidden';idleLast();
+  P.className='idle';P.textContent=IDLE_TXT;
+  T.textContent='';T.className='';W.textContent='';PB.style.visibility='hidden';idleLast();dockSync();
 }
 function idleLast(){
   const h=D.hist&&D.hist[D.hist.length-1];
@@ -2198,6 +2277,14 @@ idleLast();
 function pairFx(c){P.style.setProperty('--rc2',c);P.classList.remove('rs');void P.offsetWidth;P.classList.add('rs')}
 function washFx(l){const w=$('#wash');if(!w)return;w.className='';void w.offsetWidth;w.className='w'+l}
 function press(){if(st===1)stop();else start()}
+/* mark the time you just stopped as a fail (the \ key, and Fail on the touch dock after a stop) */
+function failLast(){
+  if(!(st===2&&postStop&&attemptD&&attemptSess))return;
+  unsnap(attemptD);D.hist=attemptHist.slice();
+  Object.keys(sess).forEach(k=>delete sess[k]);Object.assign(sess,JSON.parse(JSON.stringify(attemptSess)));
+  const now=Date.now();sess.f=(sess.f||0)+1;D.fails[cur[0]]=(D.fails[cur[0]]||0)+1;cur.forEach(k=>{D.missed[k]=1;D.missedStreak[k]=0;D.review[k]={last:now,due:now,interval:0}});
+  postStop=false;save();T.textContent='Failed';T.className='failed';washFx(2);pairFx(RC[2]);setWord(savedWords());snd('fail');toast('Time undone — marked as failed');dockSync();
+}
 function openWI(){
   snd('tab');
   WI.placeholder='Word for '+cur[0];
@@ -2220,13 +2307,7 @@ addEventListener('keydown',e=>{
     return;
   }
   if(e.code==='Space'){e.preventDefault();if(!e.repeat)press();return}
-  if(e.key==='\\'&&st===2&&postStop&&attemptD&&attemptSess){
-    e.preventDefault();
-    unsnap(attemptD);D.hist=attemptHist.slice();
-    Object.keys(sess).forEach(k=>delete sess[k]);Object.assign(sess,JSON.parse(JSON.stringify(attemptSess)));
-    const now=Date.now();sess.f=(sess.f||0)+1;D.fails[cur[0]]=(D.fails[cur[0]]||0)+1;cur.forEach(k=>{D.missed[k]=1;D.missedStreak[k]=0;D.review[k]={last:now,due:now,interval:0}});
-    postStop=false;save();T.textContent='Failed';T.className='failed';washFx(2);pairFx(RC[2]);setWord(savedWords());snd('fail');toast('Time undone — marked as failed');return;
-  }
+  if(e.key==='\\'&&st===2&&postStop&&attemptD&&attemptSess){e.preventDefault();failLast();return}
   if(st===1&&FAIL_KEYS.has(e.key.toLowerCase())){e.preventDefault();fail();return}
   if((e.key==='d'||e.key==='D')&&!e.ctrlKey&&!e.metaKey&&!e.altKey){e.preventDefault();openLookup();return}
   if((e.key==='g'||e.key==='G')&&st!==1&&!e.ctrlKey&&!e.metaKey&&!e.altKey){e.preventDefault();openGrid();return}
@@ -3062,15 +3143,43 @@ document.addEventListener('keydown',e=>{
   else if((chPhase==='setup'||chPhase==='res')&&e.key==='Enter'&&e.target.tagName!=='BUTTON'){e.preventDefault();chStart()}
 });
 
-/* mobile controls */
-const mgo=$('#mgo'),mfail=$('#mfail'),mword=$('#mword'),mreset=$('#mreset');
-$$('#mbar button').forEach(b=>b.addEventListener('mousedown',e=>e.preventDefault()));
-mgo.onclick=press;
-mfail.onclick=fail;
-mword.onclick=()=>{if(st===2)openWI();else openLookup()};
-mreset.onclick=()=>{if(st!==0)snd('err');reset()};
-let lastSt=-1;
-const mbMQ=matchMedia('(pointer:coarse),(max-width:700px)');setInterval(()=>{if(!mbMQ.matches)return;if(st!==lastSt){lastSt=st;mgo.textContent=st===0?'Start':st===1?'Stop':'Next';mfail.disabled=st!==1}},80);
+/* touch dock: Reset / Fail / Word (Lookup) / Start-Stop-Next. State is pushed from start/stop/fail/reset via dockSync() */
+var dkGo,dkReset,dkFail,dkWord,dkLbl,dkWLbl,dkKey='';
+function dockSync(){
+  if(!dkGo)return;
+  const key=st+'|'+(st===2&&postStop?1:0);
+  if(key===dkKey)return;dkKey=key;
+  dkGo.dataset.s=st;
+  const t=st===0?'Start':st===1?'Stop':'Next';
+  if(dkLbl.textContent!==t){dkLbl.textContent=t;dkLbl.classList.remove('sw');void dkLbl.offsetWidth;dkLbl.classList.add('sw')}
+  dkReset.disabled=st===0;
+  dkFail.disabled=!(st===1||(st===2&&postStop));
+  dkWord.dataset.m=st===2?'word':'look';
+  dkWLbl.textContent=st===2?'Word':'Lookup';
+  dkWord.setAttribute('aria-label',st===2?'Save a word for this pair':'Look up a word');
+}
+{
+  dkGo=$('#dgo');dkReset=$('#dreset');dkFail=$('#dfail');dkWord=$('#dword');dkLbl=dkGo.querySelector('span');dkWLbl=dkWord.querySelector('span');
+  /* keep focus where it is (the word box) when a dock button is pressed */
+  $$('#dock button').forEach(b=>b.addEventListener('mousedown',e=>e.preventDefault()));
+  /* the main button fires on touch-down so a stop is registered the instant the finger lands; click still handles keyboard use */
+  let dgAt=-1e4;
+  dkGo.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'&&e.button!==0)return;dgAt=performance.now();press()});
+  dkGo.addEventListener('click',()=>{if(performance.now()-dgAt<700)return;press()});
+  dkFail.onclick=()=>{if(st===1)fail();else failLast()};
+  dkWord.onclick=()=>{if(st===2)openWI();else openLookup()};
+  dkReset.onclick=()=>{if(st!==0)snd('err');reset()};
+  if(IS_TOUCH&&P.classList.contains('idle'))P.textContent=IDLE_TXT;
+  dockSync();
+  /* lift the dock above the on-screen keyboard while the word box is open */
+  const vv=window.visualViewport,root=document.documentElement;
+  if(vv){
+    const upd=()=>{const kb=document.body.classList.contains('typing')?Math.max(0,Math.round(innerHeight-vv.height-vv.offsetTop)):0;root.style.setProperty('--kb',kb+'px')};
+    vv.addEventListener('resize',upd);vv.addEventListener('scroll',upd);
+    WI.addEventListener('focus',()=>{document.body.classList.add('typing');upd();setTimeout(upd,250);setTimeout(upd,600)});
+    WI.addEventListener('blur',()=>{document.body.classList.remove('typing');upd()});
+  }
+}
 
 /* ---------- 3x3x3 random-state scrambler (Kociemba two-phase, written from scratch) ---------- */
 const SCR_FN=function(){
@@ -3261,7 +3370,7 @@ function tmSpReset(){
   tmCards.forEach(c=>c.classList.remove('fin','pop'));
 }
 function tmModeSync(){
-  const b=$('#tmmode');b.textContent='Memo / exec split: '+(TM.sp?'on':'off')+'  [S]';b.classList.toggle('on',TM.sp);tmClass(TM.cls);
+  const b=$('#tmmode');b.textContent='Memo / exec split: '+(TM.sp?'on':'off')+(IS_TOUCH?'':'  [S]');b.classList.toggle('on',TM.sp);tmClass(TM.cls);
 }
 function tmModeToggle(){
   if(TM.s!=='idle'&&TM.s!=='stop')return;
@@ -3455,7 +3564,7 @@ function maVis(on){
 }
 function maSync(){
   const on=!!set().tmemo;
-  maVis(on);maBtn.textContent='Memo answer: '+(on?'on':'off')+'  [M]';maBtn.classList.toggle('on',on);
+  maVis(on);maBtn.textContent='Memo answer: '+(on?'on':'off')+(IS_TOUCH?'':'  [M]');maBtn.classList.toggle('on',on);
   if(!on)return;
   if(!SCR.ready){maPlaceholder();maLive();return}
   /* right after a solve the next scramble is already up, so the panel shows the answer for the solve you just did;
@@ -3651,6 +3760,8 @@ $('#bt').onclick=openTimer;
   window._tmWarm=()=>warmed;
 }
 $('#tmmode').addEventListener('click',e=>{e.stopPropagation();tmModeToggle();e.currentTarget.blur()});
+$('#tmdnf').addEventListener('click',e=>{e.stopPropagation();e.currentTarget.blur();if(TM.s!=='stop')return;const t=$('#tmt');if(t.classList.contains('dnf'))return;t.textContent='DNF';t.classList.add('dnf');snd('fail')});
+if(IS_TOUCH){const h=document.querySelector('.tmemo-hint');if(h)h.textContent='tap to peek'}
 tmModeSync();maSync();
 
 /* ---------- top icon bar: a spotlight that glides between icons, a gentle dock swell, a soft glow under the cursor, a label ---------- */
@@ -4262,7 +4373,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')hideTip()},true);
 
 /* idle hints: the start prompt rotates through shortcuts */
 (function(){
-  const H=['Press Spacebar to Start','Press T to open the timer','Press D to look up a word','Press G for the word grid','Press C to start a memo chain','Press L for the sticker trainer','Press W for the word trainer','Press Tab after a stop to save your word','Press \\ to undo your last time'];
+  const H=IS_TOUCH?['Tap Start to begin','Tap the clock icon for the timer','Tap the book icon to look up a word','Tap Word after a stop to save your word','Tap Fail if you blank on the word']:['Press Spacebar to Start','Press T to open the timer','Press D to look up a word','Press G for the word grid','Press C to start a memo chain','Press L for the sticker trainer','Press W for the word trainer','Press Tab after a stop to save your word','Press \\ to undo your last time'];
   let i=0;
   const ok=()=>st===0&&!modal&&P.classList.contains('idle');
   setInterval(()=>{

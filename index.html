@@ -1657,8 +1657,6 @@ button.primary:hover,#heat #hmdrill:hover{background-color:var(--acc);color:var(
 :root{--dock-sa:env(safe-area-inset-bottom,0px);--dock-gap:.7rem;--dock-h:6.9rem}
 body.typing{--dock-sa:0px}
 @keyframes dockIn{from{opacity:0;transform:translate3d(-50%,18px,0)}}
-@keyframes dockLbl{from{opacity:0;transform:translateY(6px)}}
-@keyframes dockRing{0%{opacity:.5;transform:scale(1)}100%{opacity:0;transform:scale(1.06,1.2)}}
 
 @media (pointer:coarse),(max-width:700px){
   html{touch-action:manipulation}
@@ -1666,7 +1664,7 @@ body.typing{--dock-sa:0px}
   #main{padding:4.2rem 1rem calc(var(--dock-h) + env(safe-area-inset-bottom,0px))}
   #toast{bottom:calc(var(--dock-h) + env(safe-area-inset-bottom,0px) + .3rem)}
 
-  #dock{position:fixed;left:50%;bottom:calc(var(--dock-sa) + var(--dock-gap));z-index:3;display:flex;align-items:stretch;gap:.35rem;padding:.4rem;width:min(calc(100% - 1.4rem),600px);border-radius:30px;
+  #dock{position:fixed;left:50%;bottom:calc(var(--dock-sa) + var(--dock-gap));z-index:3;display:flex;align-items:stretch;gap:.35rem;padding:.4rem;width:min(calc(100% - 1.4rem),400px);border-radius:30px;
     background:color-mix(in srgb,var(--panel) 62%,transparent);border:1px solid color-mix(in srgb,var(--line) 75%,transparent);
     -webkit-backdrop-filter:blur(18px) saturate(1.35);backdrop-filter:blur(18px) saturate(1.35);box-shadow:0 20px 50px -22px rgba(0,0,0,.6);
     transform:translate3d(-50%,calc(var(--kb,0px) * -1),0);transition:transform .32s cubic-bezier(.32,.72,0,1),opacity .3s ease,bottom .3s cubic-bezier(.32,.72,0,1)}
@@ -1684,14 +1682,6 @@ body.typing{--dock-sa:0px}
   #dock .dsec:active{transform:scale(.93);background:color-mix(in srgb,var(--acc) 14%,transparent);color:var(--acc)}
   #dock button:disabled{opacity:.3;pointer-events:none}
 
-  #dock .dgo{position:relative;flex:2.3 1 0;flex-direction:row;gap:.7rem;background:var(--acc);color:var(--on);font-size:1.05rem;font-weight:600;letter-spacing:.05em;
-    box-shadow:0 10px 26px -12px color-mix(in srgb,var(--acc) 80%,transparent),inset 0 1px 0 rgba(255,255,255,.22)}
-  #dock .dgo:active{transform:scale(.965);filter:brightness(.93);background:var(--acc);color:var(--on)}
-  #dock .dgo svg{display:none;width:1.45rem;height:1.45rem;stroke-width:2.1}
-  #dock .dgo[data-s="0"] .i0,#dock .dgo[data-s="1"] .i1,#dock .dgo[data-s="2"] .i2{display:block}
-  #dock .dgo span.sw{animation:dockLbl .35s cubic-bezier(.32,.72,0,1) backwards}
-  #dock .dgo::after{content:"";position:absolute;inset:0;border-radius:inherit;border:2px solid var(--acc);opacity:0;pointer-events:none}
-  #dock .dgo[data-s="1"]::after{animation:dockRing 1.6s cubic-bezier(.32,.72,0,1) infinite}
   #dword .iw{display:none}
   #dword[data-m="word"] .il{display:none}
   #dword[data-m="word"] .iw{display:block}
@@ -1710,11 +1700,9 @@ body.typing{--dock-sa:0px}
 /* iPad: roomy dock, bigger type on the main screen */
 @media (pointer:coarse) and (min-width:700px){
   :root{--dock-gap:1.1rem;--dock-h:8.4rem}
-  #dock{width:min(calc(100% - 3rem),640px);padding:.5rem;gap:.45rem;border-radius:36px}
+  #dock{width:min(calc(100% - 3rem),460px);padding:.5rem;gap:.45rem;border-radius:36px}
   #dock button{min-height:4.9rem;border-radius:27px;font-size:.76rem}
   #dock svg{width:1.7rem;height:1.7rem}
-  #dock .dgo{font-size:1.2rem;gap:.8rem}
-  #dock .dgo svg{width:1.6rem;height:1.6rem}
   #main{padding-top:4.6rem}
   #pair{font-size:clamp(2rem,calc((92vw - (var(--n) - 1) * var(--gap,1.75rem)) / (var(--n) * 1.6)),14rem)}
   #pair.idle{font-size:clamp(1.3rem,3.4vw,2rem)}
@@ -1732,8 +1720,7 @@ body.typing{--dock-sa:0px}
   #main{padding-top:3.6rem;gap:.7rem}
   #pair{font-size:clamp(1.8rem,min(calc((92vw - (var(--n) - 1) * var(--gap,1.75rem)) / (var(--n) * 1.6)),30vh),11rem)}
 }
-@media (prefers-reduced-motion:reduce){#dock,#dock button{transition-duration:.01s!important}#dock .dgo::after,#dock .dgo span.sw,body.ready #dock{animation:none!important}}
-
+@media (prefers-reduced-motion:reduce){#dock,#dock button{transition-duration:.01s!important}body.ready #dock{animation:none!important}}
 /* =====================================================================================================
    TOUCH ONLY (phone + iPad): trainers are hidden, and the heatmap is a plain static grid (no animation,
    no hover card, no blur) so it stays smooth. PC keeps the trainers and the full animated heatmap.
@@ -1788,6 +1775,13 @@ body.typing{--dock-sa:0px}
   .hmt-grid{width:min(100%,calc(100dvh - 13rem));margin-left:0}
   .hmt-pick{position:sticky;top:6.5rem;bottom:auto;margin:.7rem 0 0;border:1px solid var(--line);border-radius:14px;padding:.8rem}
 }
+
+/* idle prompt stays still: no breathing fade (the load-in is kept), hints swap without fading */
+#pair.idle{animation:none}
+body.ready:not(.live) #pair.idle{animation:pin .8s cubic-bezier(.32,.72,0,1) .2s backwards}
+
+/* tap anywhere on the main screen: no iOS callout or tap flash */
+@media (pointer:coarse),(max-width:700px){#main{-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}}
 </style>
 </head>
 <body>
@@ -1823,7 +1817,6 @@ body.typing{--dock-sa:0px}
 <button id="dreset" type="button" class="dsec" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg><span>Reset</span></button>
 <button id="dfail" type="button" class="dsec" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/></svg><span>Fail</span></button>
 <button id="dword" type="button" class="dsec" data-m="look"><svg class="il" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/></svg><svg class="iw" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.4 3.6a2.1 2.1 0 0 1 3 3L7.4 18.6a2 2 0 0 1-.9.5l-2.9.8a.5.5 0 0 1-.6-.6l.8-2.9a2 2 0 0 1 .5-.9z"/></svg><span>Lookup</span></button>
-<button id="dgo" type="button" class="dgo" data-s="0"><svg class="i0" viewBox="0 0 24 24" aria-hidden="true"><path class="fs" d="M7.5 5.5v13l11-6.5z"/></svg><svg class="i1" viewBox="0 0 24 24" aria-hidden="true"><rect class="fs" x="6.5" y="6.5" width="11" height="11" rx="2.5"/></svg><svg class="i2" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg><span>Start</span></button>
 </div>
 <div id="guide"><span><kbd>Space</kbd>Next</span><span><kbd>Esc</kbd>Reset</span><span><kbd>Tab</kbd>Word</span><span><kbd>D</kbd>Lookup</span><span><kbd>Right-side keys</kbd>Fail</span></div>
 <div id="toast"></div>
@@ -2212,7 +2205,7 @@ function cbHide(){if(CB.tok&&CB.dirty&&!cbHold)cbPush()}
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const P=$('#pair'),T=$('#time'),W=$('#word'),WI=$('#wi'),PB=$('#pace'),PBI=PB.firstElementChild;
 let st=0,cur=[],prev=null,t0=0,el=0,raf=0,ft=0,modal=null,postStop=false,attemptD=null,attemptHist=[],attemptSess=null,sess={n:0,sum:0,best:null,rec:[],r:[0,0,0]};
-const IS_TOUCH=matchMedia('(pointer:coarse)').matches,IDLE_TXT=IS_TOUCH?'Tap Start to begin':'Press Spacebar to Start';
+const IS_TOUCH=matchMedia('(pointer:coarse)').matches,IDLE_TXT=IS_TOUCH?'Tap anywhere to start':'Press Spacebar to Start';
 const FAIL_KEYS=new Set(['y','u','i','o','p','j','h','k','l','n','m','b',',','.',';','[',"'",'8','9','0','/',']','=','-']);
 const fmt=ms=>(ms/1000).toFixed(2)+'s';
 const RC=['var(--g)','var(--y)','var(--r)'];
@@ -2810,7 +2803,7 @@ function snd(n,dl){
 }
 document.addEventListener('click',e=>{
   const t=e.target.closest&&e.target.closest('button,select,input.tg');if(!t)return;
-  if(t.hasAttribute('data-close')||t.hasAttribute('data-go')||/^(bh|bs|bg|bd|bch|bsl|slgo|slagain|slend|wdgo|wdagain|bt|bhelp|bc1|bc2|bc3|cno|cyes|lsave|ldel|mgo|mfail|mword|mreset|chgo|chagain|chdone|chsub)$/.test(t.id))return;
+  if(t.hasAttribute('data-close')||t.hasAttribute('data-go')||/^(bh|bs|bg|bd|bch|bsl|slgo|slagain|slend|wdgo|wdagain|bt|bhelp|bc1|bc2|bc3|cno|cyes|lsave|ldel|dfail|dreset|chgo|chagain|chdone|chsub)$/.test(t.id))return;
   snd('click');
 });
 const VR=document.querySelector('[data-k="vol"]');
@@ -3135,7 +3128,7 @@ function startDrill(list,label){
   label=label||'slowest pairs';
   drill={list:list.map(r=>({k:r.k,before:r.a})),times:{},fails:{},n:0,label:label};
   $('#dn').textContent=list.length;$('#dl').textContent=label;$('#drillchip').style.display='inline-flex';
-  closeM();snd('start',.12);toast('Drilling '+list.length+' '+label+(IS_TOUCH?'. Tap Start.':'. Press Space to start.'));
+  closeM();snd('start',.12);toast('Drilling '+list.length+' '+label+(IS_TOUCH?'. Tap anywhere to start.':'. Press Space to start.'));
 }
 function drillLetter(kind,l){
   const keys=(kind==='first'?L.map(b=>l+b):L.map(a=>a+l));
@@ -3266,15 +3259,12 @@ document.addEventListener('keydown',e=>{
   else if((chPhase==='setup'||chPhase==='res')&&e.key==='Enter'&&e.target.tagName!=='BUTTON'){e.preventDefault();chStart()}
 });
 
-/* touch dock: Reset / Fail / Word (Lookup) / Start-Stop-Next. State is pushed from start/stop/fail/reset via dockSync() */
-var dkGo,dkReset,dkFail,dkWord,dkLbl,dkWLbl,dkKey='';
+/* touch dock: Reset / Fail / Word (Lookup). Start, stop and next are a tap anywhere on the main screen. State is pushed from start/stop/fail/reset via dockSync() */
+var dkReset,dkFail,dkWord,dkWLbl,dkKey='';
 function dockSync(){
-  if(!dkGo)return;
+  if(!dkReset)return;
   const key=st+'|'+(st===2&&postStop?1:0);
   if(key===dkKey)return;dkKey=key;
-  dkGo.dataset.s=st;
-  const t=st===0?'Start':st===1?'Stop':'Next';
-  if(dkLbl.textContent!==t){dkLbl.textContent=t;dkLbl.classList.remove('sw');void dkLbl.offsetWidth;dkLbl.classList.add('sw')}
   dkReset.disabled=st===0;
   dkFail.disabled=!(st===1||(st===2&&postStop));
   dkWord.dataset.m=st===2?'word':'look';
@@ -3282,16 +3272,21 @@ function dockSync(){
   dkWord.setAttribute('aria-label',st===2?'Save a word for this pair':'Look up a word');
 }
 {
-  dkGo=$('#dgo');dkReset=$('#dreset');dkFail=$('#dfail');dkWord=$('#dword');dkLbl=dkGo.querySelector('span');dkWLbl=dkWord.querySelector('span');
+  dkReset=$('#dreset');dkFail=$('#dfail');dkWord=$('#dword');dkWLbl=dkWord.querySelector('span');
+  const dockEl=$('#dock');
   /* keep focus where it is (the word box) when a dock button is pressed */
   $$('#dock button').forEach(b=>b.addEventListener('mousedown',e=>e.preventDefault()));
-  /* the main button fires on touch-down so a stop is registered the instant the finger lands; click still handles keyboard use */
-  let dgAt=-1e4;
-  dkGo.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'&&e.button!==0)return;dgAt=performance.now();press()});
-  dkGo.addEventListener('click',()=>{if(performance.now()-dgAt<700)return;press()});
   dkFail.onclick=()=>{if(st===1)fail();else failLast()};
   dkWord.onclick=()=>{if(st===2)openWI();else openLookup()};
   dkReset.onclick=()=>{if(st!==0)snd('err');reset()};
+  /* tap anywhere on the main screen = Start / Stop / Next (fires on touch-down so a stop lands the instant the finger does) */
+  $('#main').addEventListener('pointerdown',e=>{
+    if(e.pointerType==='mouse'&&e.button!==0)return;
+    if(getComputedStyle(dockEl).display==='none'||modal)return;
+    if(e.target.closest('button,input,a,#wi'))return;
+    if(document.body.classList.contains('typing')){if(document.activeElement)document.activeElement.blur();return}
+    press();
+  });
   if(IS_TOUCH&&P.classList.contains('idle'))P.textContent=IDLE_TXT;
   dockSync();
   /* lift the dock above the on-screen keyboard while the word box is open */
@@ -4496,19 +4491,14 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')hideTip()},true);
 
 /* idle hints: the start prompt rotates through shortcuts */
 (function(){
-  const H=IS_TOUCH?['Tap Start to begin','Tap the clock icon for the timer','Tap the book icon to look up a word','Tap Word after a stop to save your word','Tap Fail if you blank on the word']:['Press Spacebar to Start','Press T to open the timer','Press D to look up a word','Press G for the word grid','Press C to start a memo chain','Press L for the sticker trainer','Press W for the word trainer','Press Tab after a stop to save your word','Press \\ to undo your last time'];
+  const H=IS_TOUCH?['Tap anywhere to start','Tap the clock icon for the timer','Tap the book icon to look up a word','Tap Word after a stop to save your word','Tap Fail if you blank on the word']:['Press Spacebar to Start','Press T to open the timer','Press D to look up a word','Press G for the word grid','Press C to start a memo chain','Press L for the sticker trainer','Press W for the word trainer','Press Tab after a stop to save your word','Press \\ to undo your last time'];
   let i=0;
   const ok=()=>st===0&&!modal&&P.classList.contains('idle');
   setInterval(()=>{
     if(document.hidden||!ok())return;
     let sp=P.querySelector('.hint');
     if(!sp){const t=P.textContent;P.textContent='';sp=document.createElement('span');sp.className='hint';sp.textContent=t;P.appendChild(sp)}
-    sp.classList.add('out');
-    setTimeout(()=>{
-      if(!ok()||!sp.isConnected){sp.classList.remove('out');return}
-      i=(i+1)%H.length;sp.textContent=H[i];
-      sp.style.transition='none';sp.classList.remove('out');sp.classList.add('pre');void sp.offsetWidth;sp.style.transition='';sp.classList.remove('pre');
-    },320);
+    i=(i+1)%H.length;sp.textContent=H[i];
   },5200);
 })();
 

@@ -1733,6 +1733,61 @@ body.typing{--dock-sa:0px}
   #pair{font-size:clamp(1.8rem,min(calc((92vw - (var(--n) - 1) * var(--gap,1.75rem)) / (var(--n) * 1.6)),30vh),11rem)}
 }
 @media (prefers-reduced-motion:reduce){#dock,#dock button{transition-duration:.01s!important}#dock .dgo::after,#dock .dgo span.sw,body.ready #dock{animation:none!important}}
+
+/* =====================================================================================================
+   TOUCH ONLY (phone + iPad): trainers are hidden, and the heatmap is a plain static grid (no animation,
+   no hover card, no blur) so it stays smooth. PC keeps the trainers and the full animated heatmap.
+   ===================================================================================================== */
+@media (pointer:coarse){#bsl,.pconly{display:none!important}}
+#hmt,#hmt.on,#hmt.on .box,#hmt.out .box{animation:none!important}
+#hmt{padding:0;align-items:stretch;justify-content:center;background:var(--bg)}
+#hmt.out{display:none}
+#hmt .box{width:100%;max-width:980px;height:100%;max-height:none;border:0;border-radius:0;background:var(--bg);box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;overflow:auto;-webkit-overflow-scrolling:touch;padding:0 .8rem calc(1rem + env(safe-area-inset-bottom,0px))}
+.hmt-h{position:sticky;top:0;z-index:3;margin:0 -.8rem;padding:calc(.8rem + env(safe-area-inset-top,0px)) .8rem .7rem;background:var(--bg);border-bottom:1px solid var(--line)}
+.hmt-h h2{margin:0 0 .25rem;font-size:1.35rem;font-weight:700}
+.hmt-sum{color:var(--muted);font-size:.8rem;line-height:1.4}
+.hmt-bar{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;margin:.8rem 0 .2rem}
+#hmtPrac{flex:1 1 13rem;min-height:2.9rem;border-radius:14px;font-size:.95rem}
+#hmtPrac:disabled{opacity:.4}
+.hmt-seg{display:flex;flex:none;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.hmt-seg button{border:0;border-radius:0;min-height:2.9rem;padding:.4em 1em;font-size:.82rem;color:var(--muted)}
+.hmt-seg button.on{background:color-mix(in srgb,var(--acc) 16%,transparent);color:var(--acc);font-weight:600}
+.hmt-body{display:block}
+.hmt-grid{display:grid;grid-template-columns:1.4rem repeat(24,minmax(0,1fr));gap:1px;width:min(100%,780px);margin:.7rem auto .5rem;-webkit-user-select:none;user-select:none;touch-action:manipulation}
+.hmt-grid>div{display:flex;align-items:center;justify-content:center;border-radius:2px;line-height:1}
+.hmt-grid .h{color:var(--muted);font-size:.58rem;padding:.2rem 0}
+.hmt-grid .c{aspect-ratio:1;font-size:0;color:rgba(255,255,255,.92);font-weight:600}
+.hmt-grid .r0{background:#1E8E4E}
+.hmt-grid .r1{background:#B8941F;color:#1a1400}
+.hmt-grid .r2{background:#B94646}
+.hmt-grid .rn{background:var(--line)}
+.hmt-grid .rf{background:#5A0B14}
+.hmt-grid .rf::before{content:"\00d7";font-size:.8rem;color:#FCA5A5}
+.hmt-grid .w{box-shadow:inset 0 0 0 2px rgba(255,255,255,.88)}
+.hmt-grid .sel{outline:2px solid var(--acc);outline-offset:1px;position:relative;z-index:1}
+.hmt-grid .h.sel{outline:0;color:var(--acc);font-weight:700}
+.hmt-grid.fw .c:not(.w){opacity:.13}
+.hmt-leg{display:flex;flex-wrap:wrap;gap:.35rem .9rem;justify-content:center;color:var(--muted);font-size:.72rem;margin:.2rem 0 .6rem}
+.hmt-leg span::before{content:"";display:inline-block;width:.7rem;height:.7rem;border-radius:2px;background:var(--c);vertical-align:-.1rem;margin-right:.35rem}
+.hmt-leg .lw::before{background:transparent;box-shadow:inset 0 0 0 2px var(--fg);opacity:.8}
+.hmt-pick{position:sticky;bottom:0;z-index:2;margin:0 -.8rem;padding:.75rem .8rem calc(.75rem + env(safe-area-inset-bottom,0px));background:var(--panel);border-top:1px solid var(--line);font-size:.85rem;line-height:1.45}
+.hmt-pick .pk{display:flex;align-items:baseline;gap:.7rem;margin-bottom:.15rem}
+.hmt-pick b{font-size:1.5rem;letter-spacing:.12em}
+.hmt-pick .wd{color:var(--fg)}
+.hmt-pick .mt{color:var(--muted)}
+.hmt-pick button{margin-top:.6rem;min-height:2.75rem;width:100%;border-radius:12px}
+.hmt-wh{margin:1rem 0 .2rem;font-size:.8rem;color:var(--muted);letter-spacing:.04em}
+.hmt-wr{display:grid;grid-template-columns:2.6rem minmax(0,1fr) auto;gap:.6rem;align-items:center;min-height:2.9rem;padding:.2rem .1rem;border-bottom:1px solid var(--line);cursor:pointer}
+.hmt-wr b{letter-spacing:.1em}
+.hmt-wr span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hmt-wr i{font-style:normal;color:var(--muted);font-variant-numeric:tabular-nums}
+@media (min-width:700px){.hmt-grid .c{font-size:.52rem}.hmt-grid .h{font-size:.68rem}}
+@media (min-width:900px){
+  #hmt .box{max-width:1120px}
+  .hmt-body{display:grid;grid-template-columns:minmax(0,1fr) 22rem;gap:1.2rem;align-items:start}
+  .hmt-grid{width:min(100%,calc(100dvh - 13rem));margin-left:0}
+  .hmt-pick{position:sticky;top:6.5rem;bottom:auto;margin:.7rem 0 0;border:1px solid var(--line);border-radius:14px;padding:.8rem}
+}
 </style>
 </head>
 <body>
@@ -1908,9 +1963,9 @@ body.typing{--dock-sa:0px}
 <div style="--i:3"><kbd>\</kbd><span>Undo last time and mark it failed</span></div>
 <div class="wide" style="--i:4"><kbd>Y U I O P J H K L N M B</kbd><span>Fail the running attempt (punctuation and 8 9 0 work too). No time is logged.</span></div>
 <div style="--i:5"><kbd>T</kbd><span>Timer page</span></div>
-<div style="--i:6"><kbd>C</kbd><span>Memo chain</span></div>
-<div style="--i:7"><kbd>L</kbd><span>Sticker locator</span></div>
-<div style="--i:8"><kbd>W</kbd><span>Word drill</span></div>
+<div class="pconly" style="--i:6"><kbd>C</kbd><span>Memo chain</span></div>
+<div class="pconly" style="--i:7"><kbd>L</kbd><span>Sticker locator</span></div>
+<div class="pconly" style="--i:8"><kbd>W</kbd><span>Word drill</span></div>
 <div style="--i:9"><kbd>D</kbd><span>Look up or edit a word</span></div>
 <div style="--i:10"><kbd>G</kbd><span>Word grid</span></div>
 </div>
@@ -1949,7 +2004,7 @@ body.typing{--dock-sa:0px}
 </ul>
 </div></div></div></div>
 
-<div class="ac" style="--i:3"><button type="button" class="ach" aria-expanded="false">Trainers<i class="acv"></i></button><div class="acb"><div><div>
+<div class="ac pconly" style="--i:3"><button type="button" class="ach" aria-expanded="false">Trainers<i class="acv"></i></button><div class="acb"><div><div>
 <ul>
 <li><b>Chain</b>: memorise 4 to 10 pairs in order, press Space, then type them back.</li>
 <li><b>Stickers</b>: <i>Find it</i> shows a letter and you tap its sticker. <i>Name it</i> glows a sticker and you give its letter. Misses come up more often.</li>
@@ -2005,6 +2060,15 @@ B,bat,bubble</pre>
 <div class="tmemo" id="tmemo" hidden aria-live="polite"><div class="tmemo-h"><span class="k">Memo answer</span><span class="tmemo-lbl" id="tmemol"></span><span class="mx" id="tmemox"></span><span class="tmemo-hint">click or press V to peek</span><span class="tmemo-meth">M2 / Orozco</span></div><div class="tmemo-b" id="tmemob"></div><span class="tmemo-k" id="tmemok"></span></div>
 </div>
 </div>
+
+<div class="ov" id="hmt"><div class="box" role="dialog" aria-label="Heatmap">
+<header class="hmt-h"><h2>Heatmap <button data-close type="button">Close</button></h2><div class="hmt-sum" id="hmtSum"></div></header>
+<div class="hmt-bar"><button id="hmtPrac" class="primary" type="button">Practise weak pairs</button><div class="hmt-seg" id="hmtSeg"><button type="button" data-v="all" class="on">All pairs</button><button type="button" data-v="weak">Weak only</button></div></div>
+<div class="hmt-body">
+<div class="hmt-main"><div id="hmtGrid" class="hmt-grid"></div><div class="hmt-leg" id="hmtLeg"></div></div>
+<div class="hmt-side"><div class="hmt-pick" id="hmtPick"></div><div id="hmtWeak"></div></div>
+</div>
+</div></div>
 
 <div class="ov" id="chain"><div class="box" role="dialog" aria-label="Memo chain" style="width:min(640px,100%)">
 <h2>Trainers <button data-close>Close</button></h2>
@@ -2311,9 +2375,9 @@ addEventListener('keydown',e=>{
   if(st===1&&FAIL_KEYS.has(e.key.toLowerCase())){e.preventDefault();fail();return}
   if((e.key==='d'||e.key==='D')&&!e.ctrlKey&&!e.metaKey&&!e.altKey){e.preventDefault();openLookup();return}
   if((e.key==='g'||e.key==='G')&&st!==1&&!e.ctrlKey&&!e.metaKey&&!e.altKey){e.preventDefault();openGrid();return}
-  if((e.key==='c'||e.key==='C')&&!e.ctrlKey&&!e.metaKey&&!e.altKey){e.preventDefault();openChain();return}
-  if((e.key==='l'||e.key==='L')&&!e.ctrlKey&&!e.metaKey&&!e.altKey){e.preventDefault();openLoc();return}
-  if((e.key==='w'||e.key==='W')&&!e.ctrlKey&&!e.metaKey&&!e.altKey){e.preventDefault();openWd();return}
+  if((e.key==='c'||e.key==='C')&&!IS_TOUCH&&!e.ctrlKey&&!e.metaKey&&!e.altKey){e.preventDefault();openChain();return}
+  if((e.key==='l'||e.key==='L')&&!IS_TOUCH&&!e.ctrlKey&&!e.metaKey&&!e.altKey){e.preventDefault();openLoc();return}
+  if((e.key==='w'||e.key==='W')&&!IS_TOUCH&&!e.ctrlKey&&!e.metaKey&&!e.altKey){e.preventDefault();openWd();return}
   if((e.key==='t'||e.key==='T')&&!e.ctrlKey&&!e.metaKey&&!e.altKey){e.preventDefault();openTimer();return}
   if(e.key==='Escape'||e.key==='r'||e.key==='R'){e.preventDefault();if(st!==0)snd('err');reset();return}
   if(e.key==='Tab'){e.preventDefault();if(st===2)openWI();}
@@ -2351,7 +2415,7 @@ function closeM(){if(!modal)return;hmHide();snd('close');tlStop();cancelAnimatio
 $$('[data-close]').forEach(b=>b.addEventListener('click',closeM));
 $$('.ov').forEach(o=>o.addEventListener('mousedown',e=>{if(e.target===o)closeM()}));
 $('#bg').onclick=()=>{syncUI();openM('settings')};
-$('#bh').onclick=()=>{renderHeat();openM('heat')};
+$('#bh').onclick=()=>{if(IS_TOUCH){hmtRender();openM('hmt')}else{renderHeat();openM('heat')}};
 $('#bs').onclick=()=>{stSeen.clear();renderStats();openM('drawer')};
 
 /* settings */
@@ -3071,7 +3135,7 @@ function startDrill(list,label){
   label=label||'slowest pairs';
   drill={list:list.map(r=>({k:r.k,before:r.a})),times:{},fails:{},n:0,label:label};
   $('#dn').textContent=list.length;$('#dl').textContent=label;$('#drillchip').style.display='inline-flex';
-  closeM();snd('start',.12);toast('Drilling '+list.length+' '+label+'. Press Space to start.');
+  closeM();snd('start',.12);toast('Drilling '+list.length+' '+label+(IS_TOUCH?'. Tap Start.':'. Press Space to start.'));
 }
 function drillLetter(kind,l){
   const keys=(kind==='first'?L.map(b=>l+b):L.map(a=>a+l));
@@ -3095,6 +3159,65 @@ function endDrill(){
 $('#drillchip').onclick=endDrill;
 $('#hm').addEventListener('click',e=>{const d=e.target.dataset;if(!d)return;if(d.hr)drillLetter('first',d.hr);else if(d.hc)drillLetter('second',d.hc)});
 $('#hmdrill').onclick=()=>{if(hmSel)drillLetter(hmSel[0],hmSel[1])};
+
+/* touch heatmap: one plain static grid of all 576 pairs, a weak-pair list and drills. No animation, hover card or time-lapse.
+   Weak = flagged slow or in the missed list. (PC keeps the full heatmap above.) */
+const hmtG=$('#hmtGrid'),hmtPick=$('#hmtPick'),hmtPrac=$('#hmtPrac');
+let hmtOn=[];
+const hmtIsWeak=k=>!!(D.flag[k]||D.missed[k]);
+function hmtWeakList(){
+  const out=[];
+  for(const a of L)for(const b of L){const k=a+b;if(hmtIsWeak(k))out.push({k:k,a:D.stats[k]?avgT(k):null})}
+  out.sort((x,y)=>(y.a==null?1e9:y.a)-(x.a==null?1e9:x.a));
+  return out;
+}
+function hmtRender(){
+  let h='<div class="h"></div>'+L.map(l=>'<div class="h" data-hc="'+l+'">'+l+'</div>').join('');
+  let tested=0,sum=0,weak=0;
+  for(const a of L){
+    h+='<div class="h" data-hr="'+a+'">'+a+'</div>';
+    for(const b of L){
+      const k=a+b,t=D.stats[k],w=hmtIsWeak(k);
+      let c=D.missed[k]&&D.fails[k]?'c rf':!t?'c rn':'c r'+rate(avgT(k));
+      if(t){tested++;sum+=avgT(k)}
+      if(w){c+=' w';weak++}
+      h+='<div class="'+c+'" data-p="'+k+'">'+k+'</div>';
+    }
+  }
+  hmtG.innerHTML=h;hmtG.classList.toggle('fw',$('#hmtSeg .on').dataset.v==='weak');hmtOn=[];
+  $('#hmtSum').textContent=tested+' of '+L.length*L.length+' pairs tested \u00b7 '+weak+' weak'+(tested?' \u00b7 average '+(sum/tested/1000).toFixed(2)+'s':'');
+  hmtPrac.textContent=weak?'Practise weak ('+weak+')':'No weak pairs yet';hmtPrac.disabled=!weak;
+  $('#hmtLeg').innerHTML='<span style="--c:#1E8E4E">Fast under '+set().tf+'s</span><span style="--c:#B8941F">Medium up to '+set().tm+'s</span><span style="--c:#B94646">Slower</span><span style="--c:#5A0B14">Failed</span><span style="--c:var(--line)">Untested</span><span class="lw">Weak</span>';
+  const wl=hmtWeakList().slice(0,15);
+  $('#hmtWeak').innerHTML=wl.length?'<div class="hmt-wh">Weakest pairs</div>'+wl.map(x=>'<div class="hmt-wr" data-p="'+x.k+'"><b>'+x.k+'</b><span>'+(D.words[x.k]?esc(String(D.words[x.k]).toLowerCase()):'')+'</span><i>'+(x.a!=null?(x.a/1000).toFixed(2)+'s':'failed')+'</i></div>').join(''):'';
+  hmtPick.innerHTML='<span class="mt">Tap a pair, or a row or column letter, to see details and practise it.</span>';
+}
+function hmtSelect(d){
+  hmtOn.forEach(x=>x.classList.remove('sel'));hmtOn=[];
+  const mark=q=>{const e=hmtG.querySelector(q);if(e){e.classList.add('sel');hmtOn.push(e)}};
+  if(d.p){
+    const k=d.p;mark('[data-p="'+k+'"]');mark('[data-hr="'+k[0]+'"]');mark('[data-hc="'+k[1]+'"]');
+    const t=D.stats[k],w=D.words[k],f=D.fails[k];
+    let m=t?(avgT(k)/1000).toFixed(2)+'s average over '+t.n+' attempt'+(t.n===1?'':'s'):'No times yet';
+    if(f)m+=' \u00b7 failed '+f+(f===1?' time':' times');
+    if(hmtIsWeak(k))m+=' \u00b7 weak';
+    hmtPick.innerHTML='<div class="pk"><b>'+k+'</b><span class="wd">'+(w?esc(String(w).toLowerCase()):'')+'</span></div><div class="mt">'+m+'</div><button class="primary" type="button" data-act="pair" data-k="'+k+'">Practise '+k+'</button>';
+    return;
+  }
+  const first=!!d.hr,l=d.hr||d.hc,keys=first?L.map(b=>l+b):L.map(a=>a+l);
+  mark(first?'[data-hr="'+l+'"]':'[data-hc="'+l+'"]');
+  const v=keys.map(k=>D.stats[k]?avgT(k):null).filter(x=>x!=null),wk=keys.filter(hmtIsWeak).length,name=first?l+'_':'_'+l;
+  hmtPick.innerHTML='<div class="pk"><b>'+name+'</b></div><div class="mt">'+(v.length?(v.reduce((a,b)=>a+b,0)/v.length/1000).toFixed(2)+'s average over '+v.length+' tested pair'+(v.length===1?'':'s'):'No times yet')+' \u00b7 '+wk+' weak</div><button class="primary" type="button" data-act="line" data-first="'+(first?1:0)+'" data-l="'+l+'">Practise '+name+' pairs</button>';
+}
+hmtG.addEventListener('click',e=>{const d=e.target.dataset;if(d.p||d.hr||d.hc)hmtSelect(d)});
+$('#hmtWeak').addEventListener('click',e=>{const r=e.target.closest('[data-p]');if(r)hmtSelect({p:r.dataset.p})});
+hmtPick.addEventListener('click',e=>{
+  const b=e.target.closest('[data-act]');if(!b)return;
+  if(b.dataset.act==='pair'){const k=b.dataset.k;startDrill([{k:k,a:D.stats[k]?avgT(k):null}],'pair '+k)}
+  else drillLetter(b.dataset.first==='1'?'first':'second',b.dataset.l);
+});
+hmtPrac.onclick=()=>{const l=hmtWeakList();if(!l.length){toast('No weak pairs yet');return}startDrill(l,'weak pairs')};
+$('#hmtSeg').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;$$('#hmtSeg button').forEach(x=>x.classList.toggle('on',x===b));hmtG.classList.toggle('fw',b.dataset.v==='weak')});
 
 /* memo chain: fully separate from stats, heatmap and streak */
 let chPhase='setup',chPairs=[],chT0=0,chT1=0,chMemoMs=0,chRaf=0;
